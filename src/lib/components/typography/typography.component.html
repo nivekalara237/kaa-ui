@@ -1,0 +1,50 @@
+<ng-container [ngSwitch]="variant()">
+  <ng-container *ngSwitchCase="'h1'">
+    <h1 class="{{elementClass}}">
+      <ng-container *ngTemplateOutlet="ngcontent"></ng-container>
+    </h1>
+  </ng-container>
+  <ng-container *ngSwitchCase="'h2'">
+    <h2 class="{{elementClass}}">
+      <ng-container *ngTemplateOutlet="ngcontent"></ng-container>
+    </h2>
+  </ng-container>
+  <ng-container *ngSwitchCase="'h3'">
+    <h3 class="{{elementClass}}">
+      <ng-container *ngTemplateOutlet="ngcontent"></ng-container>
+    </h3>
+  </ng-container>
+  <ng-container *ngSwitchCase="'h4'">
+    <h4 class="{{elementClass}}">
+      <ng-container *ngTemplateOutlet="ngcontent"></ng-container>
+    </h4>
+  </ng-container>
+  <ng-container *ngSwitchCase="'h5'">
+    <h5 class="{{elementClass}}">
+      <ng-container *ngTemplateOutlet="ngcontent"></ng-container>
+    </h5>
+  </ng-container>
+  <ng-container *ngSwitchCase="'h6'">
+    <h6 class="{{elementClass}}">
+      <ng-container *ngTemplateOutlet="ngcontent"></ng-container>
+    </h6>
+  </ng-container>
+  <ng-container *ngSwitchCase="'quote'">
+    <blockquote
+      class="text-ms rounded-xl bg-gray-50 dark:bg-gray-900 border-s-[2px] border-slate-200 dark:border-slate-700 italic font-light text-{{ color() ? color() : 'gray' }}-500 dark:text-slate-400 {{ nativeClassName() }}">
+      <p class="py-2 pr-2 ps-4"><span class="text-xl font-extrabold">"</span>
+        <ng-container *ngTemplateOutlet="ngcontent"></ng-container>
+        <span class="text-xl font-extrabold">"</span>
+      </p>
+    </blockquote>
+  </ng-container>
+  <ng-container *ngSwitchDefault>
+    <div class="{{ elementClass }}">
+      <ng-container *ngTemplateOutlet="ngcontent"></ng-container>
+    </div>
+  </ng-container>
+</ng-container>
+
+<ng-template #ngcontent>
+  <ng-content></ng-content>
+</ng-template>

@@ -1,0 +1,17 @@
+<span #badge [ngClass]="{
+  'flex items-center': closable(),
+  'inline-flex items-center': !closable(),
+}" class="{{ elementClass }}">
+  <ng-content></ng-content>
+  <ng-container *ngIf="closable()">
+    <button (click)="handlerClose()" aria-label="Remove"
+            class="inline-flex items-center p-1 ms-2 text-sm  rounded-full {{ _closeableBtnClass }}" type="button">
+      <svg aria-hidden="true" class="{{ _closeableBtnSizeClass }}" fill="none" viewBox="0 0 14 14"
+           xmlns="http://www.w3.org/2000/svg">
+        <path d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+              stroke-width="2"/>
+      </svg>
+      <span class="sr-only">Remove badge</span>
+    </button>
+  </ng-container>
+</span>

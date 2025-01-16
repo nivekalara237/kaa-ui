@@ -1,0 +1,8 @@
+@switch (variant()) {
+  @case ('pi') {
+    <i [ngClass]="{ 'pi-spin': isSpinner() }" class="pi pi-{{name()}} {{ elementClass }}"></i>
+  }
+  @default {
+    <i>Icon variant not found</i>
+  }
+}

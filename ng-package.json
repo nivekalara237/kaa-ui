@@ -1,0 +1,15 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/ngx-fs-ui",
+  "allowedNonPeerDependencies": [
+    "tailwindcss",
+    "co2m.js",
+    "primeicons"
+  ],
+  "lib": {
+    "entryFile": "src/public-api.ts"
+  },
+  "assets": [
+    "src/lib/assets/"
+  ]
+}

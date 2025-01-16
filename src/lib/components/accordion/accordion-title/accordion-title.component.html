@@ -1,0 +1,19 @@
+<div
+  [ngClass]="{
+  'text-gray-600 dark:text-gray-100': !isActive,
+  'text-blue-600 dark:text-blue-400': isActive,
+  'flex-row-reverse justify-between': iconPosition() === 'right',
+  'flex-row': iconPosition() === 'left'
+  }"
+  class="flex items-center py-3">
+  <span *ngIf="!disabledIcon()" class="pe-2 text-lg text-center w-6">
+      {{ isActive ? '-' : '+' }}
+    </span>
+  <ng-container *ngTemplateOutlet="content"></ng-container>
+</div>
+
+<ng-template #content>
+  <span class="{{ elementClass }} font-extrabold">
+    <ng-content></ng-content>
+  </span>
+</ng-template>

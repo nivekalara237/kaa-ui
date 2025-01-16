@@ -1,0 +1,46 @@
+<div [ngClass]="{
+'floating-label': floatingLabel()
+}" class="transition-all relative duration-500 {{ elementClass }}">
+  <ng-container [ngSwitch]="getVariant">
+    <ng-container *ngSwitchCase="'basic'">
+      <ng-container
+        *ngFor="let tpl of (floatingLabel() ? [inputTpl, labelTpl] : [labelTpl, inputTpl])">
+        <ng-container *ngTemplateOutlet="tpl"></ng-container>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'underline'">
+      <ng-container
+        *ngFor="let tpl of (floatingLabel() ? [inputTpl, labelTpl] : [labelTpl, inputTpl])">
+        <ng-container *ngTemplateOutlet="tpl"></ng-container>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'gray'">
+      <ng-container
+        *ngFor="let tpl of (floatingLabel() ? [inputTpl, labelTpl] : [labelTpl, inputTpl])">
+        <ng-container *ngTemplateOutlet="tpl"></ng-container>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+      <span>Unsupported: Unknown input variant {{ getVariant }}</span>
+    </ng-container>
+  </ng-container>
+
+</div>
+
+<ng-template #labelTpl>
+  <label [for]="id()" [ngClass]="{ 'sr-only': !label() }"
+         class="{{ ___commonLabelVariantClass }} {{ floatingLabel() ? ___labelFloatingClass : ___labelClass }}">
+    {{ label() }}
+  </label>
+</ng-template>
+
+<ng-template #inputTpl>
+  <input [id]="id()" [placeholder]="placeholder()" autocomplete="on"
+         class="{{ ___commonVariantClass }} {{ floatingLabel() ? ___inputFloatingClass : ___inputClass }}"
+         type="{{ inputType() }}"/>
+  <div *ngIf="addonIcon()"
+       class="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-4 peer-disabled:opacity-50 peer-disabled:pointer-events-none"
+  >
+    <i class="pi pi-{{ addonIcon() }}"></i>
+  </div>
+</ng-template>

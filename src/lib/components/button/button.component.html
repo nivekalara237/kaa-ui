@@ -1,0 +1,26 @@
+<button #buttonElement [disabled]="disabled()"
+        [ngClass]="{
+        'flex items-center': icon(),
+        ' gap-2': __activeIconGap,
+        'flex-row': icon() && iconPosition() === 'left',
+        'flex-row-reverse': icon() && iconPosition() === 'right',
+        'flex-col': icon() && iconPosition() === 'top',
+        'flex-col-reverse ': icon() && iconPosition() === 'bottom',
+        }"
+        class="{{ elementClass }}"
+        type="{{ buttonTagType()}}"
+>
+  <ng-container *ngIf="icon(); else noIcon">
+    <i class="pi pi-{{ icon() }} {{ getIconSize() }}"></i>
+    <div class="m-0 p-0">
+      <ng-container *ngTemplateOutlet="ngContent"/>
+    </div>
+  </ng-container>
+</button>
+
+<ng-template #noIcon>
+  <ng-container *ngTemplateOutlet="ngContent"/>
+</ng-template>
+<ng-template #ngContent>
+  <ng-content></ng-content>
+</ng-template>

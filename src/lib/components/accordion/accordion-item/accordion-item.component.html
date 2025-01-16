@@ -1,0 +1,10 @@
+<div [@.disabled]="disabled()" [ngClass]="{'opacity-50': disabled()}"
+     class="flex flex-col {{ elementClass }}">
+  <div (click)="handlerCollapsing()"
+       [ngClass]="{ 'cursor-not-allowed': disabled(), 'cursor-pointer': !disabled() }">
+    <ng-content select="ui-accordion-title"></ng-content>
+  </div>
+  <div [@expandCollapse]="expandBody ? 'collapse' : 'close'">
+    <ng-content select="ui-accordion-body"></ng-content>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+@if (name() || title()) {
+  <div class="flex items-center gap-4">
+    <ng-container *ngTemplateOutlet="image"></ng-container>
+    <div class="font-medium dark:text-white">
+      <div *ngIf="name()">{{ name() }}</div>
+      <div *ngIf="title()" class="text-sm text-gray-500 dark:text-gray-400">{{ title() }}</div>
+    </div>
+  </div>
+} @else {
+  <ng-container *ngTemplateOutlet="image"></ng-container>
+}
+<ng-template #image>
+  <div class="relative">
+    <img
+      [ngClass]="{
+        'rounded-full': getShape === 'circle',
+        'rounded-none': getShape === 'square',
+        'rounded': getShape === 'rounded',
+      }"
+      [src]="imageUrl()" alt="{{ alt() ?? (getShape +  '  avatar') }}" class="{{ elementClass }}">
+    <ng-container *ngIf="dotIndicator()">
+    <span
+      class="absolute {{ _dotIndicatorClass }} border-2 border-white dark:border-gray-800 rounded-full"></span>
+    </ng-container>
+  </div>
+</ng-template>

@@ -1,0 +1,11 @@
+<ng-container *ngIf="insertIcon(); else noIcon">
+  <div class="inline-flex my-2 items-center justify-center w-full">
+    <hr [ngStyle]="styles" class="{{ elementClass }}">
+    <div class="absolute px-4 -translate-x-1/2 bg-white left-1/2 dark:bg-gray-900">
+      <ng-content select="svg"></ng-content>
+    </div>
+  </div>
+</ng-container>
+<ng-template #noIcon>
+  <hr [ngStyle]="styles" class="{{ elementClass }}">
+</ng-template>

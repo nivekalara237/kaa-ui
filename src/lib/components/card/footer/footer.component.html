@@ -1,0 +1,11 @@
+<ng-container *ngIf="skeleton; else displayRealContent">
+  <div class="my-2 w-full animate-pulse mt-2 pt-3 border-t border-gray-200">
+    <div class="h-2.5 bg-gray-100 rounded-full dark:bg-gray-400 w-2/3"></div>
+  </div>
+</ng-container>
+
+<ng-template #displayRealContent>
+  <p class="{{ elementClass }}">
+    <ng-content></ng-content>
+  </p>
+</ng-template>

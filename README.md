@@ -2,14 +2,18 @@
 
 ## KaaUI - Angular Component Library with TailwindCSS
 
-KaaUI is a modern, lightweight, and customizable component library for Angular, built with the power of TailwindCSS. It provides ready-to-use, responsive, and elegant UI components to accelerate your development workflow.
+`KaaUI` is a modern, lightweight, and customizable component library for `Angular`, built with the power of `TailwindCSS`.
+It provides ready-to-use, responsive, and elegant UI components to accelerate your development workflow.
 
-Features:
-🧩 Reusable Components: Modular and highly customizable Angular components.
-🎨 TailwindCSS Powered: Leverage the flexibility of TailwindCSS for styling.
-⚡ Optimized for Performance: Lightweight components designed for speed and responsiveness.
-📦 Easy Integration: Seamlessly integrates into your Angular projects.
-🚀 Scalable: Built to support both small and large-scale applications.
+### Features:
+
++ 🧩 `Reusable Components`: Modular and highly customizable Angular components.
++ 🎨 `TailwindCSS Powered`: Leverage the flexibility of TailwindCSS for styling.
++ ⚡ `Optimized for Performance`: Lightweight components designed for speed and responsiveness.
++ 📦 `Easy Integration`: Seamlessly integrates into your Angular projects.
++ 🚀 `Scalable`: Built to support both small and large-scale applications.
+
+---- 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.0.
 
 ## Code scaffolding

@@ -29,17 +29,17 @@
 
 <ng-template #labelTpl>
   <label [for]="id()" [ngClass]="{ 'sr-only': !label() }"
-         class="{{ ___commonLabelVariantClass }} {{ floatingLabel() ? ___labelFloatingClass : ___labelClass }}">
+         class="{{ ___commonLabelVariantClass }} {{ ___labelClass }}">
     {{ label() }}
   </label>
 </ng-template>
 
 <ng-template #inputTpl>
   <input [id]="id()" [placeholder]="placeholder()" autocomplete="on"
-         class="{{ ___commonVariantClass }} {{ floatingLabel() ? ___inputFloatingClass : ___inputClass }}"
+         class="{{ ___commonVariantClass }} {{ ___inputClass }}"
          type="{{ inputType() }}"/>
   <div *ngIf="addonIcon()"
-       class="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-4 peer-disabled:opacity-50 peer-disabled:pointer-events-none"
+       class=" {{ ___iconClass }}"
   >
     <i class="pi pi-{{ addonIcon() }}"></i>
   </div>

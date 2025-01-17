@@ -1,8 +1,9 @@
 import {AfterViewInit, booleanAttribute, ChangeDetectionStrategy, Component, input, OnInit} from '@angular/core';
 import {AbstractUIComponent} from '../../abstract.component';
-import {RandomUtils, StringBuilder} from 'co2m.js';
+import {ObjectUtils, RandomUtils, StringBuilder} from 'co2m.js';
 import {twMerge} from 'tailwind-merge';
-import {IconVariant, InputVariant, Position, Size} from '../../../model/types';
+import {Color, HorizontalPosition, IconVariant, InputVariant, Size, Status} from '../../../model/types';
+import {InputFactory} from './input.factory';
 
 @Component({
   selector: 'ui-input',
@@ -23,14 +24,16 @@ import {IconVariant, InputVariant, Position, Size} from '../../../model/types';
 export class InputComponent extends AbstractUIComponent implements OnInit, AfterViewInit {
 
   label = input<string>();
-  labelPosition = input<Position>('top');
+  // labelDisposition = input<Position>('top');
   placeholder = input<string>();
   inputId = input<string>();
   inputType = input.required<string>();
   inputAddonIcon = input<IconVariant>('pi');
   addonIcon = input<string>();
+  addonIconPosition = input<HorizontalPosition>("left");
   variant = input<InputVariant>();
   size = input<Size>('small');
+  color = input<Status | Color>('default');
   floatingLabel = input(false, {transform: booleanAttribute});
   gray = input(false, {transform: booleanAttribute});
   underline = input(false, {transform: booleanAttribute});
@@ -60,14 +63,30 @@ export class InputComponent extends AbstractUIComponent implements OnInit, After
 
   compiledClasses(): string {
     const builder = new StringBuilder();
-    const iconBuilder = new StringBuilder();
+    const iconBuilder = new StringBuilder(
+      "absolute pointer-events-none peer-disabled:opacity-50 peer-disabled:pointer-events-none"
+    );
     const commonBuilder = new StringBuilder();
     const inputBuilder = new StringBuilder();
     const labelBuilder = new StringBuilder();
     const inputFloatingBuilder = new StringBuilder();
     const labelFloatingBuilder = new StringBuilder();
 
-    switch (this.getVariant) {
+    const factory = new InputFactory({
+      color: this.color(),
+      floatingLabel: this.floatingLabel(),
+      fullRounded: false, //this.rounded(),
+      hiddeLabel: ObjectUtils.isNullOrUndefined(this.label()),
+      size: this.size(),
+      hasIconAt: ObjectUtils.isNotNullAndNotUndefined(this.addonIcon()) ? this.addonIconPosition()! : null
+    });
+
+    const input = factory.of(this.getVariant);
+
+    inputBuilder.append(input.getInputClassNames());
+    labelBuilder.append(input.getLabelClassNames());
+
+    /*switch (this.getVariant) {
       case "basic": {
         inputBuilder.append("py-3 px-4 block w-full rounded-lg " +
           "disabled:opacity-50 disabled:point-events-none").append(" ");
@@ -89,8 +108,8 @@ export class InputComponent extends AbstractUIComponent implements OnInit, After
           "dark:border-b-neutral-700 ").append(" ");
         labelBuilder.append(" ").append(" ");
         break
-    }
-    if (this.floatingLabel()) {
+    }*/
+    /*if (this.floatingLabel()) {
       switch (this.getVariant) {
         case "basic":
           inputFloatingBuilder.append(
@@ -174,9 +193,7 @@ export class InputComponent extends AbstractUIComponent implements OnInit, After
             .append(" ");
           break;
       }
-    }
-
-
+    }*/
     /*
     if (this.floatingLabel()) {
       switch (this.getVariant) {
@@ -261,16 +278,20 @@ export class InputComponent extends AbstractUIComponent implements OnInit, After
       builder.append(this.nativeClassName()).append(" ");
     }
 
-    this.___iconClass = twMerge(iconBuilder.toString().split(" "));
+    iconBuilder.append("dark:text-neutral-400")
+    if (this.label() && !this.floatingLabel()) {
+      iconBuilder.append("inset-y-1/2 start-0 ps-3")
+    } else {
+      iconBuilder.append("inset-y-0 start-0 flex items-center ps-2")
+    }
+
+    this.___iconClass = twMerge(iconBuilder.segments());
     this.___labelClass = twMerge(labelBuilder.toString().split(" "));
-    this.___inputClass = twMerge(inputBuilder.toString().split(" "));
+    this.___inputClass = twMerge(inputBuilder.segments());
     this.___labelFloatingClass = twMerge(labelFloatingBuilder.toString().split(" "));
     this.___inputFloatingClass = twMerge(inputFloatingBuilder.toString().split(" "));
-    console.log(this.floatingLabel(), this.label(), this.getVariant, {
-      label: labelFloatingBuilder.toString(),
-      input: inputFloatingBuilder.toString()
-    })
-    return twMerge(builder.toString().split(" "));
+
+    return twMerge(builder.segments());
   }
 
   ngAfterViewInit(): void {

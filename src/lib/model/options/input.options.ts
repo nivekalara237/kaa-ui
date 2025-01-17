@@ -1,10 +1,12 @@
 import {Color, HorizontalPosition, Size, Status} from '../types';
 
 type InputOptions = {
+  hiddeLabel?: boolean;
   size: Size,
   hasIconAt: null | HorizontalPosition,
-  floatingInput: boolean,
-  color: Status | Color
+  floatingLabel?: boolean,
+  color: Status | Color,
+  fullRounded?: boolean
 };
 
 export type  {

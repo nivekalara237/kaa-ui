@@ -11,14 +11,14 @@
     "ui"
   ],
   "scripts": {
-    "prestart": "echo 'xxxxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxxxxx'",
+    "prestart": "echo 'xyz'",
     "copy-fonts": "cp node_modules/primeicons/fonts ./dist/ngx-fs-ui/fonts",
     "buildcss": "npx tailwindcss -i ./src/lib/styles/styles.scss  -o ./dist/ngx-fs-ui/ui.css --watch"
   },
   "peerDependencies": {
     "@angular/common": "^19.0.0",
     "@angular/core": "^19.0.0",
-    "co2m.js": "^1.0.12",
+    "co2m.js": "^1.0.13",
     "flowbite": "^2.5.2",
     "primeicons": "^7.0.0"
   },

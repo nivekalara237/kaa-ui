@@ -20,7 +20,7 @@ export class InputFactory {
       case "gray":
         return new GrayInput(this.options);
       default:
-        throw new Error(`Insupported input variant ${inputVariant}`);
+        throw new Error(`Unsupported input variant ${inputVariant}`);
     }
   }
 }

@@ -1,7 +1,6 @@
 import {InputOptions} from '../../../../model/options/input.options';
 import {StringBuilder} from 'co2m.js';
-import {inputTextSizeMapping} from '../../../../model/themes/input.theme';
-
+import {inputPaddingXBySize, inputPaddingYBySize, inputTextSize} from '../../../../model/themes/input.theme';
 
 export abstract class AbstractInput {
   constructor(
@@ -14,20 +13,44 @@ export abstract class AbstractInput {
   abstract getLabelClassNames(): string;
 
   commonInputClassNames = (): string => {
-    const builder = new StringBuilder("block w-full");
+    const builder = new StringBuilder("block w-full shadow-xs leading-relaxed");
+    const paddingXNameBuilder = new StringBuilder();
+    if (["number"].includes(this.options.type)) {
+      paddingXNameBuilder.append("spin");
+    } else {
+      paddingXNameBuilder.append("nospin");
+    }
+    if (this.options.hasIconAt) {
+      paddingXNameBuilder.append(`icon-${this.options.hasIconAt}`);
+    } else {
+      paddingXNameBuilder.append("noicon");
+    }
 
-    const padding = `${this.options.hasIconAt === null ? 'p-3' : (this.options.hasIconAt === 'left' ? 'py-3 pe-4 ps-9' : 'py-3 ps-4 pe-9')}`;
-    builder.append(padding);
-    builder.append("dark:bg-neutral-900 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600");
-    builder.append("disabled:opacity-50 disabled:pointer-events-none")
-      .append(inputTextSizeMapping[this.options.size]);
+    if (this.options.readonly) {
+      builder.append("read-only:bg-gray-100 dark:read-only:bg-neutral-700")
+        .append("read-only:border-none read-only:ring-0 read-only:outline-0");
+    }
+
+    builder.append(inputTextSize[this.options.size])
+      .append(inputPaddingYBySize[this.options.size])
+      .append(inputPaddingXBySize[paddingXNameBuilder.build('-')][this.options.size])
+    ;
+    builder.append("dark:bg-neutral-900 dark:text-neutral-400")
+      .append("dark:placeholder-neutral-500 dark:focus:ring-neutral-600")
+      .append("disabled:opacity-50 disabled:pointer-events-none");
+
     return builder.build(" ");
   };
 
   commonLabelClassNames = (): string => {
     const builder = new StringBuilder();
-    builder.append("mb-2").append(inputTextSizeMapping[this.options.size])
-      .append("text-neutral-900 font-medium dark:text-white");
+    // const u = "<i class='after:block after:flex after:inline-table after:inline-block'>";
+    if (this.options.required) {
+      builder.append("after:content-['*'] after:ml-0.5 after:text-red-500")
+        .append("after:inline-block after:text-sm after:items-end after:justify-center");
+    }
+    builder.append("mb-2").append(inputTextSize[this.options.size])
+      .append("text-neutral-700 font-medium dark:text-white");
     return builder.build(" ");
   };
 }

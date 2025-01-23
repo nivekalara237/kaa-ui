@@ -30,6 +30,7 @@ export * from "./lib/components/card/body/body.component";
 export * from "./lib/components/card/footer/footer.component";
 export * from "./lib/components/card/link/link.component";
 export * from "./lib/components/form/input/input.component";
+export * from "./lib/components/form/textarea/textarea.component";
 
 // Modules
 export * from './lib/components/accordion/accordion.module';

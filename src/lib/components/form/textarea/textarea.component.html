@@ -2,7 +2,7 @@
   <label *ngIf="label()" [id]="___id" class="{{ ___labelClasses }}">{{ label() }}</label>
   <textarea #textarea (keyup)="handleChange(textarea.value)"
             [id]="___id"
-            [placeholder]="placeholder()"
+            [placeholder]="placeholder() ?? ''"
             [readOnly]="readOnly()"
             [required]="requiredValue()"
             [rows]="rows()"

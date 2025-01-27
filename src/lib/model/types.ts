@@ -54,6 +54,7 @@ type InputType = "text" | "password" | "email"
   | "submit" | "reset" | "button" | "image";
 type TextareaResize = 'x' | 'y' | 'xy' | 'none' | undefined;
 type OverflowPosition = Exclude<TextareaResize, "xy"> | 'auto';
+type FormInputValidateState = 'success' | 'error' | 'warning';
 
 export type {
   Color,
@@ -74,5 +75,6 @@ export type {
   InputVariant,
   InputType,
   TextareaResize,
-  OverflowPosition
+  OverflowPosition,
+  FormInputValidateState
 }

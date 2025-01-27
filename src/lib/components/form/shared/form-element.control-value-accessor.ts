@@ -5,8 +5,9 @@ export abstract class FormElementControlValueAccessor extends AbstractUIComponen
   protected value!: any;
   protected touched = false;
   protected disabled = false;
+  // protected validateState = input<FormInputValidateState>();
 
-  onChange = (value: string) => {
+  onChange = (value: any) => {
   };
 
   onTouched = () => {

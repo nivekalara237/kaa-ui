@@ -18,10 +18,10 @@ const inputGrayBorderMapping: Record<Size, string> = {
 
 const inputRoundedSizeMapping: Record<RoundedSize | 'tiny', string> = {
   none: 'rounded-none',
-  large: 'rounded-2xl',
-  medium: 'rounded-lg',
-  small: 'rounded-md',
   tiny: 'rounded-sm',
+  small: 'rounded-md',
+  medium: 'rounded-lg',
+  large: 'rounded-2xl',
   full: 'rounded-full',
 };
 

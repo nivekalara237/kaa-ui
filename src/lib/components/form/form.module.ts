@@ -6,6 +6,8 @@ import {CheckboxComponent} from './checkbox/checkbox.component';
 import {CheckboxGroupComponent} from './checkbox-group/checkbox-group.component';
 import {CheckboxLabelComponent} from './checkbox/label/label.component';
 import {CheckboxCustomIconComponent} from './checkbox/custom-icon/checkbox-custom-icon.component';
+import {RadioButtonComponent} from './radio-button/radio-button.component';
+import {RadioLabelComponent} from './radio-button/label/label.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +16,9 @@ import {CheckboxCustomIconComponent} from './checkbox/custom-icon/checkbox-custo
     CheckboxComponent,
     CheckboxGroupComponent,
     CheckboxLabelComponent,
-    CheckboxCustomIconComponent
+    CheckboxCustomIconComponent,
+    RadioButtonComponent,
+    RadioLabelComponent
   ],
   imports: [
     CommonModule
@@ -25,8 +29,11 @@ import {CheckboxCustomIconComponent} from './checkbox/custom-icon/checkbox-custo
     CheckboxComponent,
     CheckboxGroupComponent,
     CheckboxLabelComponent,
-
-  ]
+    CheckboxCustomIconComponent,
+    RadioLabelComponent,
+    RadioButtonComponent
+  ],
+  providers: []
 })
 export class FormUiModule {
 }

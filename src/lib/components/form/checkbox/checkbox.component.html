@@ -1,14 +1,23 @@
 <div
   [ngClass]="{
-  'flex-row-reverse': labelPosition() === 'left'
+  'flex-row-reverse': labelPosition() === 'left',
+  'gap-x-2 flex-row': labelPosition() === 'left' || labelPosition() === 'right',
+  'gap-y-2 flex-col': labelPosition() === 'top' || labelPosition() === 'bottom',
+  'flex-col-reverse': labelPosition() === 'top',
   }"
-  class="flex flex-row items-center shrink-0 gap-x-2 items-center">
+  class="flex items-center shrink-0">
   <div class="group place-items-center grid relative grid-cols-1">
     <input #inputElement
+           (blur)="onBlur.emit()"
            (change)="handlerCheckboxChange(inputElement.checked)"
+           (focus)="onFocus.emit()"
+           [attr.aria-label]="ariaLabel()"
+           [attr.aria-labelledby]="ariaLabelledBy()"
+           [attr.name]="name()"
            [checked]="checked()"
-           [disabled]="disabledCheckbox()" [id]="__id"
-           [indeterminate]="intermediate() && ___state === Intermediate" [readOnly]="readOnly()"
+           [disabled]="disabledCheckbox()"
+           [id]="__id" [indeterminate]="intermediate() && ___state === Intermediate"
+           [readOnly]="readOnly()" [readonly]="readOnly()"
            [required]="required()"
            class="{{ __checkboxClass }} col-start-1 row-start-1 "
            type="checkbox">

@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, inject, input, OnInit} from '@angular/core';
 import {AbstractUIComponent} from '../../../abstract.component';
 import {StringBuilder} from 'co2m.js';
 import {twMerge} from 'tailwind-merge';
+import {Size} from '../../../../model/types';
 
 @Component({
   selector: 'ka-checkbox-custom-icon',
@@ -11,9 +12,18 @@ import {twMerge} from 'tailwind-merge';
   providers: [{
     provide: AbstractUIComponent,
     useExisting: CheckboxCustomIconComponent
-  }]
+  }],
+  host: {
+    'class': `pointer-events-none col-start-1 row-start-1 self-center justify-self-center`
+  }
 })
 export class CheckboxCustomIconComponent extends AbstractUIComponent implements OnInit {
+
+  type = input.required<'on' | 'off'>();
+  size = input<Size>();
+  checked = false;
+  private el = inject(ElementRef);
+
   compiledClasses(): string {
     const builder = new StringBuilder();
     if (this.nativeClassName()) {
@@ -24,5 +34,15 @@ export class CheckboxCustomIconComponent extends AbstractUIComponent implements 
 
   ngOnInit(): void {
     this.elementClass = this.compiledClasses();
+    // console.log(this.el.nativeElement);
+
+    if (this.checked) {
+      if (this.type() === 'off') {
+        this.el.nativeElement.remove()
+      } else {
+
+      }
+    }
+
   }
 }

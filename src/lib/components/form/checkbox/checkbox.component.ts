@@ -1,12 +1,22 @@
-import {AfterViewInit, booleanAttribute, Component, ContentChildren, input, OnInit, QueryList} from '@angular/core';
-import {FormElementControlValueAccessor} from '../shared/form-element.control-value-accessor';
+import {
+  AfterViewInit,
+  booleanAttribute,
+  Component,
+  ContentChildren,
+  forwardRef,
+  input,
+  OnInit,
+  QueryList
+} from '@angular/core';
 import {RandomUtils, StringBuilder} from 'co2m.js';
 import {twMerge} from 'tailwind-merge';
-import {HorizontalPosition, IconVariant, RoundedSize, Size, Status} from '../../../model/types';
+import {IconVariant, Position, RoundedSize, Size, Status} from '../../../model/types';
 import {CheckBoxState, Off, On, Partial} from './intermediate-state';
 import {inputRoundedSizeMapping} from '../../../model/themes/input.theme';
 import {checkboxBorderMapping, checkboxIconSizeMapping, checkboxSizeMapping} from '../../../model/shapes/input.shape';
 import {CheckboxCustomIconComponent} from './custom-icon/checkbox-custom-icon.component';
+import {AbstractInputComponent} from '../shared/abstract-input.component';
+import {NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 @Component({
   selector: 'ka-checkbox',
@@ -16,11 +26,22 @@ import {CheckboxCustomIconComponent} from './custom-icon/checkbox-custom-icon.co
   styleUrls: [
     './checkbox.component.css',
     './checkable-label.css'
+  ],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => CheckboxComponent),
+      multi: true
+    }, {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => CheckboxComponent),
+      multi: true
+    }
   ]
 })
-export class CheckboxComponent extends FormElementControlValueAccessor implements OnInit, AfterViewInit {
+export class CheckboxComponent extends AbstractInputComponent implements OnInit, AfterViewInit {
 
-  @ContentChildren(CheckboxCustomIconComponent)
+  @ContentChildren(CheckboxCustomIconComponent, {descendants: false})
   customCheckboxes!: QueryList<CheckboxCustomIconComponent>;
 
   solid = input(true, {transform: booleanAttribute});
@@ -40,7 +61,7 @@ export class CheckboxComponent extends FormElementControlValueAccessor implement
   checked = input(false, {transform: booleanAttribute});
   inputId = input<string>();
   label = input<string>();
-  labelPosition = input<HorizontalPosition>('right');
+  labelPosition = input<Position>('right');
 
   __id!: string;
   __checkboxClass!: string;
@@ -54,7 +75,7 @@ export class CheckboxComponent extends FormElementControlValueAccessor implement
     const builder = new StringBuilder();
     const iconBuilder = new StringBuilder();
     const labelBuilder = new StringBuilder("text-sm font-normal cursor-pointer text-gray-600");
-    const checkboxBuilder = new StringBuilder("appearance-none cursor-pointer")
+    const checkboxBuilder = new StringBuilder("appearance-none shadow hover:shadow-md cursor-pointer")
       .append("checked:bg-no-repeat checked:bg-center")
       .append("focus:ring-0 outline-none focus:outline-none")
       .append("transition-all ease-in-out duration-300")
@@ -65,11 +86,19 @@ export class CheckboxComponent extends FormElementControlValueAccessor implement
       builder.append(this.nativeClassName());
     }
 
-    checkboxBuilder.append(`form-checkbox-${this.status()}-theme-styles`)
+    checkboxBuilder
       .append("form-checkbox-shape-styles")
       .append(inputRoundedSizeMapping[this.rounded()])
       .append(checkboxSizeMapping[this.size()])
       .append(checkboxBorderMapping[this.size()]);
+
+    if (this.outline()) {
+      checkboxBuilder.append(`checkbox-outline-${this.status()}`);
+      iconBuilder.append(`checkbox-outline-${this.status()}-icon`);
+    } else {
+      checkboxBuilder.append(`form-checkbox-${this.status()}-theme-styles`);
+      iconBuilder.append("form-checkbox-icon");
+    }
 
     if (this.onlyLabel()) {
       checkboxBuilder.append("hidden peer");
@@ -77,8 +106,7 @@ export class CheckboxComponent extends FormElementControlValueAccessor implement
       labelBuilder.append(`form-checkable-label form-checkable-${this.status()} form-checkable-label-hover peer-checked-${this.status()}`)
         .append(`peer-checked-rounded-${this.rounded()}`)
     }
-    iconBuilder.append("form-checkbox-icon")
-      .append(checkboxIconSizeMapping[this.size()]);
+    iconBuilder.append(checkboxIconSizeMapping[this.size()]);
 
     if (this.labelClassName()) {
       labelBuilder.append(this.labelClassName()!);
@@ -95,7 +123,12 @@ export class CheckboxComponent extends FormElementControlValueAccessor implement
   }
 
   ngAfterViewInit(): void {
-    console.log(this.customCheckboxes.toArray());
+    const icons = this.customCheckboxes.toArray();
+
+    if (icons.length > 0) {
+      this.hasCustomIcon = true;
+      this.changeDetector.detectChanges();
+    }
   }
 
   ngOnInit(): void {
@@ -106,18 +139,10 @@ export class CheckboxComponent extends FormElementControlValueAccessor implement
 
   handlerCheckboxChange(checked: boolean) {
     if (this.intermediate()) {
-      console.log({
-        previousState: this.___state.value,
-        currentState: this.___state.next().value,
-        nextState: this.___state.next().next().value
-      });
-
       const _checked = this.___state.next() === Partial ? null : (this.___state.next() === On);
-      this.onChange(_checked);
-      this.setValue(_checked);
+      this.setValue(_checked, true);
     } else {
-      this.onChange(checked);
-      this.setValue(checked);
+      this.setValue(checked, true);
     }
     this.___state = this.___state.next();
   }

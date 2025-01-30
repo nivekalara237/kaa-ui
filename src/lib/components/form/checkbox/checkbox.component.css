@@ -74,10 +74,89 @@
 
 .form-checkable-label-primary-theme-styles {
   @apply inline-flex items-center w-full px-5 py-3
-  bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:border-gray-700
+  bg-white border-2 border-gray-200 rounded-lg cursor-pointer
   dark:border-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700
   peer-checked:border-blue-600 dark:peer-checked:border-blue-600
   dark:peer-checked:text-gray-300 peer-checked:text-gray-600
+}
+
+.checkbox-outline-default {
+  @apply bg-amber-50 bg-transparent hover:bg-transparent
+  checked:hover:bg-transparent border-gray-500
+  form-checkbox-disabled-theme;
+}
+
+.checkbox-outline-default-icon {
+  @apply text-gray-500
+}
+
+.checkbox-outline-primary {
+  @apply bg-blue-50 bg-transparent hover:bg-transparent
+  checked:hover:bg-transparent border-blue-500
+  form-checkbox-disabled-theme;
+}
+
+.checkbox-outline-primary-icon {
+  @apply text-blue-500
+}
+
+.checkbox-outline-secondary {
+  @apply bg-slate-50 bg-transparent hover:bg-transparent
+  checked:hover:bg-transparent border-slate-800
+  form-checkbox-disabled-theme;
+}
+
+.checkbox-outline-secondary-icon {
+  @apply text-slate-800
+}
+
+.checkbox-outline-success {
+  @apply bg-emerald-50 bg-transparent hover:bg-transparent
+  checked:hover:bg-transparent border-emerald-300
+  form-checkbox-disabled-theme;
+}
+
+.checkbox-outline-success-icon {
+  @apply text-emerald-300
+}
+
+.checkbox-outline-warning {
+  @apply bg-amber-50 bg-transparent hover:bg-transparent checked:hover:bg-transparent border-amber-300
+  form-checkbox-disabled-theme;
+}
+
+.checkbox-outline-warning-icon {
+  @apply text-amber-300
+}
+
+.checkbox-outline-danger {
+  @apply bg-red-50 bg-transparent hover:bg-transparent
+  checked:hover:bg-transparent border-red-500
+  form-checkbox-disabled-theme;
+}
+
+.checkbox-outline-danger-icon {
+  @apply text-red-500
+}
+
+.checkbox-outline-info {
+  @apply bg-sky-50 bg-transparent hover:bg-transparent
+  checked:hover:bg-transparent border-sky-500
+  form-checkbox-disabled-theme;
+}
+
+.checkbox-outline-info-icon {
+  @apply text-sky-500
+}
+
+.checkbox-outline-soft {
+  @apply bg-fuchsia-50 bg-transparent hover:bg-transparent
+  checked:hover:bg-transparent border-fuchsia-500
+  form-checkbox-disabled-theme;
+}
+
+.checkbox-outline-soft-icon {
+  @apply text-fuchsia-500
 }
 
 /* Forme (Taille, Dimensionnement) */

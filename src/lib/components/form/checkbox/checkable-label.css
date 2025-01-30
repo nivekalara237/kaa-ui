@@ -55,7 +55,8 @@
 }
 
 .peer-checked-success {
-  @apply peer-checked:border-emerald-500 dark:peer-checked:border-emerald-500
+  @apply peer-checked:border-emerald-500
+  dark:peer-checked:border-emerald-500
   peer-checked-common;
 }
 
@@ -75,7 +76,8 @@
 }
 
 .peer-checked-default {
-  @apply peer-checked:border-gray-500 dark:peer-checked:border-gray-500
+  @apply peer-checked:border-gray-500
+  dark:peer-checked:border-gray-500
   peer-checked-common;
 }
 

@@ -1,0 +1,6 @@
+<div #container [ngClass]="{
+'flex-col': orientation() === 'vertical',
+'flex-row': orientation() === 'horizontal'
+}" class="{{ elementClass }}">
+  <ng-content select="ka-radio"></ng-content>
+</div>

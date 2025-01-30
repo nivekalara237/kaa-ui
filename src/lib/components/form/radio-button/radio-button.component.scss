@@ -1,0 +1,97 @@
+.ka-radio {
+  @apply border-[1px] rounded-full flex items-center justify-center
+  relative before:content-[''] before:rounded-full cursor-pointer
+  before:opacity-0 before:scale-50 peer-checked:before:opacity-100 peer-checked:before:scale-100
+  before:transition-all before:ease-in-out before:duration-200;
+}
+
+$ka-radio-colors: (
+  primary: 'blue',
+  success: emerald,
+  info: sky,
+  warning: amber,
+  danger: 'red',
+  secondary: slate,
+  default: 'gray',
+  soft: 'fuchsia'
+);
+
+$ka-radio-colors-and-density: (
+  primary: ('blue', 500),
+  success: (emerald, 500),
+  info: (sky, 400),
+  warning: (amber, 400),
+  danger: ('red', 500),
+  secondary: (slate, 800),
+  default: ('gray', 500),
+  soft: ('fuchsia', 500)
+);
+
+$ka-radio-sizes: (
+  tiny: ("w-3 h-3 before:w-1.5 before:h-1.5"),
+  small: ("w-4 h-4 before:w-2 before:h-2"),
+  medium: ("w-5 h-5 before:w-2.5 before:h-2.5"),
+  large: ("w-6 h-6 before:w-3.5 before:h-3.5"),
+  giant: ("w-8 h-8 before:w-4.5 before:h-4.5")
+);
+
+@mixin generate-radio-apparence {
+  @each $name, $color in $ka-radio-colors {
+    .ka-radio-#{$name} {
+      @apply border-#{$color}-400 before:bg-#{$color}-500;
+    }
+  }
+}
+
+@mixin generate-radio-sizes {
+  @each $name, $size in $ka-radio-sizes {
+    .ka-radio-size-#{$name} {
+      @apply #{$size}
+    }
+  }
+}
+
+@include generate-radio-apparence;
+
+@include generate-radio-sizes;
+
+.ka-radio-label {
+  @apply text-gray-500 dark:text-neutral-400 text-sm font-medium;
+}
+
+.ka-radio-disabled {
+  @apply disabled:border-gray-300 disabled:bg-gray-100
+  disabled:checked:bg-gray-300 disabled:checked:border-gray-300
+  disabled:cursor-not-allowed disabled:hover:bg-gray-100
+  disabled:hover:checked:bg-gray-300 border-gray-300
+  before:bg-gray-300 border-2
+  peer-disabled:cursor-not-allowed peer-disabled:before:bg-gray-300
+  peer-disabled:before:border-gray-300;
+}
+
+.peer-checked-common {
+  @apply dark:peer-checked:text-gray-300 peer-checked:text-gray-600
+  dark:border-gray-700;
+}
+
+.ka-radio-label-checkable {
+  @apply inline-flex border-2  items-center w-full
+  px-5 py-3 cursor-pointer rounded-lg
+  border-gray-200 dark:peer-checked:text-gray-300
+  peer-checked:text-gray-600 dark:border-gray-700;
+}
+
+@mixin generate-radio-label-checkable {
+  @each $name, $array in $ka-radio-colors-and-density {
+    $color: nth($array, 1);
+    $density: nth($array, 2);
+    .ka-radio-label-checkable-#{$name} {
+      @apply peer-checked:border-#{$color}-#{$density}
+      dark:peer-checked:border-#{$color}-#{$density};
+    }
+  }
+}
+
+;
+
+@include generate-radio-label-checkable;

@@ -35,7 +35,13 @@
 </ng-template>
 
 <ng-template #inputTpl>
-  <input #inputElement [id]="___inputIdAttr" [placeholder]="placeholder()"
+  <input #inputElement (blur)="handlerEvent($event, 'BLUR')"
+         (focus)="handlerEvent($event, 'FOCUS')"
+         (input)="handlerInput($event)"
+         [attr.aria-label]="ariaLabel()"
+         [attr.aria-labelledby]="ariaLabelledBy()"
+         [id]="___inputIdAttr"
+         [placeholder]="placeholder() ?? ''"
          [readOnly]="readOnly()"
          [required]="requiredValue()"
          autocomplete="on"

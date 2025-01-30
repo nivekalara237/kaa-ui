@@ -20,7 +20,15 @@ module.exports = {
             }
           }
         }
-      })
+      }),
+      width: {
+        '4.5': '1.125rem',
+        '1.5': '0.375rem'
+      },
+      height: {
+        '4.5': '1.125rem',
+        '1.5': '0.375rem'
+      }
     },
   },
   darkMode: "class",

@@ -117,6 +117,8 @@ const textareaScrollablePosition: Record<Exclude<OverflowPosition, undefined>, s
   auto: 'overflow-auto',
 }
 
+const radioGroupBorderMapping: string = "border-gray-200 dark:border-gray-700"
+
 export {
   inputTextSizeMapping,
   inputRoundedSizeMapping,
@@ -127,5 +129,6 @@ export {
   inputFloatingLabelTextSize,
   inputIconSize,
   textareaResize,
-  textareaScrollablePosition
+  textareaScrollablePosition,
+  radioGroupBorderMapping
 }

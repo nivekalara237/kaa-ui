@@ -9,6 +9,7 @@ import {
   SimpleChanges
 } from '@angular/core';
 import {BooleanUtils} from 'co2m.js';
+import {twMerge} from 'tailwind-merge';
 
 @Directive({
   host: {
@@ -38,6 +39,11 @@ export abstract class AbstractUIComponent implements OnChanges {
   }
 
   abstract compiledClasses(): string;
+
+  addClass = (clazz: string | string[]) => {
+    this.elementClass = twMerge(this.elementClass, clazz);
+    this.changeDetector.markForCheck();
+  };
 
   ngOnChanges(changes: SimpleChanges): void {
     const changed = Object.keys(changes);

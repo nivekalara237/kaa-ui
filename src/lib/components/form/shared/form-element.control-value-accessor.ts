@@ -31,7 +31,7 @@ export abstract class FormElementControlValueAccessor extends AbstractUIComponen
 
   writeValue(obj: any): void {
     this.setValue(obj, true);
-    this.changeDetector.markForCheck();
+    setTimeout(() => this.changeDetector.markForCheck(), 0);
   }
 
   markAsTouched = () => {
@@ -47,6 +47,12 @@ export abstract class FormElementControlValueAccessor extends AbstractUIComponen
 
   validate(control: AbstractControl): ValidationErrors | null {
     return null;
+  }
+
+  notifyValueChange(): void {
+    if (this.onChange) {
+      this.onChange(this.value);
+    }
   }
 
   protected handlerChange = () => {

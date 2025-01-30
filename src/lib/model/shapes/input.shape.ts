@@ -1,4 +1,4 @@
-import {Size} from '../types';
+import {Orientation, Size} from '../types';
 
 const checkboxSizeMapping: Record<Size, string> = {
   tiny: 'w-4 h-4',
@@ -24,8 +24,14 @@ const checkboxBorderMapping: Record<Size, string> = {
   giant: 'border-4',
 };
 
+const radioGroupOrientation: Record<Orientation, string> = {
+  horizontal: "px-4 py-2.5 -mt-px border first:rounded-s-full last:rounded-e-full",
+  vertical: "px-4 py-2.5 -mt-px border first:rounded-t-2xl last:rounded-b-2xl"
+}
+
 export {
   checkboxSizeMapping,
   checkboxBorderMapping,
-  checkboxIconSizeMapping
+  checkboxIconSizeMapping,
+  radioGroupOrientation
 }

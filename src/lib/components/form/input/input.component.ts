@@ -1,5 +1,12 @@
-import {AfterViewInit, booleanAttribute, ChangeDetectionStrategy, Component, input, OnInit} from '@angular/core';
-import {AbstractUIComponent} from '../../abstract.component';
+import {
+  AfterViewInit,
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  forwardRef,
+  input,
+  OnInit
+} from '@angular/core';
 import {ObjectUtils, RandomUtils, StringBuilder} from 'co2m.js';
 import {twMerge} from 'tailwind-merge';
 import {
@@ -14,6 +21,8 @@ import {
 } from '../../../model/types';
 import {InputFactory} from './input.factory';
 import {inputIconSize} from '../../../model/themes/input.theme';
+import {NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {AbstractInputComponent} from '../shared/abstract-input.component';
 
 @Component({
   selector: 'ui-input',
@@ -22,8 +31,13 @@ import {inputIconSize} from '../../../model/themes/input.theme';
   styleUrl: './input.component.css',
   providers: [
     {
-      provide: AbstractUIComponent,
-      useExisting: InputComponent
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => InputComponent),
+      multi: true
+    }, {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => InputComponent),
+      multi: true
     }
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,7 +45,7 @@ import {inputIconSize} from '../../../model/themes/input.theme';
     'class': 'transition-all duration-500'
   }
 })
-export class InputComponent extends AbstractUIComponent implements OnInit, AfterViewInit {
+export class InputComponent extends AbstractInputComponent implements OnInit, AfterViewInit {
 
   label = input<string>();
   // labelDisposition = input<Position>('top');
@@ -149,4 +163,15 @@ export class InputComponent extends AbstractUIComponent implements OnInit, After
     this.___inputIdAttr = this.id();
   }
 
+  handlerInput($event: any) {
+    this.setValue($event.target.value, true);
+  }
+
+  handlerEvent = ($event: any, eventType: 'BLUR' | 'FOCUS') => {
+    if (eventType === "BLUR") {
+      this.onBlur.emit($event);
+    } else {
+      this.onFocus.emit($event);
+    }
+  }
 }

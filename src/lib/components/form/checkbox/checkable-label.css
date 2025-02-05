@@ -1,0 +1,123 @@
+/* Base styles */
+.form-checkable-label {
+  @apply inline-flex border-2 border-gray-200 items-center w-full px-5 py-3
+  cursor-pointer rounded-lg;
+}
+
+/* Dynamic themes */
+.form-checkable-primary {
+  @apply dark:border-blue-600;
+}
+
+.form-checkable-success {
+  @apply dark:border-emerald-600;
+}
+
+.form-checkable-danger {
+  @apply dark:border-red-600;
+}
+
+.form-checkable-warning {
+  @apply dark:border-amber-600;
+}
+
+.form-checkable-default {
+  @apply dark:border-gray-600;
+}
+
+.form-checkable-soft {
+  @apply dark:border-gray-600;
+}
+
+.form-checkable-secondary {
+  @apply dark:border-slate-800;
+}
+
+.form-checkable-info {
+  @apply dark:border-sky-600;
+}
+
+/* Hover styles (shared) */
+.form-checkable-label-hover {
+  @apply hover:bg-gray-50 dark:hover:bg-gray-700;
+}
+
+
+/* Peer-checked states */
+.peer-checked-common {
+  @apply dark:peer-checked:text-gray-300 peer-checked:text-gray-600
+  dark:border-gray-700;
+}
+
+.peer-checked-primary {
+  @apply peer-checked:border-blue-500 dark:peer-checked:border-blue-500
+  peer-checked-common;
+}
+
+.peer-checked-success {
+  @apply peer-checked:border-emerald-500 dark:peer-checked:border-emerald-500
+  peer-checked-common;
+}
+
+.peer-checked-danger {
+  @apply peer-checked:border-red-500 dark:peer-checked:border-red-500
+  peer-checked-common;
+}
+
+.peer-checked-warning {
+  @apply peer-checked:border-amber-400 dark:peer-checked:border-amber-500
+  peer-checked-common;
+}
+
+.peer-checked-info {
+  @apply peer-checked:border-sky-400 dark:peer-checked:border-sky-500
+  peer-checked-common;
+}
+
+.peer-checked-default {
+  @apply peer-checked:border-gray-500 dark:peer-checked:border-gray-500
+  peer-checked-common;
+}
+
+.peer-checked-secondary {
+  @apply peer-checked:border-slate-800 dark:peer-checked:border-gray-800
+  peer-checked-common;
+}
+
+.peer-checked-soft {
+  @apply peer-checked:border-fuchsia-500 dark:peer-checked:border-fuchsia-500
+  peer-checked-common;
+}
+
+/* Rounded size*/
+/*
+  none: 'rounded-none',
+  tiny: 'rounded-sm',
+  small: 'rounded-md',
+  medium: 'rounded-lg',
+  large: 'rounded-2xl',
+  full: 'rounded-full',
+ */
+.peer-checked-rounded-none {
+  @apply peer-checked:rounded-none;
+}
+
+.peer-checked-rounded-tiny {
+  @apply peer-checked:rounded-sm;
+}
+
+.peer-checked-rounded-small {
+  @apply peer-checked:rounded-md;
+}
+
+.peer-checked-rounded-medium {
+  @apply peer-checked:rounded-lg;
+}
+
+.peer-checked-rounded-large {
+  @apply peer-checked:rounded-2xl;
+}
+
+.peer-checked-rounded-full {
+  @apply peer-checked:rounded-full;
+}

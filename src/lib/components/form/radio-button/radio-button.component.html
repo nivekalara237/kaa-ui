@@ -1,0 +1,36 @@
+<div
+  [ngClass]="{
+  'flex-row-reverse': labelPosition() === 'left',
+  'gap-x-2 flex-row': labelPosition() === 'left' || labelPosition() === 'right',
+  'gap-y-2 flex-col': labelPosition() === 'top' || labelPosition() === 'bottom',
+  'flex-col-reverse': labelPosition() === 'top',
+  }"
+  class="flex items-center {{ elementClass }}">
+  <label [for]="___id" class="relative flex items-center cursor-pointer">
+    <input #inputElement
+           [attr.name]="name()"
+           [attr.value]="inputValue()"
+           [checked]="checkedInput()"
+           [disabled]="disabledInput()"
+           [id]="___id"
+           [readonly]="readOnly()"
+           class="hidden peer"
+           type="radio"/>
+    <span *ngIf="!onlyLabel()" class="{{ ___radioClass }}"></span>
+  </label>
+  <ng-container *ngTemplateOutlet="labelTpl"></ng-container>
+</div>
+
+<ng-template #labelTpl>
+  <ng-container *ngIf="label(); else tryGetLabelTagContent">
+    <span (click)="inputElement.click()"
+          class="{{ ___labelClass }}">
+      {{ label() }}
+    </span>
+  </ng-container>
+  <ng-template #tryGetLabelTagContent>
+    <div (click)="inputElement.click()" class="cursor-pointer p-0 m-0">
+      <ng-content select="ka-radio-label"></ng-content>
+    </div>
+  </ng-template>
+</ng-template>

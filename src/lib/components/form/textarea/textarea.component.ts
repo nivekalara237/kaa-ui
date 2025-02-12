@@ -151,6 +151,7 @@ export class TextareaComponent extends FormElementControlValueAccessor implement
 
   handleChange($event: string) {
     this.change.emit($event);
-    this.handlerChange();
+    // this.handlerChange();
+    this.setValue($event, true);
   }
 }

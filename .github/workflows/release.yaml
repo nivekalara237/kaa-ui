@@ -39,13 +39,12 @@ jobs:
           architecture: x64
           registry-url: https://registry.npmjs.org/
       - name: Run NPM Install
-        run: npm ci && \
-          npm run build && \
+        run: |
+          npm ci
+          npm run build
           npm run build:css
-          npm run copy-fronts
       - name: Publish
         run: |
-          cd dist
-          npm publish --access --provenance public
+          npm run publish:ci
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

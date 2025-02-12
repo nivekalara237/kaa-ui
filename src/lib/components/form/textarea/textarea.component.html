@@ -1,6 +1,7 @@
 <div class="relative">
   <label *ngIf="label()" [id]="___id" class="{{ ___labelClasses }}">{{ label() }}</label>
-  <textarea #textarea (keyup)="handleChange(textarea.value)"
+  <textarea #textarea (input)="handleChange(textarea.value)"
+            (keyup)="handleChange(textarea.value)"
             [id]="___id"
             [placeholder]="placeholder() ?? ''"
             [readOnly]="readOnly()"

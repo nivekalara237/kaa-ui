@@ -1,3 +1,5 @@
+@use "sass:list";
+
 .ka-radio {
   @apply border-[1px] rounded-full flex items-center justify-center
   relative before:content-[''] before:rounded-full cursor-pointer
@@ -83,8 +85,8 @@ $ka-radio-sizes: (
 
 @mixin generate-radio-label-checkable {
   @each $name, $array in $ka-radio-colors-and-density {
-    $color: nth($array, 1);
-    $density: nth($array, 2);
+    $color: list.nth($array, 1);
+    $density: list.nth($array, 2);
     .ka-radio-label-checkable-#{$name} {
       @apply peer-checked:border-#{$color}-#{$density}
       dark:peer-checked:border-#{$color}-#{$density};

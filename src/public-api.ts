@@ -3,7 +3,7 @@
  */
 
 // services
-export * from './lib/ngx-fs-ui.service';
+// export * from './lib/ngx-fs-ui.service';
 
 // Components
 export * from './lib/ngx-fs-ui.component';

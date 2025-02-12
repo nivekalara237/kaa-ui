@@ -1,0 +1,51 @@
+name: Publish New Version
+on:
+  create:
+
+jobs:
+  release:
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+    name: Release kaa-ui
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Create a new release lib
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$TAG_NAME" \
+             --repo="$GITHUB_REPOSITORY" \
+             --title="${TAG_NAME#v}" \
+             --generate-notes
+
+  publish-npm:
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+    name: "Publish the new version to the npmjs.org"
+    runs-on: ubuntu-22.04
+    needs: release
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache: "npm"
+          node-version: 21.x
+          architecture: x64
+          registry-url: https://registry.npmjs.org/
+      - name: Run NPM Install
+        run: npm ci && \
+          npm run build && \
+          npm run build:css
+          npm run copy-fronts
+      - name: Publish
+        run: |
+          cd dist
+          npm publish --access --provenance public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

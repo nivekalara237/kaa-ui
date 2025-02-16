@@ -1,0 +1,17 @@
+<div class="relative">
+  <label *ngIf="label()" [id]="___id" class="{{ ___labelClasses }}">{{ label() }}</label>
+  <textarea #textarea (input)="handleChange(textarea.value)"
+            (keyup)="handleChange(textarea.value)"
+            [id]="___id"
+            [placeholder]="placeholder() ?? ''"
+            [readOnly]="readOnly()"
+            [required]="requiredValue()"
+            [rows]="rows()"
+            [value]="value ?? ''"
+            class="{{ ___textareaClasses }}">
+  </textarea>
+
+</div>
+<div #content class="hidden">
+  <ng-content></ng-content>
+</div>

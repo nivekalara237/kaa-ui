@@ -3,7 +3,7 @@
  */
 
 // services
-export * from './lib/ngx-fs-ui.service';
+// export * from './lib/ngx-fs-ui.service';
 
 // Components
 export * from './lib/ngx-fs-ui.component';
@@ -30,6 +30,14 @@ export * from "./lib/components/card/body/body.component";
 export * from "./lib/components/card/footer/footer.component";
 export * from "./lib/components/card/link/link.component";
 export * from "./lib/components/form/input/input.component";
+export * from "./lib/components/form/textarea/textarea.component";
+export * from "./lib/components/form/checkbox/checkbox.component";
+export * from "./lib/components/form/checkbox-group/checkbox-group.component";
+export * from './lib/components/form/checkbox/label/label.component'
+export * from './lib/components/form/checkbox/custom-icon/checkbox-custom-icon.component'
+export * from './lib/components/form/radio-button/radio-button.component'
+export * from './lib/components/form/radio-button/label/label.component'
+export * from './lib/components/form/radio-button/group/group.component'
 
 // Modules
 export * from './lib/components/accordion/accordion.module';

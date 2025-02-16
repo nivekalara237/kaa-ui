@@ -1,0 +1,62 @@
+<div
+  [ngClass]="{
+  'flex-row-reverse': labelPosition() === 'left',
+  'gap-x-2 flex-row': labelPosition() === 'left' || labelPosition() === 'right',
+  'gap-y-2 flex-col': labelPosition() === 'top' || labelPosition() === 'bottom',
+  'flex-col-reverse': labelPosition() === 'top',
+  }"
+  class="flex items-center shrink-0">
+  <div class="group place-items-center grid relative grid-cols-1">
+    <input #inputElement
+           (blur)="onBlur.emit()"
+           (change)="handlerCheckboxChange(inputElement.checked)"
+           (focus)="onFocus.emit()"
+           [attr.aria-label]="ariaLabel()"
+           [attr.aria-labelledby]="ariaLabelledBy()"
+           [attr.name]="name()"
+           [checked]="checked()"
+           [disabled]="disabledCheckbox()"
+           [id]="__id" [indeterminate]="intermediate() && ___state === Intermediate"
+           [readOnly]="readOnly()" [readonly]="readOnly()"
+           [required]="required()"
+           class="{{ __checkboxClass }} col-start-1 row-start-1 "
+           type="checkbox">
+    <ng-container *ngIf="onlyLabel()">
+      <ng-container *ngTemplateOutlet="labelTpl"></ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="!hasCustomIcon; else customIcon">
+      <svg aria-hidden="true"
+           class="{{ __iconClass }} pointer-events-none col-start-1 row-start-1 self-center justify-self-center"
+           fill="none" height="24"
+           viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+        <path class="transition-all duration-200 fade-in opacity-0 group-has-[:checked]:opacity-100"
+              d="M5 11.917 9.724 16.5 19 7.5" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round"
+              stroke-width="4"/>
+        <path class="opacity-0 group-has-[:indeterminate]:opacity-100"
+              d="M5 12h14"
+              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+      </svg>
+    </ng-container>
+
+    <ng-template #customIcon>
+      <ng-content select="ka-checkbox-custom-icon"></ng-content>
+    </ng-template>
+  </div>
+  <ng-container *ngIf="!onlyLabel()">
+    <ng-container *ngTemplateOutlet="labelTpl"></ng-container>
+  </ng-container>
+</div>
+
+<ng-template #labelTpl>
+  <label [for]="__id" class="{{ __labelClass }}">
+    <ng-container *ngIf="label(); else tryGetLabelTagContent">
+      {{ label() }}
+    </ng-container>
+    <ng-template #tryGetLabelTagContent>
+      <ng-content select="ka-checkbox-label"></ng-content>
+    </ng-template>
+  </label>
+</ng-template>
+

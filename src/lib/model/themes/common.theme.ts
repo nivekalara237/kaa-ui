@@ -1,5 +1,40 @@
 import {Color, ColorDensityKey, Status} from '../types';
 
+const scrollbarStylesMapping: Record<Status | Color, string> = {
+  danger: '[&::-webkit-scrollbar-track]:bg-red-100 [&::-webkit-scrollbar-thumb]:bg-red-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-red-500',
+  default: '[&::-webkit-scrollbar-track]:bg-slate-100 [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-slate-500',
+  info: '[&::-webkit-scrollbar-track]:bg-sky-100 [&::-webkit-scrollbar-thumb]:bg-sky-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-sky-500',
+  primary: '[&::-webkit-scrollbar-track]:bg-blue-100 [&::-webkit-scrollbar-thumb]:bg-blue-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-blue-500',
+  secondary: '[&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-gray-500',
+  soft: '[&::-webkit-scrollbar-track]:bg-fuchsia-100 [&::-webkit-scrollbar-thumb]:bg-fuchsia-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-fuchsia-500',
+  success: '[&::-webkit-scrollbar-track]:bg-emerald-100 [&::-webkit-scrollbar-thumb]:bg-emerald-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-emerald-500',
+  warning: '[&::-webkit-scrollbar-track]:bg-amber-100 [&::-webkit-scrollbar-thumb]:bg-amber-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-amber-500',
+
+  slate: `[&::-webkit-scrollbar-track]:bg-slate-100 [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-slate-500`,
+  gray: `[&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500`,
+  zinc: `[&::-webkit-scrollbar-track]:bg-zinc-100 [&::-webkit-scrollbar-thumb]:bg-zinc-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-zinc-500`,
+  neutral: `[&::-webkit-scrollbar-track]:bg-neutral-100 [&::-webkit-scrollbar-thumb]:bg-neutral-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500`,
+  stone: `[&::-webkit-scrollbar-track]:bg-stone-100 [&::-webkit-scrollbar-thumb]:bg-stone-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-stone-500`,
+  red: `[&::-webkit-scrollbar-track]:bg-red-100 [&::-webkit-scrollbar-thumb]:bg-red-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-red-500`,
+  orange: `[&::-webkit-scrollbar-track]:bg-orange-100 [&::-webkit-scrollbar-thumb]:bg-orange-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-orange-500`,
+  ember: `[&::-webkit-scrollbar-track]:bg-ember-100 [&::-webkit-scrollbar-thumb]:bg-ember-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-ember-500`,
+  yellow: `[&::-webkit-scrollbar-track]:bg-yellow-100 [&::-webkit-scrollbar-thumb]:bg-yellow-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-yellow-500`,
+  lime: `[&::-webkit-scrollbar-track]:bg-lime-100 [&::-webkit-scrollbar-thumb]:bg-lime-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-lime-500`,
+  green: `[&::-webkit-scrollbar-track]:bg-green-100 [&::-webkit-scrollbar-thumb]:bg-green-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-green-500`,
+  emerald: `[&::-webkit-scrollbar-track]:bg-emerald-100 [&::-webkit-scrollbar-thumb]:bg-emerald-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-emerald-500`,
+  amber: `[&::-webkit-scrollbar-track]:bg-amber-100 [&::-webkit-scrollbar-thumb]:bg-amber-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-amber-500`,
+  teal: `[&::-webkit-scrollbar-track]:bg-teal-100 [&::-webkit-scrollbar-thumb]:bg-teal-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-teal-500`,
+  cyan: `[&::-webkit-scrollbar-track]:bg-cyan-100 [&::-webkit-scrollbar-thumb]:bg-cyan-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-cyan-500`,
+  sky: `[&::-webkit-scrollbar-track]:bg-sky-100 [&::-webkit-scrollbar-thumb]:bg-sky-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-sky-500`,
+  blue: `[&::-webkit-scrollbar-track]:bg-blue-100 [&::-webkit-scrollbar-thumb]:bg-blue-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-blue-500`,
+  indigo: `[&::-webkit-scrollbar-track]:bg-indigo-100 [&::-webkit-scrollbar-thumb]:bg-indigo-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-indigo-500`,
+  violet: `[&::-webkit-scrollbar-track]:bg-violet-100 [&::-webkit-scrollbar-thumb]:bg-violet-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-violet-500`,
+  purple: `[&::-webkit-scrollbar-track]:bg-purple-100 [&::-webkit-scrollbar-thumb]:bg-purple-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-purple-500`,
+  fuchsia: `[&::-webkit-scrollbar-track]:bg-fuchsia-100 [&::-webkit-scrollbar-thumb]:bg-fuchsia-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-fuchsia-500`,
+  pink: `[&::-webkit-scrollbar-track]:bg-pink-100 [&::-webkit-scrollbar-thumb]:bg-pink-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-pink-500`,
+  rose: `[&::-webkit-scrollbar-track]:bg-rose-100 [&::-webkit-scrollbar-thumb]:bg-rose-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-rose-500`,
+}
+
 const ringColorAndStatusWithDensityMapping: Record<Status | Color, Record<ColorDensityKey, string>> = {
   danger: {
     d50: "ring-red-50 dark:ring-red-950",
@@ -2035,10 +2070,17 @@ const hoverTextColorAndStatusWithDensityMapping: Record<Status | Color, Record<C
   },
 }
 
+const darkAppBackground = {
+  focus: "dark:focus:bg-neutral-800",
+  bg: "dark:bg-neutral-800"
+};
+
 export {
   ringColorAndStatusWithDensityMapping,
   textColorAndStatusWithDensityMapping,
   backgroundColorAndStatusWithDensityMapping,
   hoverBackgroundColorAndStatusWithDensityMapping,
-  hoverTextColorAndStatusWithDensityMapping
+  hoverTextColorAndStatusWithDensityMapping,
+  darkAppBackground,
+  scrollbarStylesMapping
 }

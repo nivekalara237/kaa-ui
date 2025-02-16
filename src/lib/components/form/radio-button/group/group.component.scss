@@ -1,0 +1,11 @@
+.group-item {
+  @apply px-4 py-2.5 -mt-px border;
+}
+
+.group-item-horizontal {
+  @apply px-4 py-2.5 -mt-px border first:rounded-s-full last:rounded-e-full;
+}
+
+.group-item-vertical {
+  @apply group-item first:rounded-t-full last:rounded-b-full;
+}

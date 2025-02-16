@@ -28,18 +28,55 @@
 </div>
 
 <ng-template #labelTpl>
-  <label [for]="id()" [ngClass]="{ 'sr-only': !label() }"
-         class="{{ ___commonLabelVariantClass }} {{ floatingLabel() ? ___labelFloatingClass : ___labelClass }}">
+  <label [for]="___inputIdAttr" [ngClass]="{ 'sr-only': !label() }"
+         class="{{ ___commonLabelVariantClass }} {{ ___labelClass }}">
     {{ label() }}
   </label>
 </ng-template>
 
 <ng-template #inputTpl>
-  <input [id]="id()" [placeholder]="placeholder()" autocomplete="on"
-         class="{{ ___commonVariantClass }} {{ floatingLabel() ? ___inputFloatingClass : ___inputClass }}"
+  <input #inputElement (blur)="handlerEvent($event, 'BLUR')"
+         (focus)="handlerEvent($event, 'FOCUS')"
+         (input)="handlerInput($event)"
+         [attr.aria-label]="ariaLabel()"
+         [attr.aria-labelledby]="ariaLabelledBy()"
+         [id]="___inputIdAttr"
+         [placeholder]="placeholder() ?? ''"
+         [readOnly]="readOnly()"
+         [required]="requiredValue()"
+         autocomplete="on"
+         class="{{ ___commonVariantClass }} {{ ___inputClass }}"
          type="{{ inputType() }}"/>
+  <ng-container *ngIf="inputType() === 'number'">
+    <div [ngClass]="{
+    'top-1/2': label() && !floatingLabel(),
+    'top-1.5': floatingLabel(),
+    'bottom-1.5': !label(),
+    'xxflex-col': getVariant !== 'underline',
+    'me-8': addonIcon() && addonIconPosition() === 'right'
+    }" class="absolute h-fit flex-col right-0 flex items-center peer-visible:">
+      <button (click)="inputElement.stepUp()"
+              aria-label="Increase quantity"
+              class="px-2 h-full border-none ring-0 border-gray-200 text-gray-500 hover:text-sky-500 focus:outline-none focus:ring-0"
+              type="button">
+        <svg [ngClass]="inputNumberPinIconSize" class="" fill="none" stroke="currentColor" stroke-width="1.5"
+             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4.5 15.75l7.5-7.5 7.5 7.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button (click)="inputElement.stepDown()"
+              aria-label="Decrease quantity"
+              class="px-2 h-full border-none ring-0 border-gray-200 text-gray-500 hover:text-sky-500 focus:outline-none focus:ring-0"
+              type="button">
+        <svg [ngClass]="inputNumberPinIconSize" class="" fill="none" stroke="currentColor" stroke-width="1.5"
+             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19.5 8.25l-7.5 7.5-7.5-7.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </ng-container>
   <div *ngIf="addonIcon()"
-       class="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-4 peer-disabled:opacity-50 peer-disabled:pointer-events-none"
+       class=" {{ ___iconClass }}"
   >
     <i class="pi pi-{{ addonIcon() }}"></i>
   </div>

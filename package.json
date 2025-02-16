@@ -1,38 +1,71 @@
 {
-  "name": "ngx-fs-ui",
-  "version": "0.0.1",
+  "name": "@nivekaa/kaa-ui",
+  "version": "0.0.4-beta.2",
   "keywords": [
-    "library",
-    "tailwindcs",
+    "angular",
+    "typescript",
+    "css",
+    "tailwind",
+    "tailwindcss",
     "components-library",
-    "angalar",
     "frigma",
     "kaaui",
+    "kaa-ui",
     "ui"
   ],
+  "exports": {
+    ".": {
+      "sass": "./src/lib/styles/styles.scss"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
-    "prestart": "echo 'xxxxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxxxxx'",
-    "copy-fonts": "cp node_modules/primeicons/fonts ./dist/ngx-fs-ui/fonts",
-    "buildcss": "npx tailwindcss -i ./src/lib/styles/styles.scss  -o ./dist/ngx-fs-ui/ui.css --watch"
+    "prestart": "echo 'xyz'",
+    "ui:prepare-fonts": "mkdirp dist/@nivekaa/kaa-ui/fonts",
+    "build": "ng build",
+    "ui:watch": "npm run ui:prepare-fonts && npm run ui:copy-fonts && ng build --watch",
+    "ui:copy-fonts": "cp -R projects/@nivekaa/kaa-ui/node_modules/primeicons/fonts ./dist/@nivekaa/kaa-ui #DEPRECATED",
+    "ui:watch-twcss": "npm run ui:prepare-fonts && npm run ui:copy-fonts && npx tailwindcss -i ./projects/@nivekaa/kaa-ui/src/lib/styles/styles.scss  -o ./dist/@nivekaa/kaa-ui/ui.css --watch",
+    "watch": "ng build --watch --configuration development",
+    "copy-fonts": "cp -r node_modules/primeicons/fonts ./dist/@nivekaa/kaa-ui/fonts #DEPRECATED",
+    "build:css": "npx tailwindcss -i ./src/lib/styles/styles.scss -o ./dist/@nivekaa/kaa-ui/styles/compiledui.css",
+    "watch:css": "npx tailwindcss -i ./src/lib/styles/styles.scss -o ./dist/@nivekaa/kaa-ui/styles/compiledui.css --watch",
+    "publish": "cd dist/@nivekaa/kaa-ui && npm publish --access public",
+    "publish:ci": "cd dist/@nivekaa/kaa-ui && npm publish --provenance --access public",
+    "uninstall": "npm uninstall @nivekaacom/faa-ui --registry https://registry.npmjs.org --force",
+    "install:lib": "cd ",
+    "clean": "rm -R dist",
+    "beta-version-patch": "npm version $(semver $npm_package_version -i prerelease --preid beta)",
+    "beta-version-minor": "npm version $(semver $npm_package_version -i preminor --preid beta)",
+    "beta-version-major": "npm version $(semver $npm_package_version -i premajor --preid beta)",
+    "rc-version": "npm version $(semver $npm_package_version -i prerelease --preid rc)",
+    "release-version": ""
   },
   "peerDependencies": {
     "@angular/common": "^19.0.0",
     "@angular/core": "^19.0.0",
-    "co2m.js": "^1.0.12",
-    "flowbite": "^2.5.2",
-    "primeicons": "^7.0.0"
+    "@tailwindcss/typography": "^0.5.15",
+    "autoprefixer": "^10.4.20",
+    "co2m.js": "^1.0.13",
+    "postcss": "^8.4.49",
+    "postcss-import": "^16.1.0",
+    "primeicons": "^7.0.0",
+    "tailwind-merge": "^2.6.0"
   },
   "dependencies": {
     "co2m.js": "^1.0.13",
+    "tailwindcss": "^3.4.17",
     "tslib": "^2.3.0"
   },
   "sideEffects": false,
   "devDependencies": {
-    "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.15",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
     "postcss-import": "^16.1.0",
+    "semver": "^7.7.1",
     "tailwind-merge": "^2.6.0",
     "tailwindcss": "^3.4.17"
   }

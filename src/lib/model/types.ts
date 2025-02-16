@@ -40,7 +40,6 @@ type AlertRoundedSize = Exclude<Size, 'giant' | 'tiny'> | 'none' | 'full';
 type AvatarShape = 'circle' | 'square' | 'rounded';
 
 type ColorDensityKey = 'd50' | 'd100' | 'd200' | 'd300' | 'd400' | 'd500' | 'd600' | 'd700' | 'd800' | 'd900' | 'd950';
-type ColorDensityValue = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950;
 
 type IconVariant = "pi" | "fi" | 'fa';
 type CardinalDirection = "top" | "bottom" | 'left' | 'right';
@@ -48,18 +47,16 @@ type Position = CardinalDirection;
 type HorizontalPosition = Exclude<Position, 'top' | 'bottom'>;
 type VerticalPosition = Exclude<Position, 'right' | 'left'>;
 type InputVariant = 'basic' | 'gray' | 'underline';
+type InputType = "text" | "password" | "email"
+  | "number" | "tel" | "url" | "search" | "date"
+  | "datetime-local" | "month" | "week" | "time" | "color"
+  | "checkbox" | "radio" | "range" | "file" | "hidden"
+  | "submit" | "reset" | "button" | "image";
+type TextareaResize = 'x' | 'y' | 'xy' | 'none' | undefined;
+type OverflowPosition = Exclude<TextareaResize, "xy"> | 'auto';
+type FormInputValidateState = 'success' | 'error' | 'warning';
+type Orientation = "horizontal" | "vertical";
 
-
-export const statusColor: Record<Status, Color> = {
-  primary: 'blue',
-  success: 'emerald',
-  secondary: 'slate',
-  info: "sky",
-  danger: "red",
-  default: "gray",
-  soft: 'fuchsia',
-  warning: "amber"
-}
 export type {
   Color,
   Status,
@@ -71,11 +68,15 @@ export type {
   AlertRoundedSize,
   AvatarShape,
   ColorDensityKey,
-  ColorDensityValue,
   IconVariant,
   Position,
   CardinalDirection,
   VerticalPosition,
   HorizontalPosition,
-  InputVariant
+  InputVariant,
+  InputType,
+  TextareaResize,
+  OverflowPosition,
+  FormInputValidateState,
+  Orientation
 }

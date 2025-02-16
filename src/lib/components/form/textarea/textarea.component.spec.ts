@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NgxFsUiComponent } from './ngx-fs-ui.component';
+import { TextareaComponent } from './textarea.component';
 
-describe('NgxFsUiComponent', () => {
-  let component: NgxFsUiComponent;
-  let fixture: ComponentFixture<NgxFsUiComponent>;
+describe('TextareaComponent', () => {
+  let component: TextareaComponent;
+  let fixture: ComponentFixture<TextareaComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NgxFsUiComponent]
+      declarations: [TextareaComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(NgxFsUiComponent);
+    fixture = TestBed.createComponent(TextareaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,6 +1,6 @@
 {
   "name": "@nivekaa/kaa-ui",
-  "version": "0.0.4-beta.2",
+  "version": "1.0.0",
   "keywords": [
     "angular",
     "typescript",
@@ -52,7 +52,8 @@
     "postcss": "^8.4.49",
     "postcss-import": "^16.1.0",
     "primeicons": "^7.0.0",
-    "tailwind-merge": "^2.6.0"
+    "tailwind-merge": "^2.6.0",
+    "@floating-ui/dom": "^1.6.13"
   },
   "dependencies": {
     "co2m.js": "^1.0.13",

@@ -28,7 +28,7 @@ export class UnderlineInput extends AbstractInput {
 
       builder
         .append("absolute text-base text-gray-400 dark:text-transparent " +
-          `${this.options.hasIconAt ? 'ms-9' : 'ms-4'} top-1/2 ` +
+          `${this.options.floatingLabel ? 'ms-4' : ((this.options.hasIconAt) ? 'ms-9' : 'ms-4')} top-1/2 ` +
           "left-0 start-0 " +
           "transition-all duration-300 truncate ease-in-out " +
           "-translate-y-1/2 origin-[0] " +

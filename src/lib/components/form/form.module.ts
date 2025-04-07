@@ -9,6 +9,10 @@ import {CheckboxCustomIconComponent} from './checkbox/custom-icon/checkbox-custo
 import {RadioButtonComponent} from './radio-button/radio-button.component';
 import {RadioLabelComponent} from './radio-button/label/label.component';
 import {RadioGroupComponent} from './radio-button/group/group.component';
+import {SelectComponent} from './select/select.component';
+import {DropdownModule} from "../dropdown/dropdown.module";
+import {OptionComponent} from "./select/option/option.component";
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,10 +24,14 @@ import {RadioGroupComponent} from './radio-button/group/group.component';
     CheckboxCustomIconComponent,
     RadioButtonComponent,
     RadioLabelComponent,
-    RadioGroupComponent
+    RadioGroupComponent,
+    SelectComponent,
+    OptionComponent
   ],
   imports: [
     CommonModule,
+    DropdownModule,
+    FormsModule
   ],
   exports: [
     InputComponent,
@@ -34,7 +42,9 @@ import {RadioGroupComponent} from './radio-button/group/group.component';
     CheckboxCustomIconComponent,
     RadioLabelComponent,
     RadioButtonComponent,
-    RadioGroupComponent
+    RadioGroupComponent,
+    SelectComponent,
+    OptionComponent
   ],
   providers: []
 })

@@ -1,4 +1,4 @@
-<div [ngClass]="{
+<div #htmlElement [ngClass]="{
 'floating-label': floatingLabel()
 }" class="transition-all relative duration-500 {{ elementClass }}">
   <ng-container [ngSwitch]="getVariant">
@@ -44,6 +44,7 @@
          [placeholder]="placeholder() ?? ''"
          [readOnly]="readOnly()"
          [required]="requiredValue()"
+         [value]="inputValue() ? inputValue() : ''"
          autocomplete="on"
          class="{{ ___commonVariantClass }} {{ ___inputClass }}"
          type="{{ inputType() }}"/>

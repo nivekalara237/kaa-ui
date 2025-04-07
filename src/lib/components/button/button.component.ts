@@ -8,7 +8,8 @@ import {
   ElementRef,
   input,
   OnInit,
-  viewChild
+  viewChild,
+  ViewEncapsulation
 } from '@angular/core';
 import {IconVariant, Position, RoundedSize, Size, Status} from "../../model/types";
 import {AbstractUIComponent} from "../abstract.component";
@@ -42,6 +43,7 @@ import {iconVariantSizeMapping} from '../../model/themes/icon.theme';
     }
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     'class': ''
   }
@@ -59,7 +61,6 @@ export class ButtonComponent extends AbstractUIComponent implements OnInit, Afte
   fullWidth = input(false, {transform: booleanAttribute});
   ghost = input(false, {transform: booleanAttribute});
   disabled = input(false, {transform: booleanAttribute});
-
   icon = input<string>();
   iconVariant = input<IconVariant>('pi');
   iconPosition = input<Position>('left');

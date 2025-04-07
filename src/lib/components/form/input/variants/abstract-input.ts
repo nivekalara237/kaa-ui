@@ -1,6 +1,7 @@
 import {InputOptions} from '../../../../model/options/input.options';
 import {StringBuilder} from 'co2m.js';
 import {inputPaddingXBySize, inputPaddingYBySize, inputTextSize} from '../../../../model/themes/input.theme';
+import {twMerge} from 'tailwind-merge';
 
 export abstract class AbstractInput {
   constructor(
@@ -51,6 +52,6 @@ export abstract class AbstractInput {
     }
     builder.append("mb-2").append(inputTextSize[this.options.size])
       .append("text-neutral-700 font-medium dark:text-white");
-    return builder.build(" ");
+    return twMerge(builder.segments());
   };
 }

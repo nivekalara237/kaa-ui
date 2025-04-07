@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 const fpluggin = require("flowbite/plugin");
+const plugin = require("tailwindcss");
 // fpluggin.plugins.map(p =>  p.f)
 module.exports = {
   content: [
@@ -10,7 +11,8 @@ module.exports = {
   theme: {
     extend: {
       zIndex: {
-        "-1": "-1"
+        "-1": "-1",
+        "9999": "9999"
       },
       customForms: theme => ({
         default: {
@@ -28,7 +30,7 @@ module.exports = {
       height: {
         '4.5': '1.125rem',
         '1.5': '0.375rem'
-      }
+      },
     },
   },
   darkMode: "class",
@@ -42,6 +44,19 @@ module.exports = {
      * require("@tailwindcss/forms")({ strategy: 'class'})
      *
      * */
+    plugin(function ({matchUtilities, theme}) {
+      matchUtilities(
+        {
+          'auto-fill': (value) => ({
+            gridTemplateColumns: `repeat(auto-fill, minmax(min(${value}, 100%), 1fr))`,
+          }),
+          'auto-fit': (value) => ({
+            gridTemplateColumns: `repeat(auto-fit, minmax(min(${value}, 100%), 1fr))`,
+          })
+        }, {
+          values: theme('width', {})
+        })
+    })
   ],
 }
 

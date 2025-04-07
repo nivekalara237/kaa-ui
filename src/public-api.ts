@@ -33,17 +33,23 @@ export * from "./lib/components/form/input/input.component";
 export * from "./lib/components/form/textarea/textarea.component";
 export * from "./lib/components/form/checkbox/checkbox.component";
 export * from "./lib/components/form/checkbox-group/checkbox-group.component";
-export * from './lib/components/form/checkbox/label/label.component'
-export * from './lib/components/form/checkbox/custom-icon/checkbox-custom-icon.component'
-export * from './lib/components/form/radio-button/radio-button.component'
-export * from './lib/components/form/radio-button/label/label.component'
-export * from './lib/components/form/radio-button/group/group.component'
+export * from './lib/components/form/checkbox/label/label.component';
+export * from './lib/components/form/checkbox/custom-icon/checkbox-custom-icon.component';
+export * from './lib/components/form/radio-button/radio-button.component';
+export * from './lib/components/form/radio-button/label/label.component';
+export * from './lib/components/form/radio-button/group/group.component';
+export * from './lib/components/form/select/select.component';
+export * from './lib/components/form/select/option/option.component';
+export * from './lib/components/dropdown/dropdown.component';
+export * from './lib/components/dropdown/dropdown-item/dropdown-item.component';
 
 // Modules
 export * from './lib/components/accordion/accordion.module';
 export * from './lib/components/alert/alert.module';
 export * from './lib/components/card/card.module';
 export * from './lib/components/form/form.module';
+export * from './lib/components/dropdown/dropdown.module';
+
 // Models and Options
 export * from './lib/model/types';
 export * from './lib/model/options/button.options';
@@ -54,5 +60,6 @@ export * from './lib/model/themes/accordion.theme';
 export * from './lib/model/themes/alert.theme';
 export * from './lib/model/themes/avatar.theme';
 export * from './lib/model/domain/avatar.domain';
+export * from './lib/model/domain/select-option.domain';
 export * from './lib/model/themes/icon.theme';
 export * from './lib/model/themes/input.theme';

@@ -5,7 +5,8 @@ import {
   Component,
   forwardRef,
   input,
-  OnInit
+  OnInit,
+  viewChild
 } from '@angular/core';
 import {ObjectUtils, RandomUtils, StringBuilder} from 'co2m.js';
 import {twMerge} from 'tailwind-merge';
@@ -25,7 +26,7 @@ import {NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {AbstractInputComponent} from '../shared/abstract-input.component';
 
 @Component({
-  selector: 'ui-input',
+  selector: 'ui-input, ka-input',
   standalone: false,
   templateUrl: './input.component.html',
   styleUrl: './input.component.css',
@@ -42,7 +43,7 @@ import {AbstractInputComponent} from '../shared/abstract-input.component';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    'class': 'transition-all duration-500'
+    'class': 'transition-all duration-300'
   }
 })
 export class InputComponent extends AbstractInputComponent implements OnInit, AfterViewInit {
@@ -64,7 +65,6 @@ export class InputComponent extends AbstractInputComponent implements OnInit, Af
   underline = input(false, {transform: booleanAttribute});
   requiredValue = input(false, {transform: booleanAttribute});
   readOnly = input(false, {transform: booleanAttribute});
-
   ___inputClass!: string;
   ___labelClass!: string;
   ___inputFloatingClass!: string;
@@ -73,6 +73,7 @@ export class InputComponent extends AbstractInputComponent implements OnInit, Af
   ___commonLabelVariantClass!: string;
   ___iconClass!: string;
   ___inputIdAttr!: string | undefined;
+  protected htmlContent = viewChild<HTMLDivElement>("htmlElement");
   protected inputNumberPinIconSize: Record<string, boolean> = {
     'w-2.5 h-2.5': this.size() === 'tiny',
     'w-3.5 h-3.5': this.size() === 'small',
@@ -80,6 +81,10 @@ export class InputComponent extends AbstractInputComponent implements OnInit, Af
     'w-5 h-5': this.size() === 'large',
     'w-6 h-6': this.size() === 'giant',
   };
+
+  get nativeElement() {
+    return this.htmlContent()!;
+  }
 
   get getVariant(): InputVariant {
     if (this.variant()) {
@@ -161,6 +166,10 @@ export class InputComponent extends AbstractInputComponent implements OnInit, Af
   ngOnInit(): void {
     this.elementClass = this.compiledClasses();
     this.___inputIdAttr = this.id();
+
+    if (this.inputValue()) {
+      this.nativeElement
+    }
   }
 
   handlerInput($event: any) {

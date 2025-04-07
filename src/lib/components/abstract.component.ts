@@ -40,8 +40,8 @@ export abstract class AbstractUIComponent implements OnChanges {
 
   abstract compiledClasses(): string;
 
-  addClass = (clazz: string | string[]) => {
-    this.elementClass = twMerge(this.elementClass, clazz);
+  addClass = (...classes: string[]) => {
+    this.elementClass = twMerge([this.elementClass, ...classes]);
     this.changeDetector.markForCheck();
   };
 
@@ -58,7 +58,5 @@ export abstract class AbstractUIComponent implements OnChanges {
       this.changeDetector.detectChanges();
       this.elementClass = this.compiledClasses();
     }
-
-    // console.log(changes);
   }
 }

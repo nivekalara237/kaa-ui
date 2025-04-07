@@ -56,6 +56,21 @@ type TextareaResize = 'x' | 'y' | 'xy' | 'none' | undefined;
 type OverflowPosition = Exclude<TextareaResize, "xy"> | 'auto';
 type FormInputValidateState = 'success' | 'error' | 'warning';
 type Orientation = "horizontal" | "vertical";
+type DropdownPlacement = "top" |
+  "top-left" |
+  "top-right" |
+  "bottom" |
+  "bottom-left" |
+  "bottom-right" |
+  "left" |
+  "left-top" |
+  "left-bottom" |
+  "right" |
+  "right-top" |
+  "right-bottom"
+  ;
+
+type DropdownTriggerType = 'click' | 'hover' | 'none';
 
 export type {
   Color,
@@ -78,5 +93,7 @@ export type {
   TextareaResize,
   OverflowPosition,
   FormInputValidateState,
-  Orientation
+  Orientation,
+  DropdownPlacement,
+  DropdownTriggerType
 }

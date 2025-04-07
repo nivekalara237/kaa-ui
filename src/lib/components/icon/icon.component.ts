@@ -1,4 +1,4 @@
-import {booleanAttribute, Component, input, OnInit} from '@angular/core';
+import {booleanAttribute, Component, input, OnInit, ViewEncapsulation} from '@angular/core';
 import {AbstractUIComponent} from '../abstract.component';
 import {StringBuilder} from 'co2m.js';
 import {Color, IconVariant, Size, Status} from '../../model/types';
@@ -13,7 +13,8 @@ import {NgClass} from '@angular/common';
     NgClass
   ],
   templateUrl: './icon.component.html',
-  styleUrl: './icon.component.css'
+  styleUrl: './icon.component.css',
+  encapsulation: ViewEncapsulation.None
 })
 export class IconComponent extends AbstractUIComponent implements OnInit {
   name = input.required<string>();

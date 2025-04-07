@@ -1,0 +1,123 @@
+$ka-input-variants: (
+    basic: 'basic',
+    gray: 'gray',
+    underline: 'underline',
+    floating: 'underline-floating'
+);
+
+$ka-rounded-sizes: (
+    none: 'rounded-none',
+    tiny: 'rounded-sm',
+    small: 'rounded-md',
+    medium: 'rounded-lg',
+    large: 'rounded-2xl',
+    full: 'rounded-full',
+);
+
+$ka-input-sizes: (
+    tiny: ("text-xs border py-1.5"),
+    small: ("text-sm border py-2"),
+    medium: ("text-base border py-2.5"),
+    large: ("text-lg border py-3"),
+    giant: ("text-2xl border py-4")
+);
+
+$ka-floating-label-size: (
+    tiny: 'peer-focus:text-xs peer-[:not(:placeholder-shown)]:text-xs',
+    small: 'peer-focus:text-xs peer-[:not(:placeholder-shown)]:text-xs',
+    medium: 'peer-focus:text-sm peer-[:not(:placeholder-shown)]:text-sm',
+    large: 'peer-focus:text-base peer-[:not(:placeholder-shown)]:text-base',
+    giant: 'peer-focus:text-lg peer-[:not(:placeholder-shown)]:text-lg',
+);
+
+$ka-radio-colors-and-density: (
+    primary: ('blue', 500),
+    success: (emerald, 500),
+    info: (sky, 400),
+    warning: (amber, 400),
+    danger: ('red', 500),
+    secondary: (slate, 800),
+    default: ('gray', 500),
+    soft: ('fuchsia', 500)
+);
+
+$ka-input-padding-x-sizes:(
+    nospin-noicon: (
+        tiny: "px-2.5",
+        small: "px-3.5",
+        medium: "px-4",
+        large: "px-5",
+        giant: "px-6"
+    ),
+    nospin-icon-left: (
+        tiny: "ps-8 pe-2.5",
+        small: "ps-9 pe-3.5",
+        medium: "ps-10 pe-4",
+        large: "ps-11 pe-5",
+        giant: "ps-12 pe-6"
+    ),
+    nospin-icon-right: (
+        tiny: "ps-2.5 pe-8",
+        small: "ps-3.5 pe-9",
+        medium: "ps-4 pe-10",
+        large: "ps-5 pe-11",
+        giant: "ps-6 pe-12"
+    ),
+    spin-noicon: (
+        tiny: "ps-2.5 pe-8",
+        small: "ps-3.5 pe-8",
+        medium: "ps-4 pe-8",
+        large: "ps-5 pe-8",
+        giant: "ps-6 pe-8"
+    ),
+    spin-icon-left: (
+        tiny: "ps-8 pe-8", 
+        small: "ps-9 pe-8", 
+        medium: "ps-10 pe-8",
+        large: "ps-11 pe-8",
+        giant: "ps-12 pe-8"
+    ),
+    spin-icon-right: (
+        tiny: "ps-2.5 pe-16",
+        small: "ps-3.5 pe-16",
+        medium: "ps-4 pe-16",
+        large: "ps-5 pe-20",
+        giant: "ps-6 pe-20"
+    )
+);
+
+
+
+
+// label style
+$ka-label-sizes: (
+    tiny: 'xs',
+    small: 'sm',
+    medium: 'base',
+    large: 'lg',
+    giant: 'xl',
+);
+$ka-label-style: "text-neutral-700 font-medium dark:text-white";
+
+<<<<<<< HEAD
+@mixin generate-input-label-style {
+    @each $name, $size in $ka-label-sizes {
+        .ka-input-label-#{$name} {
+            @apply text-#{$size} #{$ka-label-style}
+        }
+    }
+}
+
+
+
+
+// insantiate functions
+
+@include generate-radio-label-checkable;
+=======
+@each $name, $size in $ka-label-sizes {
+    .ka-input-label-#{$name} {
+        @apply text-#{$size} #{$ka-label-style}
+    }
+}
+>>>>>>> 17516beab7d38f937c33c52ad46fc6518fd4d7bd

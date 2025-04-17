@@ -1,0 +1,24 @@
+<div class="{{ elementClass }}">
+  <div class="py-2">
+    <span class="text-base font-semibold text-neutral-400 dark:text-neutral-600">
+      {{ label() }}
+    </span>
+  </div>
+  <div class="ms-1 grid gap-y-1">
+    <ng-container *ngIf="children() && children()!.length > 0; else internalChildren">
+      @for (option of children(); track option.value) {
+        <ka-option
+          [id]="option.id"
+          [value]="option.value"
+          [disabled]="option.disabled"
+          [selected]="option.selected"
+          [extra]="option.extraData"
+        > {{ option.label }}
+        </ka-option>
+      }
+    </ng-container>
+    <ng-template #internalChildren>
+      <ng-content select="ka-option, ui-option"></ng-content>
+    </ng-template>
+  </div>
+</div>

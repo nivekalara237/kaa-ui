@@ -17,7 +17,7 @@ import {
 import {AbstractUIComponent} from '../../../abstract.component';
 import {StringBuilder} from 'co2m.js';
 import {twMerge} from 'tailwind-merge';
-import {SelectOptionItem} from '../../../../model/domain/select-option.domain';
+import {SelectOption} from '../../../../model/domain/select-option.domain';
 
 @Component({
   selector: 'ka-option, ui-option',
@@ -41,7 +41,8 @@ export class OptionComponent extends AbstractUIComponent implements OnInit, Afte
   extra = input<any>();
   index = input<number>();
   disabled = input(false, {transform: booleanAttribute})
-  selected = new EventEmitter<{ index: number, value: SelectOptionItem }>();
+  optionSelected = input(false, {transform: booleanAttribute, alias: "selected"})
+  selected = new EventEmitter<{ index: number, value: SelectOption }>();
 
   // @view handler
   @ViewChild("ngContentTpl", {read: TemplateRef, static: false}) protected valueNgContent!: TemplateRef<any>;
@@ -98,6 +99,7 @@ export class OptionComponent extends AbstractUIComponent implements OnInit, Afte
   }
 
   @HostListener("click", ["$event"])
+  @HostListener("keyup", ["$event"])
   clicked = ($event: any) => {
     if (!this.disabled()) {
       this.selected.emit({

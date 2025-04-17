@@ -50,15 +50,11 @@
          type="{{ inputType() }}"/>
   <ng-container *ngIf="inputType() === 'number'">
     <div [ngClass]="{
-    'top-1/2': label() && !floatingLabel(),
-    'top-1.5': floatingLabel(),
-    'bottom-1.5': !label(),
-    'xxflex-col': getVariant !== 'underline',
-    'me-8': addonIcon() && addonIconPosition() === 'right'
-    }" class="absolute h-fit flex-col right-0 flex items-center peer-visible:">
+    'me-8': iconName() && iconPosition() === 'right'
+    }" class="absolute h-full  flex-col right-0 top-0 flex items-center justify-center">
       <button (click)="inputElement.stepUp()"
               aria-label="Increase quantity"
-              class="px-2 h-full border-none ring-0 border-gray-200 text-gray-500 hover:text-sky-500 focus:outline-none focus:ring-0"
+              class="px-2 border-none ring-0 border-gray-200 text-gray-500 hover:text-sky-500 focus:outline-none focus:ring-0"
               type="button">
         <svg [ngClass]="inputNumberPinIconSize" class="" fill="none" stroke="currentColor" stroke-width="1.5"
              viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -67,7 +63,7 @@
       </button>
       <button (click)="inputElement.stepDown()"
               aria-label="Decrease quantity"
-              class="px-2 h-full border-none ring-0 border-gray-200 text-gray-500 hover:text-sky-500 focus:outline-none focus:ring-0"
+              class="px-2 border-none ring-0 border-gray-200 text-gray-500 hover:text-sky-500 focus:outline-none focus:ring-0"
               type="button">
         <svg [ngClass]="inputNumberPinIconSize" class="" fill="none" stroke="currentColor" stroke-width="1.5"
              viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -76,9 +72,9 @@
       </button>
     </div>
   </ng-container>
-  <div *ngIf="addonIcon()"
+  <div *ngIf="iconName()"
        class=" {{ ___iconClass }}"
   >
-    <i class="pi pi-{{ addonIcon() }}"></i>
+    <i class="pi pi-{{ iconName() }}"></i>
   </div>
 </ng-template>

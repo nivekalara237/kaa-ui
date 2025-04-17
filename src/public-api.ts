@@ -40,8 +40,14 @@ export * from './lib/components/form/radio-button/label/label.component';
 export * from './lib/components/form/radio-button/group/group.component';
 export * from './lib/components/form/select/select.component';
 export * from './lib/components/form/select/option/option.component';
+export * from './lib/components/form/select/group/group-option.component';
 export * from './lib/components/dropdown/dropdown.component';
 export * from './lib/components/dropdown/dropdown-item/dropdown-item.component';
+
+// Directives
+export * from './lib/components/form/select/slot/slot-action.directive';
+export * from './lib/components/form/select/slot/slot-header.directive';
+export * from './lib/components/form/select/slot/slot-empty.directive';
 
 // Modules
 export * from './lib/components/accordion/accordion.module';

@@ -54,9 +54,9 @@ export class InputComponent extends AbstractInputComponent implements OnInit, Af
   inputId = input<string>();
   inputType = input.required<InputType>();
   rounding = input<RoundedSize>("small", {alias: 'roundedSize'});
-  inputAddonIcon = input<IconVariant>('pi');
-  addonIcon = input<string>();
-  addonIconPosition = input<HorizontalPosition>("left");
+  iconVariant = input<IconVariant>('pi');
+  iconName = input<string>();
+  iconPosition = input<HorizontalPosition>("left");
   variant = input<InputVariant>();
   size = input<Size>('small');
   color = input<Status | Color>('default');
@@ -74,13 +74,7 @@ export class InputComponent extends AbstractInputComponent implements OnInit, Af
   ___iconClass!: string;
   ___inputIdAttr!: string | undefined;
   protected htmlContent = viewChild<HTMLDivElement>("htmlElement");
-  protected inputNumberPinIconSize: Record<string, boolean> = {
-    'w-2.5 h-2.5': this.size() === 'tiny',
-    'w-3.5 h-3.5': this.size() === 'small',
-    'w-4 h-4': this.size() === 'medium',
-    'w-5 h-5': this.size() === 'large',
-    'w-6 h-6': this.size() === 'giant',
-  };
+  protected inputNumberPinIconSize: Record<string, boolean> = {};
 
   get nativeElement() {
     return this.htmlContent()!;
@@ -120,7 +114,7 @@ export class InputComponent extends AbstractInputComponent implements OnInit, Af
       required: this.requiredValue(),
       readonly: this.readOnly(),
       type: this.inputType(),
-      hasIconAt: ObjectUtils.isNotNullAndNotUndefined(this.addonIcon()) ? this.addonIconPosition()! : null
+      hasIconAt: ObjectUtils.isNotNullAndNotUndefined(this.iconName()) ? this.iconPosition()! : null
     });
 
     const input = factory.of(this.getVariant);
@@ -140,7 +134,7 @@ export class InputComponent extends AbstractInputComponent implements OnInit, Af
     } else {
       iconBuilder.append("inset-y-0 flex items-center");
     }
-    if (this.addonIconPosition() === "left") {
+    if (this.iconPosition() === "left") {
       iconBuilder.append("left-0 start-0 ps-3");
     } else {
       iconBuilder.append("right-0 end-0 pe-3");
@@ -166,6 +160,13 @@ export class InputComponent extends AbstractInputComponent implements OnInit, Af
   ngOnInit(): void {
     this.elementClass = this.compiledClasses();
     this.___inputIdAttr = this.id();
+    this.inputNumberPinIconSize = {
+      'w-2.5 h-2.5': this.size() === 'tiny',
+      'w-3.5 h-3.5': this.size() === 'small',
+      'w-4 h-4': this.size() === 'medium',
+      'w-4 h-5': this.size() === 'large',
+      'w-5 h-5': this.size() === 'giant',
+    };
 
     if (this.inputValue()) {
       this.nativeElement

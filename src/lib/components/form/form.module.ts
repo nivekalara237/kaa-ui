@@ -13,6 +13,11 @@ import {SelectComponent} from './select/select.component';
 import {DropdownModule} from "../dropdown/dropdown.module";
 import {OptionComponent} from "./select/option/option.component";
 import {FormsModule} from '@angular/forms';
+import {IconComponent} from '../icon/icon.component';
+import {GroupOptionComponent} from './select/group/group-option.component';
+import {SlotActionDirective} from './select/slot/slot-action.directive';
+import {SlotHeaderDirective} from './select/slot/slot-header.directive';
+import {SlotEmptyDirective} from './select/slot/slot-empty.directive';
 
 @NgModule({
   declarations: [
@@ -26,12 +31,17 @@ import {FormsModule} from '@angular/forms';
     RadioLabelComponent,
     RadioGroupComponent,
     SelectComponent,
-    OptionComponent
+    OptionComponent,
+    GroupOptionComponent,
+    SlotHeaderDirective,
+    SlotActionDirective,
+    SlotEmptyDirective
   ],
   imports: [
     CommonModule,
     DropdownModule,
-    FormsModule
+    FormsModule,
+    IconComponent
   ],
   exports: [
     InputComponent,
@@ -44,7 +54,11 @@ import {FormsModule} from '@angular/forms';
     RadioButtonComponent,
     RadioGroupComponent,
     SelectComponent,
-    OptionComponent
+    OptionComponent,
+    GroupOptionComponent,
+    SlotHeaderDirective,
+    SlotActionDirective,
+    SlotEmptyDirective
   ],
   providers: []
 })

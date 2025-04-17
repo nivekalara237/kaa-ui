@@ -1,10 +1,32 @@
-$ka-input-variants: (
-  basic: 'basic',
-  gray: 'gray',
-  underline: 'underline',
-  floating: 'underline-floating'
+@use "sass:list";
+@use "sass:map";
+@use "sass:string";
+
+$ka-variants: basic, gray, underline;
+
+$ka-variants-theming: (
+  basic: (
+    theme: 'bg-white dark:bg-gray-700 border-gray-100 dark:border-gray-800',
+    sizing: 'border outline-2',
+    read-only: '',
+    disabled: ''
+  ),
+  underline: (
+    theme: 'bg-transparent border-gray-300 dark:border-gray-400',
+    sizing: 'border-b outline-2 rounded-none',
+    read-only: '',
+    disabled: ''
+  ),
+  gray: (
+    theme: 'bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-800',
+    sizing: 'border outline-2',
+    focus: 'bg-transparent border-gray-500 ring-gray-500 dark:border-neutral-700 dark:bg-transparent dark:ring-neutral-600 ring-0',
+    read-only: '',
+    disabled: ''
+  )
 );
 
+$ka-input-size-names: tiny, small, medium, large, giant;
 $ka-rounded-sizes: (
   none: 'rounded-none',
   tiny: 'rounded-sm',
@@ -14,14 +36,31 @@ $ka-rounded-sizes: (
   full: 'rounded-full',
 );
 
+@mixin generate-rounded-size-style {
+  @each $name, $r-size in $ka-rounded-sizes {
+    .ka-input-rounded-#{$name} {
+      @apply #{$r-size}
+    }
+  }
+}
+
+;
+
 $ka-input-sizes: (
-  tiny: ("text-xs border py-1.5"),
-  small: ("text-sm border py-2"),
-  medium: ("text-base border py-2.5"),
-  large: ("text-lg border py-3"),
-  giant: ("text-2xl border py-4")
+  tiny: "text-xs px-2 py-1.5",
+  small: "text-sm px-2.5 py-2",
+  medium: "text-base px-3 py-2.5",
+  large: "text-lg px-4 py-3",
+  giant: "text-2xl px-5 py-4"
 );
 
+$ka-caret-sizes: (
+  tiny: 4,
+  small: 4,
+  medium: 5,
+  large: 6,
+  giant: 7
+);
 $ka-floating-label-size: (
   tiny: 'peer-focus:text-xs peer-[:not(:placeholder-shown)]:text-xs',
   small: 'peer-focus:text-xs peer-[:not(:placeholder-shown)]:text-xs',
@@ -29,7 +68,6 @@ $ka-floating-label-size: (
   large: 'peer-focus:text-base peer-[:not(:placeholder-shown)]:text-base',
   giant: 'peer-focus:text-lg peer-[:not(:placeholder-shown)]:text-lg',
 );
-
 $ka-radio-colors-and-density: (
   primary: ('blue', 500),
   success: (emerald, 500),
@@ -40,7 +78,6 @@ $ka-radio-colors-and-density: (
   default: ('gray', 500),
   soft: ('fuchsia', 500)
 );
-
 $ka-input-padding-x-sizes: (
   nospin-noicon: (
     tiny: "px-2.5",
@@ -85,8 +122,6 @@ $ka-input-padding-x-sizes: (
     giant: "ps-6 pe-20"
   )
 );
-
-
 // label style
 $ka-label-sizes: (
   tiny: 'xs',
@@ -95,18 +130,64 @@ $ka-label-sizes: (
   large: 'lg',
   giant: 'xl',
 );
+
+@mixin generate-input-size {
+  @each $size in $ka-input-size-names {
+    $commonSized: map.get($ka-input-sizes, $size);
+    .ka-input-#{$size} {
+      @apply w-full #{$commonSized};
+    }
+  }
+}
+
 $ka-label-style: "text-neutral-700 font-medium dark:text-white";
+// $ka-caret-sizes: size-3, size-4, size-5, size-6, size-7;
+
+@mixin generate-input-caret-style {
+  @each $inputSize in $ka-input-size-names {
+    $caret-size: map.get($ka-caret-sizes, $inputSize);
+    .ka-input-#{$inputSize} .ka-input-caret {
+      @apply size-#{$caret-size};
+      svg {
+        @apply w-#{$caret-size} h-#{$caret-size} transition-transform ease-in-out duration-300;
+      }
+    }
+  }
+}
 
 @mixin generate-input-label-style {
   @each $name, $size in $ka-label-sizes {
     .ka-input-label-#{$name} {
       @apply text-#{$size} #{$ka-label-style}
     }
+
+    .ka-input-#{$name} .selected-value .select-placeholder {
+      @apply text-#{$size} text-gray-400 dark:text-gray-300 text-ellipsis;
+    }
   }
 }
 
-;
+@mixin generate-input-theme {
+  @each $name in $ka-variants {
+    $config: map.get($ka-variants-theming, $name);
+    $sizing: map.get($config, sizing);
+    $coloring: map.get($config, theme);
+    .ka-input-v-#{$name} {
+      @apply #{$sizing} #{$coloring};
+    }
 
-// insantiate functions
+    @if $name == gray {
+      $focus: map.get($config, focus);
+      .focusable.ka-input-v-#{$name}:focus {
+        @apply #{$focus};
+      }
+    }
+  }
+}
 
+// instantiate functions
 @include generate-input-label-style;
+@include generate-rounded-size-style;
+@include generate-input-size;
+@include generate-input-theme;
+@include generate-input-caret-style;

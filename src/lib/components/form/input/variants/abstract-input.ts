@@ -14,7 +14,7 @@ export abstract class AbstractInput {
   abstract getLabelClassNames(): string;
 
   commonInputClassNames = (): string => {
-    const builder = new StringBuilder("block w-full shadow-xs leading-relaxed");
+    const builder = new StringBuilder("block w-full shadow-xs leading-relaxed appearance-none outline-none");
     const paddingXNameBuilder = new StringBuilder();
     if (["number"].includes(this.options.type)) {
       paddingXNameBuilder.append("spin");

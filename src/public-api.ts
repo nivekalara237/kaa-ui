@@ -69,3 +69,6 @@ export * from './lib/model/domain/avatar.domain';
 export * from './lib/model/domain/select-option.domain';
 export * from './lib/model/themes/icon.theme';
 export * from './lib/model/themes/input.theme';
+
+// index.ts
+export * from './lib/components/stepper'

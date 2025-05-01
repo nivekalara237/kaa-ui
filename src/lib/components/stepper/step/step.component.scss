@@ -1,0 +1,150 @@
+@use "sass:map";
+@use "sass:list";
+
+$statues: (none, processed, error, completed);
+$orientation: (vertical, horizontal);
+
+$theming: (
+  none: '',
+  processed: 'bg-blue-600',
+  error: 'bg-red-600',
+  completed: 'bg-emerald-600'
+);
+
+$configs: (
+  none: (
+    connector: '',
+    title: ''
+  ),
+  processed: (
+    connector: ' bg-blue-200',
+    title: 'text-blue-400 dark:text-blue-500',
+    indic: 'bg-blue-200 text-blue-600'
+  ),
+  error: (
+    connector: 'bg-red-200',
+    title: 'text-red-400 dark:text-red-500',
+    indic: 'bg-red-200'
+  ),
+  completed: (
+    connector: 'bg-emerald-200',
+    title: 'text-emerald-400 dark:text-emerald-500',
+    indic: 'bg-emerald-200'
+  )
+);
+
+.step {
+  @apply cursor-pointer;
+  &:last-child {
+    @apply flex-none
+  }
+
+  .active {
+    .step-indic {
+      @apply border-double border-2 shadow-md shadow-blue-400 border-blue-600;
+    }
+
+    .step-title {
+      @apply text-blue-600
+    }
+  }
+
+  .step-connector {
+    @apply transition-colors duration-300 mt-2 bg-gray-400
+  }
+
+  .step-title {
+    @apply font-medium text-base text-nowrap text-gray-500 dark:text-gray-50;
+  }
+
+  .step-flow .step-indic {
+    @apply size-7 min-h-7 rounded-full  bg-gray-100 dark:bg-gray-900;
+    .step-number {
+      @apply text-neutral-700 text-sm font-bold dark:text-white;
+    }
+
+    .step-icon {
+      @apply p-1;
+    }
+  }
+
+  .step-details .step-description {
+    @apply text-xs  font-light text-gray-600 dark:text-gray-100;
+  }
+
+  .step-orientation\:vertical {
+    @apply gap-x-4;
+    .step-flow {
+      @apply min-h-16;
+      .step-connector {
+        @apply h-full;
+      }
+    }
+  }
+
+  .step-orientation\:horizontal {
+    @apply gap-x-4;
+    .step-details {
+      .step-connector {
+        @apply w-full min-w-12
+      }
+    }
+  }
+
+  @each $statusName in $statues {
+    $configMap: map.get($configs, $statusName);
+    .step-status\:#{$statusName} {
+      .step-flow, .step-details {
+        $conn: if(map.has-key($configMap, connector), map.get($configMap, connector), '');
+        @if $conn != '' {
+          .step-connector {
+            @apply #{map.get($configMap, connector)};
+          }
+        }
+
+      }
+
+      // title
+      $title: if(map.has-key($configMap, title), map.get($configMap, title), '');
+      $indic: if(map.has-key($configMap, indic), map.get($configMap, indic), '');
+      @if $title != '' {
+        .step-details .step-title {
+          @apply #{$title};
+        }
+      }
+
+      @if $indic != '' {
+        .step-flow .step-indic {
+          @apply #{$indic};
+          .step-number, .step-icon, .step-icon > * {
+            @apply text-white;
+          }
+        }
+      }
+    }
+
+    @if $statusName == error {
+      .step-status\:#{$statusName}.active {
+        .step-indic {
+          @apply border-none shadow-none;
+        }
+
+        $orientationConfig: (
+          vertical: w-px h-full,
+          horizontal: h-px w-full
+        );
+        @each $o in map.keys($orientationConfig) {
+          &.step-orientation\:#{$o} {
+            .step-flow, .step-details {
+              .step-connector {
+                @apply bg-gray-400 #{map.get($orientationConfig, $o)}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+}

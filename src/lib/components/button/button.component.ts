@@ -6,6 +6,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  HostListener,
   input,
   OnInit,
   viewChild,
@@ -42,7 +43,7 @@ import {iconVariantSizeMapping} from '../../model/themes/icon.theme';
       useExisting: ButtonComponent
     }
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
   encapsulation: ViewEncapsulation.None,
   host: {
     'class': ''
@@ -128,4 +129,15 @@ export class ButtonComponent extends AbstractUIComponent implements OnInit, Afte
   }
 
   getIconSize = () => iconVariantSizeMapping[this.iconVariant()][this.size()];
+
+  @HostListener("click", ["$event"])
+  handlerClick($event: Event) {
+    const handler = () => {
+      if (this.disabled()) {
+        $event.stopPropagation();
+        $event.preventDefault();
+      }
+    };
+    setTimeout(handler, 10);
+  }
 }

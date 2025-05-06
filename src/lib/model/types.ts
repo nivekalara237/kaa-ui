@@ -72,7 +72,8 @@ type DropdownPlacement = "top" |
 
 type DropdownTriggerType = 'click' | 'hover' | 'none';
 type StepperStatus = 'none' | 'completed' | 'error' | 'processed';
-type StepperStepType = 'numbered' | 'iconic' | 'custom'
+type StepperStepType = 'numbered' | 'iconic' | 'custom';
+type InputValidationMode = 'change' | 'blur' | 'any';
 
 export type {
   Color,
@@ -99,5 +100,6 @@ export type {
   DropdownPlacement,
   DropdownTriggerType,
   StepperStatus,
-  StepperStepType
+  StepperStepType,
+  InputValidationMode
 }

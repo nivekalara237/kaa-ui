@@ -2,14 +2,16 @@
   [class.block]="isVertical"
   [class.flex-row]="isVertical"
   [class.flex]="isVertical"
-  class="h-full w-full {{ elementClass }}">
-  <div [ngClass]="{'pe-4 me-4 border-r border-gray-50 dark:border-gray-600': isVertical}"
-       class="w-fullx">
+  class="h-full ka-stepper ka-stepper-orientation:{{ orientation() }} w-full {{ elementClass }}">
+  <div [class.max-w-76]="isVertical"
+       [ngClass]="{
+       'pe-4 me-4 border-r border-gray-50 dark:border-gray-600': isVertical
+       }" class="w-fullx ka-stepper-steps">
     <div [class.flex-col]="isVertical" class="flex">
       <ng-content select="ka-step, ui-step"></ng-content>
     </div>
   </div>
-  <div class="flex-1 flex flex-col w-full">
+  <div class="flex-1 ka-stepper-content flex flex-col w-full">
     <div class="min-h-32">
       <div
         *ngIf="!(finished$ | async) && (!outlet() && currentIndex >= 0 && steps.at(currentIndex)?.contentTemplateRef)"

@@ -1,45 +1,53 @@
-<div #htmlElement [ngClass]="{
-'floating-label': floatingLabel()
-}" class="transition-all relative duration-500 {{ elementClass }}">
-  <ng-container [ngSwitch]="getVariant">
-    <ng-container *ngSwitchCase="'basic'">
-      <ng-container
-        *ngFor="let tpl of (floatingLabel() ? [inputTpl, labelTpl] : [labelTpl, inputTpl])">
-        <ng-container *ngTemplateOutlet="tpl"></ng-container>
+<div #htmlElement class="ka-input">
+  <div [ngClass]="{
+    'floating-label': floatingLabel()
+    }"
+       class="transition-all ka-input-size:{{size()}} ka-input-variant:{{ getVariant }} relative duration-500 {{ elementClass }}">
+    <ng-container [ngSwitch]="getVariant">
+      <ng-container *ngSwitchCase="'basic'">
+        <ng-container
+          *ngFor="let tpl of (floatingLabel() ? [inputTpl, labelTpl] : [labelTpl, inputTpl])">
+          <ng-container *ngTemplateOutlet="tpl"></ng-container>
+        </ng-container>
       </ng-container>
-    </ng-container>
-    <ng-container *ngSwitchCase="'underline'">
-      <ng-container
-        *ngFor="let tpl of (floatingLabel() ? [inputTpl, labelTpl] : [labelTpl, inputTpl])">
-        <ng-container *ngTemplateOutlet="tpl"></ng-container>
+      <ng-container *ngSwitchCase="'underline'">
+        <ng-container
+          *ngFor="let tpl of (floatingLabel() ? [inputTpl, labelTpl] : [labelTpl, inputTpl])">
+          <ng-container *ngTemplateOutlet="tpl"></ng-container>
+        </ng-container>
       </ng-container>
-    </ng-container>
-    <ng-container *ngSwitchCase="'gray'">
-      <ng-container
-        *ngFor="let tpl of (floatingLabel() ? [inputTpl, labelTpl] : [labelTpl, inputTpl])">
-        <ng-container *ngTemplateOutlet="tpl"></ng-container>
+      <ng-container *ngSwitchCase="'gray'">
+        <ng-container
+          *ngFor="let tpl of (floatingLabel() ? [inputTpl, labelTpl] : [labelTpl, inputTpl])">
+          <ng-container *ngTemplateOutlet="tpl"></ng-container>
+        </ng-container>
       </ng-container>
-    </ng-container>
-    <ng-container *ngSwitchDefault>
-      <span>Unsupported: Unknown input variant {{ getVariant }}</span>
-    </ng-container>
-  </ng-container>
+      <ng-container *ngSwitchDefault>
+        <span>Unsupported: Unknown input variant {{ getVariant }}</span>
+      </ng-container>
 
+
+    </ng-container>
+  </div>
+  <ng-container *ngTemplateOutlet="errorTpl"></ng-container>
 </div>
 
 <ng-template #labelTpl>
-  <label [for]="___inputIdAttr" [ngClass]="{ 'sr-only': !label() }"
+  <label [class.has-error]="isError" [for]="___inputIdAttr" [ngClass]="{ 'sr-only': !label() }"
          class="{{ ___commonLabelVariantClass }} {{ ___labelClass }}">
     {{ label() }}
   </label>
 </ng-template>
 
 <ng-template #inputTpl>
-  <input #inputElement (blur)="handlerEvent($event, 'BLUR')"
+  <input #inputElement
+         (blur)="handlerEvent($event, 'BLUR')"
          (focus)="handlerEvent($event, 'FOCUS')"
          (input)="handlerInput($event)"
          [attr.aria-label]="ariaLabel()"
          [attr.aria-labelledby]="ariaLabelledBy()"
+         [class.has-error]="isError"
+         [disabled]="disabled"
          [id]="___inputIdAttr"
          [placeholder]="placeholder() ?? ''"
          [readOnly]="readOnly()"
@@ -50,8 +58,10 @@
          type="{{ inputType() }}"/>
   <ng-container *ngIf="inputType() === 'number'">
     <div [ngClass]="{
-    'me-8': iconName() && iconPosition() === 'right'
-    }" class="absolute h-full  flex-col right-0 top-0 flex items-center justify-center">
+    'me-8': iconName() && iconPosition() === 'right',
+    'justify-end input-number-step': !floatingLabel(),
+    'justify-center': floatingLabel(),
+    }" class="absolute h-full flex-col right-0 top-0 flex items-center">
       <button (click)="inputElement.stepUp()"
               aria-label="Increase quantity"
               class="px-2 border-none ring-0 border-gray-200 text-gray-500 hover:text-sky-500 focus:outline-none focus:ring-0"
@@ -73,8 +83,26 @@
     </div>
   </ng-container>
   <div *ngIf="iconName()"
-       class=" {{ ___iconClass }}"
+       [class.fix-margin]="!floatingLabel() && variant() !== 'underline'"
+       class="input-icon {{ ___iconClass }}"
   >
     <i class="pi pi-{{ iconName() }}"></i>
   </div>
+</ng-template>
+
+<ng-template #errorTpl>
+  <ul *ngIf="errorable && hasError && controlErrors"
+      class="validation-messages validation:{{ isError ? 'error' : 'success' }} list-none mt-1.5 flex gap-y-2">
+    <li *ngFor="let errorKey of controlErrors | keyvalue" class="m-0 p-0 flex items-center">
+      <svg aria-hidden="true" class="w-3.5 h-3.5 me-1 icon" fill="none"
+           height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+        <path d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"/>
+      </svg>
+
+      <p
+        class="text-xs max-w-fit text-red-600 dark:text-red-500">{{ errorMessage[(errorKey.key)](ngControl?.name + '', errorKey.value) }}</p>
+    </li>
+  </ul>
 </ng-template>

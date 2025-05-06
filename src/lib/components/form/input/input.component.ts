@@ -2,10 +2,13 @@ import {
   AfterViewInit,
   booleanAttribute,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
-  forwardRef,
+  inject,
   input,
   OnInit,
+  Optional,
+  Self,
   viewChild
 } from '@angular/core';
 import {ObjectUtils, RandomUtils, StringBuilder} from 'co2m.js';
@@ -15,6 +18,7 @@ import {
   HorizontalPosition,
   IconVariant,
   InputType,
+  InputValidationMode,
   InputVariant,
   RoundedSize,
   Size,
@@ -22,24 +26,22 @@ import {
 } from '../../../model/types';
 import {InputFactory} from './input.factory';
 import {inputIconSize} from '../../../model/themes/input.theme';
-import {NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {NgControl} from '@angular/forms';
+import {errorMessage} from './utils/errors-message-handler';
 import {AbstractInputComponent} from '../shared/abstract-input.component';
+
 
 @Component({
   selector: 'ui-input, ka-input',
   standalone: false,
   templateUrl: './input.component.html',
-  styleUrl: './input.component.css',
+  styleUrls: ['./input.component.css', "variant.scss"],
   providers: [
-    {
+    /*{
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => InputComponent),
       multi: true
-    }, {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => InputComponent),
-      multi: true
-    }
+    }*/
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
@@ -47,9 +49,7 @@ import {AbstractInputComponent} from '../shared/abstract-input.component';
   }
 })
 export class InputComponent extends AbstractInputComponent implements OnInit, AfterViewInit {
-
   label = input<string>();
-  // labelDisposition = input<Position>('top');
   placeholder = input<string>();
   inputId = input<string>();
   inputType = input.required<InputType>();
@@ -65,6 +65,10 @@ export class InputComponent extends AbstractInputComponent implements OnInit, Af
   underline = input(false, {transform: booleanAttribute});
   requiredValue = input(false, {transform: booleanAttribute});
   readOnly = input(false, {transform: booleanAttribute});
+  disabledInput = input(false, {transform: booleanAttribute, alias: "disabled"});
+  validation = input(false, {transform: booleanAttribute});
+  validationMode = input<InputValidationMode>("blur");
+
   ___inputClass!: string;
   ___labelClass!: string;
   ___inputFloatingClass!: string;
@@ -75,6 +79,17 @@ export class InputComponent extends AbstractInputComponent implements OnInit, Af
   ___inputIdAttr!: string | undefined;
   protected htmlContent = viewChild<HTMLDivElement>("htmlElement");
   protected inputNumberPinIconSize: Record<string, boolean> = {};
+  // protected ngControl!: NgControl;
+  protected readonly errorMessage = errorMessage;
+
+  constructor(
+    @Optional() @Self() public ngControl: NgControl,
+  ) {
+    super(inject(ChangeDetectorRef));
+    if (ngControl) {
+      this.ngControl.valueAccessor = this;
+    }
+  }
 
   get nativeElement() {
     return this.htmlContent()!;
@@ -91,6 +106,10 @@ export class InputComponent extends AbstractInputComponent implements OnInit, Af
       return 'basic';
     }
   }
+
+  protected get isError() {
+    return this.errorable && this.hasError;
+  };
 
   id = () => this.inputId() ? this.inputId() : RandomUtils.secureChars(12)
 
@@ -155,6 +174,16 @@ export class InputComponent extends AbstractInputComponent implements OnInit, Af
   }
 
   ngAfterViewInit(): void {
+    setTimeout(() => {
+      if (this.ngControl) {
+        // console.log(this.ngControl.control);
+        this.ngControl.valueChanges?.subscribe(value => {
+          this.hasError = !!this.ngControl.errors;
+          this.controlErrors = this.ngControl.errors;
+          this.handlerError();
+        });
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -171,17 +200,38 @@ export class InputComponent extends AbstractInputComponent implements OnInit, Af
     if (this.inputValue()) {
       this.nativeElement
     }
+    // this.setDisabledState(this.disabledInput());
   }
 
   handlerInput($event: any) {
-    this.setValue($event.target.value, true);
-  }
-
-  handlerEvent = ($event: any, eventType: 'BLUR' | 'FOCUS') => {
-    if (eventType === "BLUR") {
-      this.onBlur.emit($event);
-    } else {
-      this.onFocus.emit($event);
+    if (!this.disabled) {
+      const emitEvent = this.validation() ? ['change', 'any'].includes(this.validationMode()) : true;
+      this.markAsTouched();
+      this.updateValue($event.target.value, emitEvent);
+      if (this.validation() && ['change', 'any'].includes(this.validationMode())) {
+        this.errorable = true;
+      }
     }
   }
+
+  handlerEvent = ($event: any, eventType: 'BLUR' | 'FOCUS' | "KEY_UP") => {
+
+    console.log("EVENT", this.validation(), this.validationMode())
+    if (!this.disabled) {
+      if (eventType === "BLUR") {
+        this.markAsTouched();
+        this.onBlur.emit($event);
+        if (this.validation() && ['blur', "any"].includes(this.validationMode())) {
+          this.notifyValueChange();
+          this.errorable = true;
+        }
+        this.ngControl.control?.updateValueAndValidity();
+      } else {
+        this.onFocus.emit($event);
+      }
+    }
+  }
+
+  private handlerError = () => {
+  };
 }

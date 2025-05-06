@@ -360,7 +360,7 @@ export class SelectComponent extends AbstractInputComponent implements OnInit, A
       this.selectionChange.emit({index: indexImpacted, item: option, type: eventType, selected: this.selectedValue});
     }
 
-    this.setValue(
+    this.updateValue(
       this.multiple() ?
         this.selectedValue.map(value => value.value) :
         option?.value, true);

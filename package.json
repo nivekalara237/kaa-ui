@@ -36,6 +36,7 @@
     "publish:ci": "cd dist/@nivekaa/kaa-ui && npm publish --provenance --access public",
     "uninstall": "npm uninstall @nivekaacom/faa-ui --registry https://registry.npmjs.org --force",
     "install:lib": "cd ",
+    "prepare:deploy": "cp ng-package.json tmp.json && cp ng-package.json.old ng-package.json && cp tmp.json ng-package.json.old && rm tmp.json",
     "clean": "rm -R dist",
     "beta-version-patch": "npm version $(semver $npm_package_version -i prerelease --preid beta)",
     "beta-version-minor": "npm version $(semver $npm_package_version -i preminor --preid beta)",

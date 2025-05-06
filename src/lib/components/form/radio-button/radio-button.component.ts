@@ -100,6 +100,6 @@ export class RadioButtonComponent extends AbstractInputComponent implements OnIn
   private initAll = () => {
     this.elementClass = this.compiledClasses();
     this.___id = this.inputId() ? this.inputId()! : RandomUtils.secureChars(12);
-    this.setValue(this.inputValue());
+    this.updateValue(this.inputValue());
   }
 }

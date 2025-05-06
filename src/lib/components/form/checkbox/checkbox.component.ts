@@ -140,9 +140,9 @@ export class CheckboxComponent extends AbstractInputComponent implements OnInit,
   handlerCheckboxChange(checked: boolean) {
     if (this.intermediate()) {
       const _checked = this.___state.next() === Partial ? null : (this.___state.next() === On);
-      this.setValue(_checked, true);
+      this.updateValue(_checked, true);
     } else {
-      this.setValue(checked, true);
+      this.updateValue(checked, true);
     }
     this.___state = this.___state.next();
   }

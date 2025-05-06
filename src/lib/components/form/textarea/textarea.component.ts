@@ -138,7 +138,7 @@ export class TextareaComponent extends FormElementControlValueAccessor implement
     if (this.contentElement) {
       const text = this.contentElement.nativeElement.textContent;
       if (StringUtils.size(text!) !== 0) {
-        this.setValue(text, false);
+        this.updateValue(text, false);
         this.changeDetector.markForCheck();
       }
     }
@@ -152,6 +152,6 @@ export class TextareaComponent extends FormElementControlValueAccessor implement
   handleChange($event: string) {
     this.change.emit($event);
     // this.handlerChange();
-    this.setValue($event, true);
+    this.updateValue($event, true);
   }
 }

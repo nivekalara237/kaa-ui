@@ -1,7 +1,11 @@
 import {FormElementControlValueAccessor} from './form-element.control-value-accessor';
-import {Component, input, model, output} from '@angular/core';
+import {Directive, input, model, output} from '@angular/core';
 
-@Component({template: ''})
+@Directive(
+  {
+    providers: []
+  }
+)
 export abstract class AbstractInputComponent extends FormElementControlValueAccessor {
   name = model<string>();
   inputValue = input<any>();

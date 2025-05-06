@@ -25,7 +25,7 @@ import {BehaviorSubject} from 'rxjs';
 @Component({
   selector: 'ka-stepper, ui-stepper',
   templateUrl: './stepper.component.html',
-  styleUrl: './stepper.component.css',
+  styleUrls: ['./stepper.component.css', './stapper.component.scss'],
   standalone: false,
   changeDetection: ChangeDetectionStrategy.Default,
   encapsulation: ViewEncapsulation.None

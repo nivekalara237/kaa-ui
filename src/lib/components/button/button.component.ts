@@ -29,7 +29,7 @@ import {twMerge} from 'tailwind-merge';
 import {iconVariantSizeMapping} from '../../model/themes/icon.theme';
 
 @Component({
-  selector: 'ui-button',
+  selector: 'ui-button, ka-button',
   imports: [
     NgIf,
     NgTemplateOutlet,

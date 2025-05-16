@@ -1,24 +1,24 @@
 <div #htmlElement class="ka-input">
   <div [ngClass]="{
-    'floating-label': floatingLabel()
+    'floating-label': floating()
     }"
        class="transition-all ka-input-size:{{size()}} ka-input-variant:{{ getVariant }} relative duration-500 {{ elementClass }}">
     <ng-container [ngSwitch]="getVariant">
       <ng-container *ngSwitchCase="'basic'">
         <ng-container
-          *ngFor="let tpl of (floatingLabel() ? [inputTpl, labelTpl] : [labelTpl, inputTpl])">
+          *ngFor="let tpl of (floating() ? [inputTpl, labelTpl] : [labelTpl, inputTpl])">
           <ng-container *ngTemplateOutlet="tpl"></ng-container>
         </ng-container>
       </ng-container>
       <ng-container *ngSwitchCase="'underline'">
         <ng-container
-          *ngFor="let tpl of (floatingLabel() ? [inputTpl, labelTpl] : [labelTpl, inputTpl])">
+          *ngFor="let tpl of (floating() ? [inputTpl, labelTpl] : [labelTpl, inputTpl])">
           <ng-container *ngTemplateOutlet="tpl"></ng-container>
         </ng-container>
       </ng-container>
       <ng-container *ngSwitchCase="'gray'">
         <ng-container
-          *ngFor="let tpl of (floatingLabel() ? [inputTpl, labelTpl] : [labelTpl, inputTpl])">
+          *ngFor="let tpl of (floating() ? [inputTpl, labelTpl] : [labelTpl, inputTpl])">
           <ng-container *ngTemplateOutlet="tpl"></ng-container>
         </ng-container>
       </ng-container>
@@ -29,6 +29,7 @@
 
     </ng-container>
   </div>
+  <ng-container *ngTemplateOutlet="helperTextTpl"></ng-container>
   <ng-container *ngTemplateOutlet="errorTpl"></ng-container>
 </div>
 
@@ -44,23 +45,25 @@
          (blur)="handlerEvent($event, 'BLUR')"
          (focus)="handlerEvent($event, 'FOCUS')"
          (input)="handlerInput($event)"
+         [attr.aria-describedby]="getDescribedBy"
+         [attr.aria-invalid]="hasError"
          [attr.aria-label]="ariaLabel()"
          [attr.aria-labelledby]="ariaLabelledBy()"
+         [attr.id]="___inputIdAttr"
          [class.has-error]="isError"
          [disabled]="disabled"
-         [id]="___inputIdAttr"
          [placeholder]="placeholder() ?? ''"
          [readOnly]="readOnly()"
-         [required]="requiredValue()"
+         [required]="required()"
          [value]="inputValue() ? inputValue() : ''"
          autocomplete="on"
          class="{{ ___commonVariantClass }} {{ ___inputClass }}"
-         type="{{ inputType() }}"/>
-  <ng-container *ngIf="inputType() === 'number'">
+         type="{{ type() }}"/>
+  <ng-container *ngIf="type() === 'number'">
     <div [ngClass]="{
     'me-8': iconName() && iconPosition() === 'right',
-    'justify-end input-number-step': !floatingLabel(),
-    'justify-center': floatingLabel(),
+    'justify-end input-number-step': !floating(),
+    'justify-center': floating(),
     }" class="absolute h-full flex-col right-0 top-0 flex items-center">
       <button (click)="inputElement.stepUp()"
               aria-label="Increase quantity"
@@ -83,7 +86,7 @@
     </div>
   </ng-container>
   <div *ngIf="iconName()"
-       [class.fix-margin]="!floatingLabel() && variant() !== 'underline'"
+       [class.fix-margin]="!floating() && variant() !== 'underline'"
        class="input-icon {{ ___iconClass }}"
   >
     <i class="pi pi-{{ iconName() }}"></i>
@@ -91,7 +94,7 @@
 </ng-template>
 
 <ng-template #errorTpl>
-  <ul *ngIf="errorable && hasError && controlErrors"
+  <ul *ngIf="isError && controlErrors"
       class="validation-messages validation:{{ isError ? 'error' : 'success' }} list-none mt-1.5 flex gap-y-2">
     <li *ngFor="let errorKey of controlErrors | keyvalue" class="m-0 p-0 flex items-center">
       <svg aria-hidden="true" class="w-3.5 h-3.5 me-1 icon" fill="none"
@@ -100,9 +103,17 @@
               stroke-linejoin="round"
               stroke-width="2"/>
       </svg>
-
       <p
         class="text-xs max-w-fit text-red-600 dark:text-red-500">{{ errorMessage[(errorKey.key)](ngControl?.name + '', errorKey.value) }}</p>
     </li>
   </ul>
+</ng-template>
+<ng-template #helperTextTpl>
+  @if (isHelperText) {
+    <p class="helper-text is-text"> {{ helperText() }}</p>
+  } @else {
+    <div class="helper-text">
+      <ng-container *ngTemplateOutlet="helperTextAsTemplate"></ng-container>
+    </div>
+  }
 </ng-template>

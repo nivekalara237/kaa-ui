@@ -12,13 +12,13 @@ import {
 import {Orientation} from '../../../../model/types';
 import {RadioButtonComponent} from '../radio-button.component';
 import {AbstractUIComponent} from '../../../abstract.component';
-import {StringBuilder} from 'co2m.js';
+import {RandomUtils, StringBuilder} from 'co2m.js';
 import {twMerge} from 'tailwind-merge';
 import {radioGroupOrientation} from '../../../../model/shapes/input.shape';
 import {radioGroupBorderMapping} from '../../../../model/themes/input.theme';
 
 @Component({
-  selector: 'ka-radio-group',
+  selector: 'ka-radio-group, ui-radio-group',
   standalone: false,
   templateUrl: './group.component.html',
   styleUrl: './group.component.scss',
@@ -40,11 +40,13 @@ export class RadioGroupComponent extends AbstractUIComponent implements OnInit, 
   orientation = input<Orientation>('horizontal');
   name = input<string>();
 
+  private _name!: string;
+
   ngAfterViewInit(): void {
     this.container.clear();
     if (this.radioChildren && this.radioChildren.toArray().length > 0) {
       this.radioChildren.forEach(radio => {
-        radio.name.set(this.name());
+        radio.name.set(this._name);
         radio.isItemGroup = true;
         [
           ...radioGroupOrientation[this.orientation()].split(" "),
@@ -60,6 +62,7 @@ export class RadioGroupComponent extends AbstractUIComponent implements OnInit, 
 
   ngOnInit(): void {
     this.elementClass = this.compiledClasses();
+    this._name = this.name() ?? `radio-group-${RandomUtils.secureChars(12)}`;
   }
 
   compiledClasses(): string {

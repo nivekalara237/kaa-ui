@@ -137,7 +137,7 @@ export class StepperComponent extends AbstractUIComponent implements OnInit, Aft
       this.updateSteps();
     },
     previous: () => {
-      console.log({curr: this.currentIndex});
+      // console.log({curr: this.currentIndex});
       if (ObjectUtils.isNullOrUndefined(this.currentIndex) || this.currentIndex === -1) {
         this.currentIndex = this.stepLength - 1;
       } else {

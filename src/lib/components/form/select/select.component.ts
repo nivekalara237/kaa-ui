@@ -2,13 +2,16 @@ import {
   AfterViewInit,
   booleanAttribute,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ContentChildren,
   ElementRef,
-  forwardRef,
+  Host,
   HostListener,
+  inject,
   input,
   OnInit,
+  Optional,
   output,
   QueryList,
   TemplateRef,
@@ -16,10 +19,9 @@ import {
   ViewChildren,
   ViewEncapsulation
 } from '@angular/core';
-import {RandomUtils, StringBuilder} from 'co2m.js';
+import {StringBuilder} from 'co2m.js';
 import {twMerge} from 'tailwind-merge';
 import {AbstractInputComponent} from '../shared/abstract-input.component';
-import {NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {HorizontalPosition, IconVariant, InputVariant, RoundedSize, Size} from '../../../model/types';
 import {SelectOption} from '../../../model/domain/select-option.domain';
 import {computePosition, ComputePositionReturn, flip, offset, shift} from '@floating-ui/dom';
@@ -27,23 +29,20 @@ import {OptionComponent} from './option/option.component';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {inputIconSize} from '../../../model/themes/input.theme';
 import {GroupOptionComponent} from './group/group-option.component';
+import {NgControl} from '@angular/forms';
+import {errorMessage} from '../input/utils/errors-message-handler';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'ka-select, ui-select',
   standalone: false,
   templateUrl: './select.component.html',
-  styleUrls: ['./select.component.scss', './variant.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SelectComponent),
-      multi: true
-    }, {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => SelectComponent),
-      multi: true
-    }
+  styleUrls: [
+    './select.component.scss',
+    './variant.scss',
+    '../common/style.component.scss'
   ],
+  providers: [],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
@@ -78,12 +77,12 @@ export class SelectComponent extends AbstractInputComponent implements OnInit, A
   optionLabelKey = input<string>();
   label = input<string>();
   placeholder = input<string>("Select option");
-  requiredValue = input(false, {transform: booleanAttribute});
+  required = input(false, {transform: booleanAttribute});
   readOnly = input(false, {transform: booleanAttribute});
   variant = input<InputVariant>('basic');
   roundedSize = input<RoundedSize>('small');
   size = input<Size>('medium');
-  floatingLabel = input(false, {transform: booleanAttribute});
+  floating = input(false, {transform: booleanAttribute});
   multiple = input(false, {transform: booleanAttribute});
   filter = input(false, {transform: booleanAttribute});
   iconVariant = input<IconVariant>('pi');
@@ -100,13 +99,23 @@ export class SelectComponent extends AbstractInputComponent implements OnInit, A
   @ViewChildren(GroupOptionComponent)
   _groupOptionsComponents!: QueryList<GroupOptionComponent>;
   // private attributes
-  protected __id!: string;
   protected selectedValue: SelectOption[] = [];
   protected opened = false;
+  protected opened$ = new BehaviorSubject(false);
   protected readonly inputIconSize = inputIconSize;
+  protected readonly errorMessage = errorMessage;
   private listboxElement!: HTMLElement;
   private inputElement!: HTMLElement;
   private internalOptions: SelectOption[] = [];
+
+  constructor(
+    @Optional() @Host() public ngControl: NgControl
+  ) {
+    super(
+      inject(ChangeDetectorRef),
+      ngControl
+    );
+  }
 
   @ViewChildren(OptionComponent)
   _optionsComponents!: QueryList<OptionComponent>;
@@ -129,9 +138,6 @@ export class SelectComponent extends AbstractInputComponent implements OnInit, A
     return this.options().length > 0 ? this.options() : this.internalOptions;
   }
 
-  registerOnValidatorChange(fn: { (): void }): void {
-  }
-
   override compiledClasses(): string {
     const builder = new StringBuilder();
     const inputBuilder = new StringBuilder();
@@ -142,7 +148,7 @@ export class SelectComponent extends AbstractInputComponent implements OnInit, A
     inputBuilder.append(`ka-input ka-input-${this.size()}`);
     inputBuilder.append(`ka-input-v-${this.variant()}`);
 
-    if (this.floatingLabel()) {
+    if (this.floating()) {
       inputBuilder.append("peer ka-input-floating");
       if (this.iconName() && this.iconPosition() === 'left') {
         labelBuilder.append("ms-9");
@@ -158,14 +164,20 @@ export class SelectComponent extends AbstractInputComponent implements OnInit, A
     if (this.nativeClassName()) {
       builder.append(this.nativeClassName());
     }
+    if (this.labelClassName()) {
+      labelBuilder.append(this.labelClassName()!);
+    }
 
+    if (this.inputClassName()) {
+      inputBuilder.append(this.inputClassName()!);
+    }
     this._inputCssClass = twMerge(inputBuilder.segments());
     this._labelCssClass = twMerge(labelBuilder.segments());
     return twMerge(builder.segments());
   }
 
   ngOnInit(): void {
-    this.__id = this.id();
+    this.initSuper();
     this.elementClass = this.compiledClasses();
     if (this.inputValue()) {
       if (this.multiple()) {
@@ -189,8 +201,6 @@ export class SelectComponent extends AbstractInputComponent implements OnInit, A
     this.handleListboxCheckbox();
   }
 
-  id = () => this.selectFieldId() ? this.selectFieldId()! : RandomUtils.secureChars(12);
-
   @HostListener("document:click", ["$event"])
   clickOutside = ($event: any) => {
     const multipleSelectItems = this.parentElement.nativeElement
@@ -207,6 +217,7 @@ export class SelectComponent extends AbstractInputComponent implements OnInit, A
     ) {
       this.showOrHideListBox(true);
       this.opened = false;
+      this.opened$.next(false);
     }
   }
 
@@ -291,12 +302,16 @@ export class SelectComponent extends AbstractInputComponent implements OnInit, A
   };
 
   private init = () => {
+    this.opened$.subscribe(value => {
+      console.log("$open", value);
+    });
     const parentElement = this.parentElement.nativeElement;
     const input = parentElement.querySelector("#input-select") as HTMLElement;
     const listbox = parentElement.querySelector(`#floating-block`) as HTMLElement;
     this.listboxElement = listbox;
     this.inputElement = input;
     const dropdown = ($event: any) => {
+      this.handleChange("", "BLUR");
       const selectedItems = parentElement.querySelector(".select-base .select-input #multiple-select-items");
       if (selectedItems && selectedItems.childNodes.length > 0) {
         const children = (() => {
@@ -315,6 +330,8 @@ export class SelectComponent extends AbstractInputComponent implements OnInit, A
 
       listbox.classList.toggle("hidden");
       this.opened = !this.opened;
+      this.opened$.next(this.opened);
+
       if (this.opened) {
         setTimeout(() => this.updateListbox(), 10);
       }
@@ -360,19 +377,20 @@ export class SelectComponent extends AbstractInputComponent implements OnInit, A
       this.selectionChange.emit({index: indexImpacted, item: option, type: eventType, selected: this.selectedValue});
     }
 
-    this.updateValue(
+    this.handleChange(
       this.multiple() ?
         this.selectedValue.map(value => value.value) :
-        option?.value, true);
-    this.changeDetector.markForCheck();
+        option?.value, 'INPUT');
   }
 
   private handleListboxCheckbox() {
     // component.isMultiSelect = true;
     const selectedValues = this.selectedValue.map(v => v.value);
-    this.optionsComponents.map(this.getCallbackfn())
-      .flatMap(value => [...value]).forEach(option => {
-      option.isSelected = selectedValues.includes(option.value());
-    });
+    this.optionsComponents
+      .map(this.getCallbackfn())
+      .flatMap(value => [...value])
+      .forEach(option => {
+        option.isSelected = selectedValues.includes(option.value());
+      });
   }
 }

@@ -1,49 +1,96 @@
-<div
-  [ngClass]="{
-  'flex-row-reverse': labelPosition() === 'left',
-  'gap-x-2 flex-row': labelPosition() === 'left' || labelPosition() === 'right',
-  'gap-y-2 flex-col': labelPosition() === 'top' || labelPosition() === 'bottom',
-  'flex-col-reverse': labelPosition() === 'top'
+<div #element class="ka-radio">
+  <div
+    [class.items-center]="!helperText()"
+    [class.items-start]="helperText()"
+    [ngClass]="{
+    'flex-row-reverse': labelPosition() === 'left',
+    'gap-x-2 flex-row': labelPosition() === 'left' || labelPosition() === 'right',
+    'gap-y-2 flex-col': labelPosition() === 'top' || labelPosition() === 'bottom',
+    'flex-col-reverse': labelPosition() === 'top'
   }"
-  class="flex items-center {{ elementClass }}">
-  <ng-container *ngIf="onlyLabel(); else labelWithRadio">
-    <ng-container *ngTemplateOutlet="inputTpl"></ng-container>
-    <ng-container *ngTemplateOutlet="labelTpl"></ng-container>
-  </ng-container>
-  <ng-template #labelWithRadio>
-    <label [for]="___id" class="relative flex items-center cursor-pointer">
+    class="flex {{ elementClass }} ka-radio-size:{{ size() }} ka-radio-status:{{ status() }}">
+    <ng-container *ngIf="onlyLabel(); else labelWithRadio">
       <ng-container *ngTemplateOutlet="inputTpl"></ng-container>
-      <span class="{{ ___radioClass }}"></span>
-    </label>
-    <ng-container *ngTemplateOutlet="labelTpl"></ng-container>
-  </ng-template>
+      <ng-container *ngTemplateOutlet="labelTpl"></ng-container>
+    </ng-container>
+    <ng-template #labelWithRadio>
+      <label [for]="___inputIdAttr" class="relative flex items-center cursor-pointer">
+        <ng-container *ngTemplateOutlet="inputTpl"></ng-container>
+        <span class="{{ ___radioClass }}"></span>
+      </label>
+      <ng-container *ngTemplateOutlet="labelTpl"></ng-container>
+    </ng-template>
+  </div>
 </div>
 
 <ng-template #labelTpl>
-  <ng-container *ngIf="label(); else tryGetLabelTagContent">
+  <ng-template #labelForOnlyLabel>
+    <ng-container *ngIf="label(); else tryGetLabelTagContent">
     <span (click)="handlerInputClick()"
           class="{{ onlyLabel() ? ___onlyLabelClass : ___labelClass }}">
       {{ label() }}
     </span>
-  </ng-container>
-  <ng-template #tryGetLabelTagContent>
-    <div (click)="handlerInputClick()" [ngClass]="{
+    </ng-container>
+    <ng-template #tryGetLabelTagContent>
+      <div (click)="handlerInputClick()" [ngClass]="{
     'cursor-not-allowed': disabledInput(),
     'cursor-pointer': !disabledInput(),
     }" class=" {{ onlyLabel() ? ___onlyLabelClass : '' }} p-0 m-0">
-      <ng-content select="ka-radio-label"></ng-content>
-    </div>
+        <ng-content select="ka-radio-label"></ng-content>
+      </div>
+    </ng-template>
   </ng-template>
+
+  <ng-container *ngIf="onlyLabel()">
+    <ng-container *ngTemplateOutlet="labelForOnlyLabel"></ng-container>
+  </ng-container>
+  <div *ngIf="!onlyLabel()" class="m-0 p-0 leading-none">
+    <ng-container *ngTemplateOutlet="labelForOnlyLabel"></ng-container>
+    @if (helperText()) {
+      <div>
+        <ng-container *ngTemplateOutlet="helperTextTpl"></ng-container>
+      </div>
+    }
+  </div>
 </ng-template>
 
 <ng-template #inputTpl>
   <input #inputElement
+         [attr.aria-describedby]="getDescribedBy"
+         [attr.aria-invalid]="hasError"
+         [attr.aria-label]="ariaLabel()"
+         [attr.aria-labelledby]="ariaLabelledBy()"
+         [attr.id]="___inputIdAttr"
          [attr.name]="name()"
          [attr.value]="inputValue()"
          [checked]="checkedInput()"
          [disabled]="disabledInput()"
-         [id]="___id"
          [readonly]="readOnly()"
          class="hidden peer"
          type="radio"/>
+</ng-template>
+
+<ng-template #helperTextTpl>
+  @if (isHelperText) {
+    <p class="helper-text is-text"> {{ helperText() }}</p>
+  } @else {
+    <div class="helper-text">
+      <ng-container *ngTemplateOutlet="helperTextAsTemplate"></ng-container>
+    </div>
+  }
+</ng-template>
+<ng-template #errorTpl>
+  <ul *ngIf="isError && controlErrors"
+      class="validation-messages validation:{{ isError ? 'error' : 'success' }} list-none mt-1.5 flex gap-y-2">
+    <li *ngFor="let errorKey of controlErrors | keyvalue" class="m-0 p-0 flex items-center">
+      <svg aria-hidden="true" class="w-3.5 h-3.5 me-1 icon" fill="none"
+           height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+        <path d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"/>
+      </svg>
+      <p
+        class="text-xs max-w-fit text-red-600 dark:text-red-500">{{ errorMessage[(errorKey.key)](ngControl?.name + '', errorKey.value) }}</p>
+    </li>
+  </ul>
 </ng-template>

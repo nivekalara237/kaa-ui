@@ -1,62 +1,107 @@
-<div
-  [ngClass]="{
-  'flex-row-reverse': labelPosition() === 'left',
-  'gap-x-2 flex-row': labelPosition() === 'left' || labelPosition() === 'right',
-  'gap-y-2 flex-col': labelPosition() === 'top' || labelPosition() === 'bottom',
-  'flex-col-reverse': labelPosition() === 'top',
-  }"
-  class="flex items-center shrink-0">
-  <div class="group place-items-center grid relative grid-cols-1">
-    <input #inputElement
-           (blur)="onBlur.emit()"
-           (change)="handlerCheckboxChange(inputElement.checked)"
-           (focus)="onFocus.emit()"
-           [attr.aria-label]="ariaLabel()"
-           [attr.aria-labelledby]="ariaLabelledBy()"
-           [attr.name]="name()"
-           [checked]="checked()"
-           [disabled]="disabledCheckbox()"
-           [id]="__id" [indeterminate]="intermediate() && ___state === Intermediate"
-           [readOnly]="readOnly()" [readonly]="readOnly()"
-           [required]="required()"
-           class="{{ __checkboxClass }} col-start-1 row-start-1 "
-           type="checkbox">
-    <ng-container *ngIf="onlyLabel()">
+<div class="ka-checkbox">
+  <div
+    [class.items-center]="!helperText()"
+    [class.items-start]="helperText()"
+    [ngClass]="{
+      'flex-row-reverse': labelPosition() === 'left',
+      'gap-x-2 flex-row': labelPosition() === 'left' || labelPosition() === 'right',
+      'gap-y-2 flex-col': labelPosition() === 'top' || labelPosition() === 'bottom',
+      'flex-col-reverse': labelPosition() === 'top',
+      }"
+    class="flex shrink-0 ka-checkbox-size:{{ size() }} ka-checkbox-status:{{ status() }} ka-checkbox-rounded:{{ roundedSize() }}">
+    <div class="group place-items-center grid relative grid-cols-1">
+      <input #inputElement
+             (blur)="onBlur.emit(null)"
+             (change)="handlerCheckboxChange(inputElement.checked)"
+             (focus)="this.onFocus.emit(null)"
+             [attr.aria-describedby]="getDescribedBy"
+             [attr.aria-invalid]="hasError"
+             [attr.aria-label]="ariaLabel()"
+             [attr.aria-labelledby]="ariaLabelledBy()"
+             [attr.id]="___inputIdAttr"
+             [attr.name]="name()"
+             [checked]="checked()"
+             [disabled]="disabledCheckbox()"
+             [id]="___inputIdAttr" [indeterminate]="intermediate() && ___state === Intermediate"
+             [readOnly]="readOnly()" [readonly]="readOnly()"
+             [required]="required()"
+             class="{{ __checkboxClass }} col-start-1 row-start-1 "
+             type="checkbox">
+      <ng-container *ngIf="onlyLabel()">
+        <ng-container *ngTemplateOutlet="labelTpl"></ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="!hasCustomIcon; else customIcon">
+        <svg aria-hidden="true"
+             class="{{ __iconClass }} pointer-events-none col-start-1 row-start-1 self-center justify-self-center"
+             fill="none" height="24"
+             viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <path class="transition-all duration-200 fade-in opacity-0 group-has-[:checked]:opacity-100"
+                d="M5 11.917 9.724 16.5 19 7.5" stroke="currentColor"
+                stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="4"/>
+          <path class="opacity-0 group-has-[:indeterminate]:opacity-100"
+                d="M5 12h14"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+        </svg>
+      </ng-container>
+
+      <ng-template #customIcon>
+        <ng-content select="ka-checkbox-custom-icon"></ng-content>
+      </ng-template>
+    </div>
+    <ng-container *ngIf="!onlyLabel()">
       <ng-container *ngTemplateOutlet="labelTpl"></ng-container>
     </ng-container>
-
-    <ng-container *ngIf="!hasCustomIcon; else customIcon">
-      <svg aria-hidden="true"
-           class="{{ __iconClass }} pointer-events-none col-start-1 row-start-1 self-center justify-self-center"
-           fill="none" height="24"
-           viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-        <path class="transition-all duration-200 fade-in opacity-0 group-has-[:checked]:opacity-100"
-              d="M5 11.917 9.724 16.5 19 7.5" stroke="currentColor"
-              stroke-linecap="round" stroke-linejoin="round"
-              stroke-width="4"/>
-        <path class="opacity-0 group-has-[:indeterminate]:opacity-100"
-              d="M5 12h14"
-              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
-      </svg>
-    </ng-container>
-
-    <ng-template #customIcon>
-      <ng-content select="ka-checkbox-custom-icon"></ng-content>
-    </ng-template>
   </div>
-  <ng-container *ngIf="!onlyLabel()">
-    <ng-container *ngTemplateOutlet="labelTpl"></ng-container>
-  </ng-container>
 </div>
 
 <ng-template #labelTpl>
-  <label [for]="__id" class="{{ __labelClass }}">
-    <ng-container *ngIf="label(); else tryGetLabelTagContent">
-      {{ label() }}
-    </ng-container>
-    <ng-template #tryGetLabelTagContent>
-      <ng-content select="ka-checkbox-label"></ng-content>
-    </ng-template>
-  </label>
+  <ng-template #labelForOnlyLabel>
+    <label [for]="___inputIdAttr" class="{{ __labelClass }}">
+      <ng-container *ngIf="label(); else tryGetLabelTagContent">
+        {{ label() }}
+      </ng-container>
+      <ng-template #tryGetLabelTagContent>
+        <ng-content select="ka-checkbox-label"></ng-content>
+      </ng-template>
+    </label>
+  </ng-template>
+  <ng-container *ngIf="onlyLabel()">
+    <ng-container *ngTemplateOutlet="labelForOnlyLabel"></ng-container>
+  </ng-container>
+  <div *ngIf="!onlyLabel()" class="m-0 p-0 leading-none">
+    <ng-container *ngTemplateOutlet="labelForOnlyLabel"></ng-container>
+    @if (helperText()) {
+      <div>
+        <ng-container *ngTemplateOutlet="helperTextTpl"></ng-container>
+      </div>
+    }
+  </div>
+</ng-template>
+
+<ng-template #helperTextTpl>
+  @if (isHelperText) {
+    <p class="helper-text is-text"> {{ helperText() }}</p>
+  } @else {
+    <div class="helper-text">
+      <ng-container *ngTemplateOutlet="helperTextAsTemplate"></ng-container>
+    </div>
+  }
+</ng-template>
+<ng-template #errorTpl>
+  <ul *ngIf="isError && controlErrors"
+      class="validation-messages validation:{{ isError ? 'error' : 'success' }} list-none mt-1.5 flex gap-y-2">
+    <li *ngFor="let errorKey of controlErrors | keyvalue" class="m-0 p-0 flex items-center">
+      <svg aria-hidden="true" class="w-3.5 h-3.5 me-1 icon" fill="none"
+           height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+        <path d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"/>
+      </svg>
+      <p
+        class="text-xs max-w-fit text-red-600 dark:text-red-500">{{ errorMessage[(errorKey.key)](ngControl?.name + '', errorKey.value) }}</p>
+    </li>
+  </ul>
 </ng-template>
 

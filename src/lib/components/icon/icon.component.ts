@@ -14,7 +14,10 @@ import {NgClass} from '@angular/common';
   ],
   templateUrl: './icon.component.html',
   styleUrl: './icon.component.css',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    "class": "leading-none"
+  }
 })
 export class IconComponent extends AbstractUIComponent implements OnInit {
   name = input.required<string>();

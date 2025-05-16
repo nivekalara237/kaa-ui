@@ -128,7 +128,7 @@ export class DropdownComponent extends AbstractUIComponent implements OnInit, Af
     this.toggleButtonTriggerHandleTimer = setTimeout(() => {
       if (!menuElt || !menuElt.closest(".dropdown") || !menuElt.closest("#toggleButton")) {
         this.toggleHandler(true);
-        console.log("Leave from button");
+        // console.log("Leave from button");
       }
     }, 100);
   };

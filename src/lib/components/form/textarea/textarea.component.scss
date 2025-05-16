@@ -1,0 +1,48 @@
+@use "sass:map";
+@use "sass:list";
+@use "../common/variables" as *;
+
+.ka-textarea {
+  @each $sizeName in map.keys($ka-input-sizes-config) {
+    $sizeConfigMap: map.get($ka-input-sizes-config, $sizeName);
+    .ka-textarea-size\:#{$sizeName} {
+
+      .input-icon.fix-margin {
+        @apply #{map.get($sizeConfigMap, fix-icon-margin)}
+      }
+
+      textarea.has-error {
+        @apply border-red-600 dark:border-red-400
+        focus:border-red-600 dark:focus:border-red-400
+        bg-red-50 dark:bg-neutral-900
+      }
+
+      &.ka-textarea-variant\:gray textarea.has-error,
+      &.ka-textarea-variant\:basic textarea.has-error {
+        @apply #{list.nth(map.get($sizeConfigMap, borders), 1)};
+      }
+
+      &.ka-textarea-variant\:underline textarea.has-error {
+        @apply border-b-2;
+        //#{list.nth(map.get($sizeConfigMap, borders), 2)}
+      }
+
+      label.has-error {
+        @apply text-red-600 dark:text-red-500
+      }
+    }
+  }
+
+  .validation-messages.validation\:error {
+    li {
+      .icon, p {
+        @apply text-red-600 dark:text-red-500
+      }
+    }
+  }
+
+  .ka-auto-resize {
+    @apply resize-none overflow-hidden min-h-[3rem]
+  }
+
+}

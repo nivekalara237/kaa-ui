@@ -43,11 +43,14 @@ export * from './lib/components/form/select/option/option.component';
 export * from './lib/components/form/select/group/group-option.component';
 export * from './lib/components/dropdown/dropdown.component';
 export * from './lib/components/dropdown/dropdown-item/dropdown-item.component';
-
+export * from './lib/components/form/checkbox/checkbox-control/checkbox-control.component';
+export * from './lib/components/form/radio-button/radio-control/radio-control.component';
 // Directives
 export * from './lib/components/form/select/slot/slot-action.directive';
 export * from './lib/components/form/select/slot/slot-header.directive';
 export * from './lib/components/form/select/slot/slot-empty.directive';
+export * from "./lib/components/form/shared/textarea-and-input-char-count.directive"
+
 
 // Modules
 export * from './lib/components/accordion/accordion.module';
@@ -71,4 +74,5 @@ export * from './lib/model/themes/icon.theme';
 export * from './lib/model/themes/input.theme';
 
 // index.ts
-export * from './lib/components/stepper'
+export * from './lib/components/stepper';
+// export * from './lib/components/form';

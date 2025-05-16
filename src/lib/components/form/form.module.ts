@@ -18,6 +18,9 @@ import {GroupOptionComponent} from './select/group/group-option.component';
 import {SlotActionDirective} from './select/slot/slot-action.directive';
 import {SlotHeaderDirective} from './select/slot/slot-header.directive';
 import {SlotEmptyDirective} from './select/slot/slot-empty.directive';
+import {TextareaAndInputCharCountDirective} from './shared/textarea-and-input-char-count.directive';
+import {CheckboxControlComponent} from './checkbox/checkbox-control/checkbox-control.component';
+import {RadioControlComponent} from './radio-button/radio-control/radio-control.component';
 
 @NgModule({
   declarations: [
@@ -33,9 +36,12 @@ import {SlotEmptyDirective} from './select/slot/slot-empty.directive';
     SelectComponent,
     OptionComponent,
     GroupOptionComponent,
+    CheckboxControlComponent,
+    RadioControlComponent,
     SlotHeaderDirective,
     SlotActionDirective,
-    SlotEmptyDirective
+    SlotEmptyDirective,
+    TextareaAndInputCharCountDirective
   ],
   imports: [
     CommonModule,
@@ -56,9 +62,12 @@ import {SlotEmptyDirective} from './select/slot/slot-empty.directive';
     SelectComponent,
     OptionComponent,
     GroupOptionComponent,
+    CheckboxControlComponent,
+    RadioControlComponent,
     SlotHeaderDirective,
     SlotActionDirective,
-    SlotEmptyDirective
+    SlotEmptyDirective,
+    TextareaAndInputCharCountDirective
   ],
   providers: []
 })

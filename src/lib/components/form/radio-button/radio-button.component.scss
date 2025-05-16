@@ -1,6 +1,6 @@
 @use "sass:list";
 
-.ka-radio {
+.ka-radio-custom {
   @apply border-[1px] rounded-full flex items-center justify-center
   relative before:content-[''] before:rounded-full cursor-pointer
   before:opacity-0 before:scale-50 peer-checked:before:opacity-100 peer-checked:before:scale-100
@@ -58,7 +58,7 @@ $ka-radio-sizes: (
 @include generate-radio-sizes;
 
 .ka-radio-label {
-  @apply text-gray-500 dark:text-neutral-400 text-sm font-medium;
+  @apply text-gray-500 dark:text-neutral-400 font-medium;
 }
 
 .ka-radio-disabled {

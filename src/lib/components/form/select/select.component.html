@@ -1,12 +1,23 @@
-<div #parentElement class="relative w-full cursor-pointer select-box" id="{{ __id }}">
-  <div [class.relative]="floatingLabel()" class="flex-row select-base" id="input-select">
-
-    <ng-container *ngFor="let tpl of floatingLabel() ? [inputTpl, labelTpl] : [labelTpl, inputTpl]">
-      <ng-container *ngTemplateOutlet="tpl; context: {$implicit: floatingLabel()}"></ng-container>
+<div #parentElement
+     (blur)="this.handleChange('', 'BLUR')"
+     (focus)="this.handleChange('', 'FOCUS')"
+     [attr.aria-describedby]="getDescribedBy"
+     [attr.aria-disabled]="disabled"
+     [attr.aria-invalid]="isError"
+     [attr.aria-label]="ariaLabel()"
+     [attr.aria-labelledby]="ariaLabelledBy()"
+     [attr.id]="___inputIdAttr"
+     class="relative ka-select w-full cursor-pointer select-box">
+  <div
+    [class.relative]="floating()"
+    class="flex-row select-base ka-select-size:{{ size() }} ka-select-variant:{{ variant() }} ka-select-rounded:{{ roundedSize() }}"
+    id="input-select">
+    <ng-container *ngFor="let tpl of floating() ? [inputTpl, labelTpl] : [labelTpl, inputTpl]">
+      <ng-container *ngTemplateOutlet="tpl; context: {$implicit: floating()}"></ng-container>
     </ng-container>
     <ng-template #labelTpl let-floating>
       <span [ngClass]="{
-          'required': requiredValue()
+          'required': required()
         }" class="select-label ka-input-label-{{ size() }} {{ _labelCssClass }}"
       >
         @if (floating) {
@@ -20,6 +31,7 @@
       <div (focusin)="handlerInputFocus('IN')"
            (focusout)="handlerInputFocus('OUT')"
            [attr.data-readonly]="readOnly()"
+           [class.has-error]="isError"
            [class.variant-gray]="variant() === 'gray'"
            class="select-input focusable flex justify-between {{ _inputCssClass }}"
            tabindex="0">
@@ -87,6 +99,9 @@
     </ng-template>
   </div>
 
+  <ng-container *ngTemplateOutlet="helperTextTpl"></ng-container>
+  <ng-container *ngTemplateOutlet="errorTpl"></ng-container>
+
   <div aria-describedby="input-select" class="hidden" id="floating-block" role="listbox">
     <ng-container *ngIf="filter()">
       <div class="mt-4">
@@ -141,4 +156,29 @@
 </ng-template>
 <ng-template #renderSingleTpl let-index="idx" let-option>
   <span class="text-inherit for-peer-fl dark:text-white">{{ option.label }}</span>
+</ng-template>
+
+<ng-template #helperTextTpl>
+  @if (isHelperText) {
+    <p class="helper-text is-text"> {{ helperText() }}</p>
+  } @else {
+    <div class="helper-text">
+      <ng-container *ngTemplateOutlet="helperTextAsTemplate"></ng-container>
+    </div>
+  }
+</ng-template>
+<ng-template #errorTpl>
+  <ul *ngIf="isError && controlErrors"
+      class="validation-messages validation:{{ isError ? 'error' : 'success' }} list-none mt-1.5 flex gap-y-2">
+    <li *ngFor="let errorKey of controlErrors | keyvalue" class="m-0 p-0 flex items-center">
+      <svg aria-hidden="true" class="w-3.5 h-3.5 me-1 icon" fill="none"
+           height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+        <path d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"/>
+      </svg>
+      <p
+        class="text-xs max-w-fit text-red-600 dark:text-red-500">{{ errorMessage[(errorKey.key)](ngControl?.name + '', errorKey.value) }}</p>
+    </li>
+  </ul>
 </ng-template>

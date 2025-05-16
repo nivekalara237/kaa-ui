@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 
-const fpluggin = require("flowbite/plugin");
+// const fpluggin = require("flowbite/plugin");
 const plugin = require("tailwindcss");
 // fpluggin.plugins.map(p =>  p.f)
 module.exports = {
@@ -35,7 +35,7 @@ module.exports = {
   },
   darkMode: "class",
   plugins: [
-    fpluggin,
+    // fpluggin,
     require('postcss-import'),
     require("tailwindcss"),
     require("autoprefixer"),

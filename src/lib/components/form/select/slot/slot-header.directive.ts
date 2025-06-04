@@ -13,7 +13,7 @@ export class SlotHeaderDirective implements OnInit {
   constructor() {
   }
 
-  get clazzes() {
+  private get clazzes() {
     const builder = new StringBuilder();
     builder.append("px-3 py-4")
       .append("border-b border-gray-200");

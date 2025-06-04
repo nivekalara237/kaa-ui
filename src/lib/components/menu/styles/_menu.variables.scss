@@ -1,0 +1,11 @@
+$menu-sizing: p-1 rounded-lg max-w-fit min-w-48;
+$menu-item-sizing: px-3 py-2 mb-1 rounded-md;
+
+$menu-border-radius: 0.25rem;
+$menu-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+$menu-item-hover-bg: #f3f4f6;
+$menu-item-active-bg: #e5e7eb;
+
+$menu-item-theming: "bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-white";
+
+$menu-transition: all 0.2s ease;

@@ -12,7 +12,7 @@ export class SlotEmptyDirective implements OnInit {
   constructor() {
   }
 
-  get classes() {
+  private get classes() {
     const builder = new StringBuilder();
     builder.append("my-5")
       .append("w-full flex justify-center items-center");

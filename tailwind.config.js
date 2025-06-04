@@ -8,11 +8,17 @@ module.exports = {
     "./src/**/*.{html,ts,md}",
     // "./node_modules/flowbite/**/*.js"
   ],
+  safelist: [
+    "ka-scrollbar",
+    "ka-scrollbar-vertical",
+    "ka-scrollbar-horizontal"
+  ],
   theme: {
     extend: {
       zIndex: {
         "-1": "-1",
-        "9999": "9999"
+        "9999": "9999",
+        "9998": "9999"
       },
       customForms: theme => ({
         default: {
@@ -39,7 +45,7 @@ module.exports = {
     require('postcss-import'),
     require("tailwindcss"),
     require("autoprefixer"),
-    require("@tailwindcss/typography"),
+    require("@tailwindcss/typography")({className: 'non', target: "modern"}),
     /**
      * require("@tailwindcss/forms")({ strategy: 'class'})
      *

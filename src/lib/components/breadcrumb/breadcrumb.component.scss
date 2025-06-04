@@ -1,0 +1,49 @@
+:host {
+  display: inline-block;
+  white-space: nowrap;
+  overflow-x: auto;
+  // animation: fadeIn 300ms ease-in;
+}
+
+.ka-breadcrumb {
+  &-items {
+    @apply list-none;
+
+    li {
+      @apply text-sm font-semibold text-gray-500 dark:text-gray-300;
+    }
+
+    .ka-breadcrumb-item {
+      .one-line {
+        @apply flex flex-row gap-x-2 items-center;
+      }
+
+      a.active {
+        @apply text-gray-700 dark:text-gray-50 underline-offset-4 underline;
+      }
+
+      &.disabled {
+        @apply text-gray-300 dark:text-gray-700 cursor-not-allowed focus:outline-none focus:ring;
+      }
+    }
+
+    .ka-breadcrumb-item-ellipsis {
+      @apply text-gray-500 cursor-pointer;
+    }
+
+    .ka-breadcrumb-separator {
+      @apply text-gray-400;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

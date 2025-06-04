@@ -74,19 +74,21 @@
     <ng-container *ngTemplateOutlet="labelForOnlyLabel"></ng-container>
     @if (helperText()) {
       <div>
-        <ng-container *ngTemplateOutlet="helperTextTpl"></ng-container>
+        <ng-container *ngTemplateOutlet="helperTextTpl, context: {$implicit: !!helperText()}"></ng-container>
       </div>
     }
   </div>
 </ng-template>
 
-<ng-template #helperTextTpl>
-  @if (isHelperText) {
-    <p class="helper-text is-text"> {{ helperText() }}</p>
-  } @else {
-    <div class="helper-text">
-      <ng-container *ngTemplateOutlet="helperTextAsTemplate"></ng-container>
-    </div>
+<ng-template #helperTextTpl let-has>
+  @if (has) {
+    @if (isHelperText) {
+      <p class="helper-text is-text"> {{ helperText() }}</p>
+    } @else {
+      <div class="helper-text">
+        <ng-container *ngTemplateOutlet="helperTextAsTemplate"></ng-container>
+      </div>
+    }
   }
 </ng-template>
 <ng-template #errorTpl>

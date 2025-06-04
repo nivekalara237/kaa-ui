@@ -8,7 +8,8 @@ import {NgControl} from '@angular/forms';
   {
     providers: [],
     host: {
-      "ngSkipHydration": ''
+      "ngSkipHydration": '',
+      'class': 'prose'
     }
   }
 )

@@ -45,6 +45,7 @@ export * from './lib/components/dropdown/dropdown.component';
 export * from './lib/components/dropdown/dropdown-item/dropdown-item.component';
 export * from './lib/components/form/checkbox/checkbox-control/checkbox-control.component';
 export * from './lib/components/form/radio-button/radio-control/radio-control.component';
+export * from './lib/components/breadcrumb/breadcrumb.component';
 // Directives
 export * from './lib/components/form/select/slot/slot-action.directive';
 export * from './lib/components/form/select/slot/slot-header.directive';
@@ -72,7 +73,11 @@ export * from './lib/model/domain/avatar.domain';
 export * from './lib/model/domain/select-option.domain';
 export * from './lib/model/themes/icon.theme';
 export * from './lib/model/themes/input.theme';
+export * from './lib/model/domain/menu-item.domain';
 
 // index.ts
 export * from './lib/components/stepper';
 // export * from './lib/components/form';
+export * from './lib/components/drawer';
+export * from './lib/components/menu';
+export * from "./lib/components/common";

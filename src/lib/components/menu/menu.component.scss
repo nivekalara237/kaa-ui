@@ -1,0 +1,61 @@
+@use "styles/menu.variables" as *;
+
+.ka-menu {
+  @apply bg-white dark:bg-gray-600 #{$menu-sizing};
+  &.ka-menu-borderless\:true {
+    @apply border-none;
+  }
+
+  &.ka-menu-borderless\:false {
+    @apply shadow-sm border border-gray-300 dark:border-gray-950 ;
+  }
+
+  .ka-menu-orientation\:horizontal {
+    @apply flex gap-x-4;
+    .ka-menu-item {
+      @apply mb-0;
+    }
+  }
+
+  .ka-menu-items {
+
+    .ka-menu-item-submenus {
+      @apply border-s border-gray-200 dark:border-gray-700 ps-2 ms-4;
+    }
+
+    .ka-menu-item {
+      &-icon {
+      }
+
+      &-label {
+        @apply font-medium text-sm flex-1;
+      }
+
+      &-badge {
+
+      }
+
+      @apply flex flex-row gap-x-4 last:mb-0 cursor-pointer items-center
+      transition-colors duration-200 ease-in-out justify-between
+      #{$menu-item-sizing} #{$menu-item-theming};
+
+      &.ka-disabled {
+        @apply bg-neutral-50 text-neutral-500 hover:bg-neutral-700 cursor-not-allowed dark:bg-neutral-600 pointer-events-none;
+      }
+    }
+
+    &.ka-menu-orientation\:horizontal .ka-menu-separator {
+      @apply border-s border-gray-200 dark:border-gray-700 mx-[.125rem];
+    }
+
+    &.ka-menu-orientation\:vertical .ka-menu-separator {
+      @apply border-t border-gray-200 dark:border-gray-700 my-[.125rem];
+    }
+  }
+
+  .ka-menu-orientation\:horizontal {
+    .ka-menu-item {
+      @apply mb-0;
+    }
+  }
+}

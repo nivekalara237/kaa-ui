@@ -29,7 +29,7 @@ export class StepContentSlotDirective implements AfterViewInit {
     private viewContainerRef: ViewContainerRef
   ) {
     if (!this.step) {
-      throw new Error('The `kaStepContent` directive must be used inside a <ka-step>/<ui-step> component.');
+      throw new Error('The `kaStepContent` directive must be used inside a <ka-step>{..}</ui-step> component.');
     }
   }
 

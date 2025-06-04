@@ -1,0 +1,53 @@
+<nav aria-label="Breadcrumb" class="ka-breadcrumb">
+  <ol class="inline-flex gap-x-2 items-center ka-breadcrumb-items">
+    <ng-container
+      *ngFor="let item of (multipage ? visibleItems: items);
+       let last=last; let first = first;  let i = index">
+      <ng-container *ngIf="item === 'ellipsis'">
+        <li (click)="toggleExpand()" (keydown.enter)="toggleExpand()" [@fadeInOut]
+            aria-expanded="false"
+            class="ka-breadcrumb-item-ellipsis"
+            role="button"
+            tabindex="0">
+          ...
+        </li>
+      </ng-container>
+      <ng-container *ngIf="item !== 'ellipsis'">
+        <li (click)="execCommand(item)" [@fadeInOut] [attr.aria-current]="last ? 'page' : undefined"
+            [class.disabled]="item.disabled"
+            class="ka-breadcrumb-item">
+          <ng-template #icon>
+            @if (isIconObject(item)) {
+              <ui-icon [nativeClassName]="item.iconClass!" *ngIf="item.icon" [variant]="getIconObject(item).variant"
+                       name="{{ getIconObject(item).name }}"
+                       size="small"></ui-icon>
+            } @else {
+              <ui-icon [nativeClassName]="item.iconClass!" *ngIf="item.icon" name="{{ item.icon }}"
+                       size="small"></ui-icon>
+            }
+          </ng-template>
+          <a (click)="item.disabled ? $event.preventDefault() : undefined"
+             *ngIf="item.routerLink"
+             [routerLinkActiveOptions]="{exact: true}"
+             [routerLinkActive]="'active'"
+             [routerLink]="item.routerLink"
+             class="one-line"
+          >
+            <ng-container *ngTemplateOutlet="icon"></ng-container>
+            {{ item.label }}
+          </a>
+          <div *ngIf="!item.routerLink" class="one-line">
+            <ng-container *ngTemplateOutlet="icon"></ng-container>
+            <span>{{ item.label }}</span>
+          </div>
+        </li>
+      </ng-container>
+      <li *ngIf="i < visibleItems.length - 1" [@fadeInOut] class="ka-breadcrumb-separator">
+        <ng-container *ngIf="isTemplateSeparator; else defaultSeparator">
+          <ng-container *ngTemplateOutlet="separatorAsTemplate"></ng-container>
+        </ng-container>
+        <ng-template #defaultSeparator>{{ separator }}</ng-template>
+      </li>
+    </ng-container>
+  </ol>
+</nav>

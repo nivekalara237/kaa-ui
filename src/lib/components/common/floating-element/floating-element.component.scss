@@ -1,0 +1,46 @@
+.ka-floating-element {
+  position: relative;
+  display: inline-flex;
+
+  .ka-floating-element-content {
+    position: absolute;
+    width: max-content;
+    top: 0;
+    left: 0;
+
+    #ka-floating-arrow {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      visibility: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: inherit;
+        transform: rotate(45deg);
+        visibility: visible;
+      }
+    }
+
+    /* Positionnement dynamique selon la direction */
+    &[data-fe-placement^='top'] #arrow {
+      bottom: -5px; /* Ajustez selon la taille de la flèche */
+    }
+
+    &[data-fe-placement^='bottom'] #ka-floating-arrow {
+      top: -5px;
+    }
+
+    &[data-fe-placement^='left'] #ka-floating-arrow {
+      right: -5px;
+    }
+
+    &[data-fe-placement^='right'] #ka-floating-arrow {
+      left: -5px;
+    }
+
+  }
+}

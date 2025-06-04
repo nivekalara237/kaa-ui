@@ -13,7 +13,8 @@ import {twMerge} from 'tailwind-merge';
 
 @Directive({
   host: {
-    "ngSkipHydration": ''
+    "ngSkipHydration": '',
+    "class": "prose"
   }
 })
 export abstract class AbstractUIComponent implements OnChanges {

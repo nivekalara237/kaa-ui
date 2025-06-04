@@ -15,7 +15,7 @@ export class SlotActionDirective implements OnInit {
   }
 
   // @HostBinding("class")
-  get classes() {
+  private get classes() {
     const builder = new StringBuilder();
     builder.append("px-3 py-4")
       .append("border-t border-gray-200");

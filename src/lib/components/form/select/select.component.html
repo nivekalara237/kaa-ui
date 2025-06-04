@@ -99,7 +99,7 @@
     </ng-template>
   </div>
 
-  <ng-container *ngTemplateOutlet="helperTextTpl"></ng-container>
+  <ng-container *ngTemplateOutlet="helperTextTpl, context: {$implicit: !!helperText()}"></ng-container>
   <ng-container *ngTemplateOutlet="errorTpl"></ng-container>
 
   <div aria-describedby="input-select" class="hidden" id="floating-block" role="listbox">
@@ -158,13 +158,15 @@
   <span class="text-inherit for-peer-fl dark:text-white">{{ option.label }}</span>
 </ng-template>
 
-<ng-template #helperTextTpl>
-  @if (isHelperText) {
-    <p class="helper-text is-text"> {{ helperText() }}</p>
-  } @else {
-    <div class="helper-text">
-      <ng-container *ngTemplateOutlet="helperTextAsTemplate"></ng-container>
-    </div>
+<ng-template #helperTextTpl let-has>
+  @if (has) {
+    @if (isHelperText) {
+      <p class="helper-text is-text"> {{ helperText() }}</p>
+    } @else {
+      <div class="helper-text">
+        <ng-container *ngTemplateOutlet="helperTextAsTemplate"></ng-container>
+      </div>
+    }
   }
 </ng-template>
 <ng-template #errorTpl>

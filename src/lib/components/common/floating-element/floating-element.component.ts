@@ -130,6 +130,11 @@ export class FloatingElementComponent extends AbstractUIComponent implements Aft
         } else {
           arrowOffset = Number(new RegExp(/^(\d+(\.\d+)?)/).exec(getComputedStyle(arrowElement).height)?.at(1));
         }
+
+        console.log({
+          bg: getComputedStyle(this.__floatingContentElement.querySelector("ui-fe-content > *")!).background,
+          bgc: getComputedStyle(this.__floatingContentElement.querySelector("ui-fe-content > *")!).backgroundColor,
+        })
       }
 
       this.cleanUpFloatingUi = autoUpdate(this.__triggerElement, this.__floatingContentElement, () => {

@@ -13,6 +13,7 @@
       width: 10px;
       height: 10px;
       visibility: hidden;
+      z-index: 10;
 
       &::before {
         content: '';

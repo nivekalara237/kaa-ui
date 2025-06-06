@@ -34,7 +34,7 @@ export abstract class AbstractInputComponent extends FormElementControlValueAcce
 
   // protected abstract ngControl: NgControl;
 
-  constructor(
+  protected constructor(
     cd: ChangeDetectorRef,
     private _ngControl: NgControl
   ) {
@@ -84,7 +84,6 @@ export abstract class AbstractInputComponent extends FormElementControlValueAcce
       }
     }, 0);
   };
-
 
   protected handleChange(value: any, eventType: 'FOCUS' | 'INPUT' | 'BLUR' | 'KEY_UP') {
     if (this.disabled) return;

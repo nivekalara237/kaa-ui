@@ -46,6 +46,8 @@ export * from './lib/components/dropdown/dropdown-item/dropdown-item.component';
 export * from './lib/components/form/checkbox/checkbox-control/checkbox-control.component';
 export * from './lib/components/form/radio-button/radio-control/radio-control.component';
 export * from './lib/components/breadcrumb/breadcrumb.component';
+export * from './lib/components/dropzone/dropzone.component';
+
 // Directives
 export * from './lib/components/form/select/slot/slot-action.directive';
 export * from './lib/components/form/select/slot/slot-header.directive';

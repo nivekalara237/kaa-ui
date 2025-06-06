@@ -302,9 +302,6 @@ export class SelectComponent extends AbstractInputComponent implements OnInit, A
   };
 
   private init = () => {
-    this.opened$.subscribe(value => {
-      console.log("$open", value);
-    });
     const parentElement = this.parentElement.nativeElement;
     const input = parentElement.querySelector("#input-select") as HTMLElement;
     const listbox = parentElement.querySelector(`#floating-block`) as HTMLElement;

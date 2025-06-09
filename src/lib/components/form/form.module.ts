@@ -21,6 +21,7 @@ import {SlotEmptyDirective} from './select/slot/slot-empty.directive';
 import {TextareaAndInputCharCountDirective} from './shared/textarea-and-input-char-count.directive';
 import {CheckboxControlComponent} from './checkbox/checkbox-control/checkbox-control.component';
 import {RadioControlComponent} from './radio-button/radio-control/radio-control.component';
+import {FileInputComponent} from './file-input/file-input.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import {RadioControlComponent} from './radio-button/radio-control/radio-control.
     SlotHeaderDirective,
     SlotActionDirective,
     SlotEmptyDirective,
-    TextareaAndInputCharCountDirective
+    TextareaAndInputCharCountDirective,
+    FileInputComponent
   ],
   imports: [
     CommonModule,
@@ -67,7 +69,8 @@ import {RadioControlComponent} from './radio-button/radio-control/radio-control.
     SlotHeaderDirective,
     SlotActionDirective,
     SlotEmptyDirective,
-    TextareaAndInputCharCountDirective
+    TextareaAndInputCharCountDirective,
+    FileInputComponent
   ],
   providers: []
 })

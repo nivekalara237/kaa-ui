@@ -6,6 +6,7 @@ import {
   ContentChild,
   ContentChildren,
   EmbeddedViewRef,
+  Input,
   input,
   numberAttribute,
   OnInit,
@@ -20,7 +21,7 @@ import {Orientation, Size} from '../../model/types';
 import {StepComponent} from './step/step.component';
 import {StepperOutletDirective} from './stepper-outlet.directive';
 import {StepperFinalContentSlotDirective} from './slots/stepper-final-content-slot.directive';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Component({
   selector: 'ka-stepper, ui-stepper',
@@ -38,6 +39,9 @@ export class StepperComponent extends AbstractUIComponent implements OnInit, Aft
   selectable = input(true, {transform: booleanAttribute});
   actionable = input(false, {transform: booleanAttribute});
   outlet = input<StepperOutletDirective>();
+
+  @Input() beforeFinish?: () => Promise<void> | Observable<void> | void;
+
   stepChange = output<number>();
   @ContentChildren(StepComponent)
   stepComponents!: QueryList<StepComponent>;
@@ -70,6 +74,15 @@ export class StepperComponent extends AbstractUIComponent implements OnInit, Aft
 
   ngOnInit(): void {
     this.elementClass = this.compiledClasses();
+
+    this.finished$.subscribe(value => {
+      if (value) {
+        this.stepComponents.forEach(step => {
+          step.status = "completed";
+          step.active = false;
+        });
+      }
+    });
   }
 
   handlerFlow(flow: 'next' | 'prev' | 'finished' | 'reset') {
@@ -89,11 +102,31 @@ export class StepperComponent extends AbstractUIComponent implements OnInit, Aft
       this.flow.select(0);
       this.finished$.next(false);
     } else if (flow === 'finished') {
+      this.finishStepper();
+    }
+  }
+
+  finishStepper() {
+    if (this.beforeFinish) {
+      const result = this.beforeFinish();
+      if (result instanceof Observable) {
+        result.subscribe({
+          next: () => {
+            this.finished$.next(true);
+          },
+          error: () => console.warn('beforeFinish failed'),
+          complete: () => {
+          }
+        });
+      } else if (result instanceof Promise) {
+        result
+          .then(() => this.finished$.next(true))
+          .catch(() => console.warn('beforeFinish failed'));
+      } else {
+
+      }
+    } else {
       this.finished$.next(true);
-      this.stepComponents.forEach(step => {
-        step.status = "completed";
-        step.active = false;
-      });
     }
   }
 

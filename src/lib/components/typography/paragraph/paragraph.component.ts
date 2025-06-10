@@ -1,4 +1,4 @@
-import {booleanAttribute, ChangeDetectorRef, Component, input, OnInit} from '@angular/core';
+import {booleanAttribute, ChangeDetectorRef, Component, input, OnInit, ViewEncapsulation} from '@angular/core';
 import {AbstractUIComponent} from '../../abstract.component';
 import {StringBuilder} from 'co2m.js';
 import {twMerge} from 'tailwind-merge';
@@ -12,6 +12,7 @@ type ParagraphSize = Size | 'normal';
   imports: [],
   templateUrl: './paragraph.component.html',
   styleUrl: './paragraph.component.css',
+  encapsulation: ViewEncapsulation.None,
   providers: [
     {
       provide: AbstractUIComponent,

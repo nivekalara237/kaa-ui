@@ -95,6 +95,7 @@ export class FileInputComponent extends AbstractInputComponent implements OnInit
     }
 
     this.fileSelected.emit(file);
+    this.updateValue(file, true);
   }
 
   removeFile() {

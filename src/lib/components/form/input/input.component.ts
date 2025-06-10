@@ -190,7 +190,7 @@ export class InputComponent extends AbstractInputComponent implements OnInit, Af
     };
 
     if (this.inputValue()) {
-      this.nativeElement
+      this.updateValue(this.inputValue(), true);
     }
     // this.setDisabledState(this.disabledInput());
   }

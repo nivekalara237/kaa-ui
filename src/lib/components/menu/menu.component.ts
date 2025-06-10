@@ -147,7 +147,7 @@ export class MenuComponent extends AbstractUIComponent implements OnInit, AfterV
   };
 
   ngOnInit(): void {
-    console.log({itemOnInit: this.itemTemplate});
+    // console.log({itemOnInit: this.itemTemplate});
   }
 
   onItemSelected(wrapper: MenuItemWrapper, el: HTMLElement, index: number, submenus: HTMLDivElement, target: any) {

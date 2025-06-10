@@ -1,4 +1,4 @@
-import {booleanAttribute, Component, input, numberAttribute, OnInit} from '@angular/core';
+import {booleanAttribute, Component, input, numberAttribute, OnInit, ViewEncapsulation} from '@angular/core';
 import {AbstractUIComponent} from '../../abstract.component';
 import {StringBuilder} from 'co2m.js';
 import {twMerge} from 'tailwind-merge';
@@ -17,6 +17,7 @@ type SizeType = Size | 'full';
   templateUrl: './hr.component.html',
   styleUrl: './hr.component.css',
   standalone: true,
+  encapsulation: ViewEncapsulation.None,
   providers: [{
     provide: AbstractUIComponent,
     useExisting: HrComponent,

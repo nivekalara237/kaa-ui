@@ -1,0 +1,7 @@
+<div #parentElement [id]="__idAttr" class="ka-floating-element">
+  <ng-content select="ka-fe-trigger, ui-fe-trigger"></ng-content>
+  <div class="ka-floating-element-content hidden">
+    <ng-content select="ka-fe-content, ui-fe-content"></ng-content>
+    <div *ngIf="hasArrow()" class="{{ arrowClass() }}" id="ka-floating-arrow"></div>
+  </div>
+</div>

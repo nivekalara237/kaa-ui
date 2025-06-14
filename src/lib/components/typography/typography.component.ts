@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, input, OnInit, ViewEncapsulation} from '@angular/core';
 import {StringBuilder, StringUtils} from 'co2m.js';
 import {twMerge} from 'tailwind-merge';
 import {NgSwitch, NgSwitchCase, NgSwitchDefault, NgTemplateOutlet} from '@angular/common';
@@ -16,6 +16,7 @@ import {typographyTextColor300Mapping, variantBase} from '../../model/themes/typ
   ],
   templateUrl: './typography.component.html',
   styleUrl: './typography.component.css',
+  encapsulation: ViewEncapsulation.None,
   providers: [{
     provide: AbstractUIComponent,
     useExisting: TypographyComponent,

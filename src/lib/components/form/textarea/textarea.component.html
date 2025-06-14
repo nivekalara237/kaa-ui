@@ -1,17 +1,61 @@
-<div class="relative">
-  <label *ngIf="label()" [id]="___id" class="{{ ___labelClasses }}">{{ label() }}</label>
-  <textarea #textarea (input)="handleChange(textarea.value)"
-            (keyup)="handleChange(textarea.value)"
-            [id]="___id"
-            [placeholder]="placeholder() ?? ''"
-            [readOnly]="readOnly()"
-            [required]="requiredValue()"
-            [rows]="rows()"
-            [value]="value ?? ''"
-            class="{{ ___textareaClasses }}">
+<div class="ka-textarea">
+  <div class="relative ka-textarea-size:{{ size() }} ka-textarea-variant:{{ getVariant }}">
+    <label *ngIf="label()" [class.has-error]="isError" [id]="___inputIdAttr"
+           class="{{ ___labelClasses }}">{{ label() }}</label>
+    <textarea
+      #textarea
+      (blur)="handleChange(textarea.value, 'BLUR')"
+      (focus)="handleChange(textarea.value, 'FOCUS')"
+      (input)="handleChange(textarea.value, 'INPUT')"
+      (keyup)="handleChange(textarea.value, 'KEY_UP')"
+      [attr.aria-describedby]="getDescribedBy"
+      [attr.aria-invalid]="hasError"
+      [attr.aria-label]="ariaLabel()"
+      [attr.aria-labelledby]="ariaLabelledBy()"
+      [attr.aria-multiline]="true"
+      [attr.id]="___inputIdAttr"
+      [class.has-error]="isError"
+      [class.ka-auto-resize]="autoResize()"
+      [disabled]="disabled"
+      [placeholder]="placeholder() ?? ''"
+      [readOnly]="readOnly()"
+      [required]="requiredValue()"
+      [rows]="rows()"
+      [value]="value ? value : ''"
+      class="{{ ___textareaClasses }}">
   </textarea>
+  </div>
+  <div #content class="hidden">
+    <!--Please never remove this block-->
+    <ng-content></ng-content>
+  </div>
+  <ng-container *ngTemplateOutlet="helperTextTpl, context: {$implicit: !!helperText()}"></ng-container>
+  <ng-container *ngTemplateOutlet="errorTpl"></ng-container>
+</div>
 
-</div>
-<div #content class="hidden">
-  <ng-content></ng-content>
-</div>
+<ng-template #helperTextTpl let-has>
+  @if (has) {
+    @if (isHelperText) {
+      <p class="helper-text is-text"> {{ helperText() }}</p>
+    } @else {
+      <div class="helper-text">
+        <ng-container *ngTemplateOutlet="helperTextAsTemplate"></ng-container>
+      </div>
+    }
+  }
+</ng-template>
+<ng-template #errorTpl>
+  <ul *ngIf="isError && controlErrors"
+      class="validation-messages validation:{{ isError ? 'error' : 'success' }} list-none mt-1.5 flex gap-y-2">
+    <li *ngFor="let errorKey of controlErrors | keyvalue" class="m-0 p-0 flex items-center">
+      <svg aria-hidden="true" class="w-3.5 h-3.5 me-1 icon" fill="none"
+           height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+        <path d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"/>
+      </svg>
+      <p
+        class="text-xs max-w-fit text-red-600 dark:text-red-500">{{ errorMessage[(errorKey.key)](ngControl?.name + '', errorKey.value) }}</p>
+    </li>
+  </ul>
+</ng-template>

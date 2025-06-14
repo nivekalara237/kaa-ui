@@ -1,0 +1,30 @@
+@use "sass:map";
+@use "sass:list";
+
+$ka-input-sizes-config: (
+  tiny: (
+    number-step: "pb-[5px]",
+    fix-icon-margin: "mt-[2px]",
+    borders: ('border-[1px]', 'border-b-[1px]')
+  ),
+  small: (
+    number-step: "pb-[6px]",
+    fix-icon-margin: "mt-[3px]",
+    borders: ('border', 'border-b')
+  ),
+  medium: (
+    number-step: "pb-[8px]",
+    fix-icon-margin: "mt-[5px]",
+    borders: ('border-2', 'border-b-2')
+  ),
+  large: (
+    number-step: "pb-[12px]",
+    fix-icon-margin: "mt-[4px]",
+    borders: ('border-[3px]', 'border-b-[3px]')
+  ),
+  giant: (
+    number-step: "pb-[15px]",
+    fix-icon-margin: "mt-[3px]",
+    borders: ('border-4', 'border-b-4')
+  )
+);

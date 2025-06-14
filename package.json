@@ -1,6 +1,6 @@
 {
   "name": "@nivekaa/kaa-ui",
-  "version": "0.0.4-beta.2",
+  "version": "1.0.1-beta.13",
   "keywords": [
     "angular",
     "typescript",
@@ -36,6 +36,7 @@
     "publish:ci": "cd dist/@nivekaa/kaa-ui && npm publish --provenance --access public",
     "uninstall": "npm uninstall @nivekaacom/faa-ui --registry https://registry.npmjs.org --force",
     "install:lib": "cd ",
+    "prepare:deploy": "cp ng-package.json tmp.json && cp ng-package.json.old ng-package.json && cp tmp.json ng-package.json.old && rm tmp.json",
     "clean": "rm -R dist",
     "beta-version-patch": "npm version $(semver $npm_package_version -i prerelease --preid beta)",
     "beta-version-minor": "npm version $(semver $npm_package_version -i preminor --preid beta)",
@@ -52,7 +53,8 @@
     "postcss": "^8.4.49",
     "postcss-import": "^16.1.0",
     "primeicons": "^7.0.0",
-    "tailwind-merge": "^2.6.0"
+    "tailwind-merge": "^2.6.0",
+    "@floating-ui/dom": "^1.6.13"
   },
   "dependencies": {
     "co2m.js": "^1.0.13",

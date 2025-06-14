@@ -1,0 +1,115 @@
+<div #rootElement class="ka-dropzone max-w-2xl p-2 {{ elementClass }}">
+  <!-- Zone de dépôt -->
+  <div
+    (dragleave)="onDragLeave($event)"
+    (dragover)="onDragOver($event)"
+    (drop)="onDrop($event)"
+    [class.ka-dropzone-zone-dragging]="isDragging"
+    class="ka-dropzone-zone"
+  >
+    <input
+      (change)="onFileSelected($event)"
+      [accept]="_formats.join(', ')"
+      [disabled]="uploadedFiles.length >= maxFiles()"
+      [multiple]="multiple()"
+      class="hidden"
+      id="fileInput"
+      type="file"
+    >
+    <label
+      [class.cursor-not-allowed]="uploadedFiles.length >= maxFiles()"
+      class="cursor-pointer"
+      for="fileInput">
+      <div class="flex flex-col items-center justify-center gap-2">
+        <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2"/>
+        </svg>
+        <p class="font-medium dark:text-gray-300">
+          @if (isDragging) {
+            Drop your images here
+          } @else {
+            Drag and drop or click to select
+          }
+        </p>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Formats supported: {{ _supportedFormats }}</p>
+      </div>
+
+      <div *ngIf="uploadedFiles.length >= maxFiles()" class="mt-2 text-red-500">
+        The limit of file is reached
+      </div>
+    </label>
+  </div>
+
+  <div class="ka-dropzone-error">
+    <!-- Messages d'erreur -->
+    <div *ngIf="errorMessage" class="mt-2 text-red-500 text-sm">
+      {{ errorMessage }}
+    </div>
+    <!-- Compteur de fichiers -->
+    <div *ngIf="displayIndicator()" class="mt-2 text-gray-600 dark:text-white text-sm">
+      {{ uploadedFiles.length }} / {{ maxFiles() }} files (max {{ maxFileSizeMB() }}MB each)
+    </div>
+  </div>
+
+  <!-- Liste des images uploadées -->
+  <div *ngIf="uploadedFiles.length > 0" class="ka-dropzone-preview mt-2">
+    <h3 class="ka-dropzone-preview-title">
+      Images downloaded
+      <ui-badge color="indigo" size="tiny" status="primary">{{ uploadedFiles.length }}</ui-badge>
+    </h3>
+    <div class="ka-dropzone-preview-items grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+      <div
+        *ngFor="let item of uploadedFiles; let i = index"
+        class="ka-dropzone-preview-item relative group">
+        @if (item.type?.match("image.*")) {
+          <img [src]="item.preview" alt="Preview file n°{{ i }}" class="ka-dropzone-preview-item-image">
+        } @else {
+          <svg class="w-full h-32 stroke-1 text-gray-800 dark:text-white" aria-hidden="true"
+               xmlns="http://www.w3.org/2000/svg"
+               width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linejoin="round" stroke-width="1"
+                  d="M10 3v4a1 1 0 0 1-1 1H5m14-4v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z"/>
+          </svg>
+          <span *ngIf="item.type"
+                class="text-lg text-gray-800 dark:text-white font-semibold absolute inset-1/2 -translate-x-1/2 -translate-y-1/2">
+            {{ item.type.split("/")[1] }}
+          </span>
+        }
+
+        <!-- Progress bar -->
+        <div *ngIf="item.uploading" class="ka-dropzone-preview-item-progress">
+          <div
+            [style.width.%]="item.progress"
+            class="bg-blue-500 h-full transition-all duration-300">
+          </div>
+        </div>
+
+        <!-- Progress percentage -->
+        <div *ngIf="item.uploading"
+             class="ka-dropzone-preview-item-progress-percent">
+          {{ item.progress | number:'1.0-0' }}%
+        </div>
+
+        <!-- Error message -->
+        <div *ngIf="item.error" class="ka-dropzone-preview-item-error">
+          {{ item.error }}
+        </div>
+
+        <button
+          (click)="removeFile(i)"
+          [class.opacity-100]="item.error"
+          [disabled]="item.uploading"
+          aria-label="Delete"
+          class="ka-dropzone-preview-item-btn-delete transition-opacity opacity-0 group-hover:opacity-100"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

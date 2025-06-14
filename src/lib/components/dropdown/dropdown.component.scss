@@ -1,0 +1,58 @@
+.dropdown {
+  @apply p-2 rounded-lg shadow-lg border
+  border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800
+  transition-transform duration-200 ease-in-out transform z-9999
+  max-w-max
+}
+
+.dropdown ka-dropdown-item {
+
+}
+
+.d-top {
+  @apply bottom-full mb-2 -translate-x-1/2 left-1/2
+}
+
+.d-top-right {
+  @apply bottom-full mb-2 right-0
+}
+
+.d-top-left {
+  @apply bottom-full mb-2 left-0
+}
+
+.d-left {
+  @apply me-2 right-full -translate-y-1/2
+}
+
+.d-left-top {
+  @apply me-2 right-full top-0
+}
+
+.d-left-bottom {
+  @apply me-2 right-full bottom-0
+}
+
+.d-right {
+  @apply ms-2 left-full -translate-y-1/2
+}
+
+.d-right-top {
+  @apply ms-2 left-full top-0
+}
+
+.d-right-bottom {
+  @apply ms-2 left-full bottom-0
+}
+
+.d-bottom {
+  @apply left-1/2 mt-2 -translate-x-1/2
+}
+
+.d-bottom-left {
+  @apply left-0 mt-2 -translate-x-0
+}
+
+.d-bottom-right {
+  @apply right-0 mt-2
+}

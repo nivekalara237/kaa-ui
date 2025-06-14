@@ -1,36 +1,40 @@
-import {AbstractControl, ControlValueAccessor, ValidationErrors, Validator} from '@angular/forms';
+import {ControlValueAccessor, ValidationErrors} from '@angular/forms';
 import {AbstractUIComponent} from '../../abstract.component';
 
-export abstract class FormElementControlValueAccessor extends AbstractUIComponent implements ControlValueAccessor, Validator {
-  protected value!: any;
+export abstract class FormElementControlValueAccessor<T = any> extends AbstractUIComponent implements ControlValueAccessor {
+  hasError = false;
+  controlErrors: ValidationErrors | null = null;
+  protected value!: T;
   protected touched = false;
   protected disabled = false;
-  // protected validateState = input<FormInputValidateState>();
+  protected errorable = false;
 
-  onChange = (value: any) => {
+
+  onChange = (value: T) => {
   };
 
   onTouched = () => {
   };
 
-  setValue(__value: any, emitEvent?: boolean) {
+  onValidatorChange = () => {
+  };
+
+  updateValue(__value: T, emitEvent: boolean = true) {
     this.value = __value;
-    if (emitEvent && this.onChange) {
-      this.onChange(__value);
-      this.onTouched?.();
-    }
+    this.onChange(__value);
   }
 
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
 
+
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }
 
   writeValue(obj: any): void {
-    this.setValue(obj, true);
+    this.updateValue(obj, true);
     setTimeout(() => this.changeDetector.markForCheck(), 0);
   }
 
@@ -43,15 +47,14 @@ export abstract class FormElementControlValueAccessor extends AbstractUIComponen
 
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
-  }
-
-  validate(control: AbstractControl): ValidationErrors | null {
-    return null;
+    this.changeDetector.markForCheck();
   }
 
   notifyValueChange(): void {
-    if (this.onChange) {
-      this.onChange(this.value);
+    if (!this.disabled) {
+      /*if (this.onChange) {
+        this.onChange(this.value);
+      }*/
     }
   }
 

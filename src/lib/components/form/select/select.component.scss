@@ -1,0 +1,81 @@
+.focusable {
+  tab-index: 0;
+  @apply outline-none
+}
+
+// handler focus in div.select-input
+// old = border-blue-500 ring-blue-500 dark:border-neutral-700  dark:ring-neutral-600
+.focusable:focus {
+  @apply ring-0 transition-all duration-200
+}
+
+
+#input-select .grid-auto-fit {
+  grid-template-columns: repeat(auto-fit, minmax(min-content, 1fr));
+}
+
+
+#floating-block {
+  @apply absolute top-0 left-0 w-full bg-white dark:bg-gray-700
+  border border-gray-100 dark:border-gray-800 z-9999
+  overflow-y-auto max-h-[18rem]
+  [&::-webkit-scrollbar]:w-1
+  [&::-webkit-scrollbar-track]:rounded-full
+  [&::-webkit-scrollbar-track]:bg-gray-100
+  [&::-webkit-scrollbar-thumb]:rounded-full
+  [&::-webkit-scrollbar-thumb]:bg-gray-300
+  dark:[&::-webkit-scrollbar-track]:bg-gray-950
+  dark:[&::-webkit-scrollbar-thumb]:bg-gray-500
+}
+
+.select-box .select-base .select-label.required {
+  @apply after:content-['*'] after:ml-0.5 after:text-red-500
+  after:inline-flex after:items-center after:text-base after:justify-center
+}
+
+.select-box .select-base .select-label {
+  @apply text-gray-400 dark:text-white
+  transition-all duration-300 truncate ease-in-out
+}
+
+// diseabled && readonly attribute applied
+.select-box .select-input[data-readonly=true] {
+  @apply opacity-50 pointer-events-none bg-neutral-400
+}
+
+// @apply outline-2 bg-gray-100 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-800
+.select-box .select-input {
+}
+
+.select-box .select-input .selected-value #multiple-select-items .multiple-select-item {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+
+.select-box .select-input .select-arrow {
+  @apply h-full flex items-center justify-center
+}
+
+#filter-input ._input {
+  @apply py-1.5 sm:py-3 px-4 block w-full border-gray-200
+  rounded-lg sm:text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600
+}
+
+
+/*
+bg-gray-100 block border border-gray-200 dark:bg-transparent dark:border-neutral-600 dark:focus:bg-transparent
+dark:focus:ring-neutral-600 dark:placeholder-neutral-500 dark:text-neutral-400 disabled:opacity-50 disabled:pointer-events-none
+focus:bg-transparent focus:border-gray-300 focus:ring-0 focus:ring-gray-500 outline-2 pe-3.5 peer peer/input-number-pin-button
+ps-9 py-2 rounded-md shadow-xs text-sm w-full
+*/
+
+
+.select-box .select-input.ka-input-floating {
+
+}
+
+
+.select-box .select-label.ka-input-floating {
+  @apply absolute px-2 pointer-events-none z-10 cursor-text select-none
+  duration-300 transform
+}

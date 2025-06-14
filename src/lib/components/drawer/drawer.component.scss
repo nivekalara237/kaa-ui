@@ -1,0 +1,367 @@
+@use "sass:list";
+@use "sass:map";
+@use "sass:string";
+
+$ka-drawer-sizes: (
+  small: (horizontal: h-64, vertical: w-64),
+  medium: (horizontal: h-80, vertical: w-80),
+  large: (horizontal: 'h-[90%]', vertical: 'w-[90%]'),
+  full: (horizontal: h-full, vertical: w-full)
+);
+
+$ka-drawer-position: (
+  top: 'top-0 -translate-y-full',
+  bottom: 'bottom-0 translate-y-full',
+  left: 'left-0 -translate-x-full',
+  right: 'right-0 translate-x-full'
+);
+
+:host {
+  display: block;
+
+  .ka-drawer {
+    @apply fixed z-9999;
+
+    &.ka-drawer-position\: {
+      &left, &right {
+        @apply top-0 h-[100vh];
+      }
+
+      &top, &bottom {
+        @apply left-0 w-[100vw];
+      }
+
+      &left {
+        @apply left-0 -translate-x-full;
+      }
+
+      &right {
+        @apply right-0 translate-x-full;
+      }
+
+      &top {
+        @apply top-0 -translate-y-full;
+      }
+
+      &bottom {
+
+        @apply bottom-0 translate-y-full;
+      }
+    }
+
+    &.ka-drawer-size\: {
+      &small {
+        &.ka-drawer-position\: {
+          &left, &right {
+            @apply w-64 max-w-md;
+          }
+        }
+
+        &.ka-drawer-position\: {
+          &top, &bottom {
+            @apply h-64;
+          }
+        }
+      }
+
+      &medium {
+        &.ka-drawer-position\: {
+          &left, &right {
+            @apply w-80 max-w-lg;
+          }
+        }
+
+        &.ka-drawer-position\: {
+          &top, &bottom {
+            @apply h-80;
+          }
+        }
+      }
+
+      &large {
+        &.ka-drawer-position\: {
+          &left, &right {
+            @apply w-[90%] max-w-2xl;
+          }
+        }
+
+        &.ka-drawer-position\: {
+          &top, &bottom {
+            @apply h-[90%] max-h-full;
+          }
+        }
+      }
+
+      &full {
+        &.ka-drawer-position\: {
+          &left, &right {
+            @apply w-full;
+          }
+        }
+
+        &.ka-drawer-position\: {
+          &top, &bottom {
+            @apply h-full;
+          }
+        }
+      }
+    }
+
+    &.open.ka-drawer-position\: {
+      &left {
+        animation: slideInFromLeft 200ms ease-in forwards;
+      }
+
+      &right {
+        animation: slideInFromRight 200ms ease-in forwards;
+      }
+
+      &top {
+        animation: slideInFromTop 200ms ease-in forwards;
+      }
+
+      &bottom {
+        animation: slideInFromBottom 200ms ease-in forwards;
+      }
+
+      &left, &right {
+        @apply translate-x-0;
+      }
+
+      &top, &bottom {
+        @apply translate-y-0;
+      }
+    }
+
+    &.close.ka-drawer-position\: {
+      &left {
+        animation: slideOutToLeft 200ms ease-out forwards;
+      }
+
+      &right {
+        animation: slideOutToRight 200ms ease-out forwards;
+      }
+
+      &top {
+        animation: slideOutToTop 200ms ease-out forwards;
+      }
+
+      &bottom {
+        animation: slideOutToBottom 200ms ease-out forwards;
+      }
+    }
+
+    &.ka-drawer-size\:full {
+      &.open {
+        animation: zoomIn 300ms ease-in forwards;
+      }
+
+      &.close {
+        animation: zoomOut 200ms ease-out forwards;
+      }
+    }
+
+    .ka-drawer-container {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      display: block;
+      @apply bg-white dark:bg-gray-600 shadow-lg flex flex-col;
+
+      &.left, &.right {
+        height: 100%;
+      }
+
+      &.top, &.bottom {
+        width: 100%;
+        height: 100%;
+      }
+
+      .ka-drawer-header {
+        @apply flex items-center justify-between p-4;
+
+        .ka-drawer-header-text {
+          @apply text-lg font-semibold text-gray-600 dark:text-white flex-1;
+        }
+
+        .ka-drawer-header-close {
+          // @apply
+        }
+      }
+
+      .ka-drawer-content {
+        @apply pb-4 px-4 flex-1;
+      }
+
+      .ka-drawer-footer {
+        @apply w-full;
+      }
+    }
+  }
+}
+
+.ka-scrollbar {
+  @apply [&::-webkit-scrollbar]:w-1
+  [&::-webkit-scrollbar-track]:rounded-full
+  [&::-webkit-scrollbar-track]:bg-gray-100
+  [&::-webkit-scrollbar-thumb]:rounded-full
+  [&::-webkit-scrollbar-thumb]:bg-gray-300
+  dark:[&::-webkit-scrollbar-track]:bg-gray-950
+  dark:[&::-webkit-scrollbar-thumb]:bg-gray-500;
+
+  &-vertical {
+    overflow-y: auto;
+  }
+
+  &-horizontal {
+    overflow-x: auto;
+  }
+}
+
+
+.ka-drawer\:backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  animation: ka-overlay-mask-enter-animation ease-in-out 200ms forwards;
+  @apply bg-black bg-opacity-20 z-9998 inset-0;
+
+  &.close {
+    animation: ka-overlay-mask-out-animation ease-in-out 200ms forwards;
+  }
+}
+
+
+@keyframes ka-overlay-mask-enter-animation {
+  from {
+    background-color: transparent;
+    opacity: 0;
+  }
+  to {
+    opacity: 0.2;
+    background-color: black;
+  }
+}
+
+
+@keyframes ka-overlay-mask-out-animation {
+  from {
+    opacity: 0.2;
+    background-color: black;
+  }
+  to {
+    background-color: transparent;
+    opacity: 0;
+  }
+}
+
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToLeft {
+  from {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToRight {
+  from {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideInFromTop {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToTop {
+  from {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToBottom {
+  from {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes zoomOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}

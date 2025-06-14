@@ -26,7 +26,7 @@ import {NgClass, NgIf} from '@angular/common';
 type BadgeSize = Exclude<Size, 'giant'>;
 
 @Component({
-  selector: 'ui-badge',
+  selector: 'ui-badge, ka-badge',
   imports: [
     NgIf,
     NgClass

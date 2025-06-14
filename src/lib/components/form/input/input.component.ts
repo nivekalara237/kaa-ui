@@ -2,12 +2,17 @@ import {
   AfterViewInit,
   booleanAttribute,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
-  forwardRef,
+  inject,
   input,
-  OnInit
+  OnInit,
+  Optional,
+  Self,
+  viewChild,
+  ViewEncapsulation
 } from '@angular/core';
-import {ObjectUtils, RandomUtils, StringBuilder} from 'co2m.js';
+import {ObjectUtils, StringBuilder} from 'co2m.js';
 import {twMerge} from 'tailwind-merge';
 import {
   Color,
@@ -21,49 +26,46 @@ import {
 } from '../../../model/types';
 import {InputFactory} from './input.factory';
 import {inputIconSize} from '../../../model/themes/input.theme';
-import {NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {NgControl} from '@angular/forms';
+import {errorMessage} from './utils/errors-message-handler';
 import {AbstractInputComponent} from '../shared/abstract-input.component';
 
+
 @Component({
-  selector: 'ui-input',
+  selector: 'ui-input, ka-input',
   standalone: false,
   templateUrl: './input.component.html',
-  styleUrl: './input.component.css',
+  styleUrls: ['./input.component.css', "./variant.scss", "../common/style.component.scss"],
   providers: [
-    {
+    /*{
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => InputComponent),
       multi: true
-    }, {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => InputComponent),
-      multi: true
-    }
+    }*/
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
-    'class': 'transition-all duration-500'
+    'class': 'transition-all duration-300'
   }
 })
 export class InputComponent extends AbstractInputComponent implements OnInit, AfterViewInit {
-
   label = input<string>();
-  // labelDisposition = input<Position>('top');
   placeholder = input<string>();
-  inputId = input<string>();
-  inputType = input.required<InputType>();
+  type = input.required<InputType>();
   rounding = input<RoundedSize>("small", {alias: 'roundedSize'});
-  inputAddonIcon = input<IconVariant>('pi');
-  addonIcon = input<string>();
-  addonIconPosition = input<HorizontalPosition>("left");
+  iconVariant = input<IconVariant>('pi');
+  iconName = input<string>();
+  iconPosition = input<HorizontalPosition>("left");
   variant = input<InputVariant>();
   size = input<Size>('small');
   color = input<Status | Color>('default');
-  floatingLabel = input(false, {transform: booleanAttribute});
+  floating = input(false, {transform: booleanAttribute});
   gray = input(false, {transform: booleanAttribute});
   underline = input(false, {transform: booleanAttribute});
-  requiredValue = input(false, {transform: booleanAttribute});
+  required = input(false, {transform: booleanAttribute});
   readOnly = input(false, {transform: booleanAttribute});
+  disabledInput = input(false, {transform: booleanAttribute, alias: "disabled"});
 
   ___inputClass!: string;
   ___labelClass!: string;
@@ -72,14 +74,23 @@ export class InputComponent extends AbstractInputComponent implements OnInit, Af
   ___commonVariantClass!: string;
   ___commonLabelVariantClass!: string;
   ___iconClass!: string;
-  ___inputIdAttr!: string | undefined;
-  protected inputNumberPinIconSize: Record<string, boolean> = {
-    'w-2.5 h-2.5': this.size() === 'tiny',
-    'w-3.5 h-3.5': this.size() === 'small',
-    'w-4 h-4': this.size() === 'medium',
-    'w-5 h-5': this.size() === 'large',
-    'w-6 h-6': this.size() === 'giant',
-  };
+  protected htmlContent = viewChild<HTMLDivElement>("htmlElement");
+  protected inputNumberPinIconSize: Record<string, boolean> = {};
+  // protected ngControl!: NgControl;
+  protected readonly errorMessage = errorMessage;
+
+  constructor(
+    @Optional() @Self() protected ngControl: NgControl,
+  ) {
+    super(inject(ChangeDetectorRef), ngControl);
+    if (ngControl) {
+      this.ngControl.valueAccessor = this;
+    }
+  }
+
+  get nativeElement() {
+    return this.htmlContent()!;
+  }
 
   get getVariant(): InputVariant {
     if (this.variant()) {
@@ -92,8 +103,6 @@ export class InputComponent extends AbstractInputComponent implements OnInit, Af
       return 'basic';
     }
   }
-
-  id = () => this.inputId() ? this.inputId() : RandomUtils.secureChars(12)
 
   compiledClasses(): string {
     const builder = new StringBuilder();
@@ -108,14 +117,14 @@ export class InputComponent extends AbstractInputComponent implements OnInit, Af
 
     const factory = new InputFactory({
       color: this.color(),
-      floatingLabel: this.floatingLabel(),
+      floatingLabel: this.floating(),
       roundedSize: this.rounding(),
       hiddeLabel: ObjectUtils.isNullOrUndefined(this.label()),
       size: this.size(),
-      required: this.requiredValue(),
+      required: this.required(),
       readonly: this.readOnly(),
-      type: this.inputType(),
-      hasIconAt: ObjectUtils.isNotNullAndNotUndefined(this.addonIcon()) ? this.addonIconPosition()! : null
+      type: this.type(),
+      hasIconAt: ObjectUtils.isNotNullAndNotUndefined(this.iconName()) ? this.iconPosition()! : null
     });
 
     const input = factory.of(this.getVariant);
@@ -130,19 +139,27 @@ export class InputComponent extends AbstractInputComponent implements OnInit, Af
     iconBuilder.append("dark:text-neutral-400")
       .append(inputIconSize[this.size()]);
 
-    if (this.label() && !this.floatingLabel()) {
+    if (this.label() && !this.floating()) {
       iconBuilder.append("inset-y-1/2 ps-3")
     } else {
       iconBuilder.append("inset-y-0 flex items-center");
     }
-    if (this.addonIconPosition() === "left") {
+    if (this.iconPosition() === "left") {
       iconBuilder.append("left-0 start-0 ps-3");
     } else {
       iconBuilder.append("right-0 end-0 pe-3");
     }
 
-    if (this.inputType() === 'number') {
+    if (this.type() === 'number') {
       inputBuilder.append("[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none");
+    }
+
+    if (this.labelClassName()) {
+      labelBuilder.append(this.labelClassName()!);
+    }
+
+    if (this.inputClassName()) {
+      inputBuilder.append(this.inputClassName()!);
     }
 
     this.___iconClass = twMerge(iconBuilder.segments());
@@ -156,22 +173,54 @@ export class InputComponent extends AbstractInputComponent implements OnInit, Af
   }
 
   ngAfterViewInit(): void {
+    // this.initSuper();
   }
 
   ngOnInit(): void {
+
+    this.initSuper();
     this.elementClass = this.compiledClasses();
     this.___inputIdAttr = this.id();
+    this.inputNumberPinIconSize = {
+      'w-2.5 h-2.5': this.size() === 'tiny',
+      'w-3.5 h-3.5': this.size() === 'small',
+      'w-4 h-4': this.size() === 'medium',
+      'w-4 h-5': this.size() === 'large',
+      'w-5 h-5': this.size() === 'giant',
+    };
+
+    if (this.inputValue()) {
+      this.updateValue(this.inputValue(), true);
+    }
+    // this.setDisabledState(this.disabledInput());
   }
 
   handlerInput($event: any) {
-    this.setValue($event.target.value, true);
+    if (!this.disabled) {
+      const emitEvent = this.validation() ? ['change', 'any'].includes(this.validationMode()) : true;
+      this.markAsTouched();
+      this.updateValue($event.target.value, emitEvent);
+      if (this.validation() && ['change', 'any'].includes(this.validationMode())) {
+        this.errorable = true;
+      }
+    }
   }
 
-  handlerEvent = ($event: any, eventType: 'BLUR' | 'FOCUS') => {
-    if (eventType === "BLUR") {
-      this.onBlur.emit($event);
-    } else {
-      this.onFocus.emit($event);
+  handlerEvent = ($event: any, eventType: 'BLUR' | 'FOCUS' | "KEY_UP") => {
+    if (!this.disabled) {
+      if (eventType === "BLUR") {
+        this.markAsTouched();
+        this.onBlur.emit($event);
+        if (this.validation() && ['blur', "any"].includes(this.validationMode())) {
+          this.notifyValueChange();
+          this.errorable = true;
+        }
+        if (this.ngControl) {
+          this.ngControl.control?.updateValueAndValidity();
+        }
+      } else {
+        this.onFocus.emit($event);
+      }
     }
   }
 }

@@ -1,0 +1,21 @@
+@use "menu.variables" as *;
+
+@mixin menu-base {
+  background-color: $menu-bg;
+  padding: $menu-padding;
+  border-radius: $menu-border-radius;
+  box-shadow: $menu-shadow;
+  transition: $menu-transition;
+}
+
+@mixin menu-item {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: $menu-transition;
+  &:hover {
+    background-color: $menu-item-hover-bg;
+  }
+  &.active {
+    background-color: $menu-item-active-bg;
+  }
+}

@@ -91,6 +91,13 @@ to do:
            "preserveSymlinks": true,// <--- add this
   ```
 
+And then
+
+```bash
+cd my-app # the app that using ngx-fs-ui
+npm link ngx-fs-ui
+```
+
 ## Running unit tests
 
 To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:

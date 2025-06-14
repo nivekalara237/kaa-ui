@@ -6,9 +6,11 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  HostListener,
   input,
   OnInit,
-  viewChild
+  viewChild,
+  ViewEncapsulation
 } from '@angular/core';
 import {IconVariant, Position, RoundedSize, Size, Status} from "../../model/types";
 import {AbstractUIComponent} from "../abstract.component";
@@ -27,7 +29,7 @@ import {twMerge} from 'tailwind-merge';
 import {iconVariantSizeMapping} from '../../model/themes/icon.theme';
 
 @Component({
-  selector: 'ui-button',
+  selector: 'ui-button, ka-button',
   imports: [
     NgIf,
     NgTemplateOutlet,
@@ -41,7 +43,8 @@ import {iconVariantSizeMapping} from '../../model/themes/icon.theme';
       useExisting: ButtonComponent
     }
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
+  encapsulation: ViewEncapsulation.None,
   host: {
     'class': ''
   }
@@ -59,7 +62,6 @@ export class ButtonComponent extends AbstractUIComponent implements OnInit, Afte
   fullWidth = input(false, {transform: booleanAttribute});
   ghost = input(false, {transform: booleanAttribute});
   disabled = input(false, {transform: booleanAttribute});
-
   icon = input<string>();
   iconVariant = input<IconVariant>('pi');
   iconPosition = input<Position>('left');
@@ -127,4 +129,15 @@ export class ButtonComponent extends AbstractUIComponent implements OnInit, Afte
   }
 
   getIconSize = () => iconVariantSizeMapping[this.iconVariant()][this.size()];
+
+  @HostListener("click", ["$event"])
+  handlerClick($event: Event) {
+    const handler = () => {
+      if (this.disabled()) {
+        $event.stopPropagation();
+        $event.preventDefault();
+      }
+    };
+    setTimeout(handler, 10);
+  }
 }

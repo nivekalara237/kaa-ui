@@ -1,4 +1,4 @@
-import {booleanAttribute, ChangeDetectorRef, Component, input, OnInit} from '@angular/core';
+import {booleanAttribute, ChangeDetectorRef, Component, input, OnInit, ViewEncapsulation} from '@angular/core';
 import {AbstractUIComponent} from '../../abstract.component';
 import {Router, RouterLink} from '@angular/router';
 import {NgClass, NgIf, NgTemplateOutlet} from '@angular/common';
@@ -13,6 +13,7 @@ import {link} from '../../../model/themes/typography.theme';
     NgClass
   ],
   templateUrl: './link.component.html',
+  encapsulation: ViewEncapsulation.None,
   styleUrl: './link.component.css'
 })
 export class LinkComponent extends AbstractUIComponent implements OnInit {

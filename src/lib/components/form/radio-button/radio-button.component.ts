@@ -1,46 +1,38 @@
 import {
   AfterViewInit,
   booleanAttribute,
+  ChangeDetectorRef,
   Component,
   ElementRef,
-  forwardRef,
+  Host,
   inject,
   input,
   OnInit,
-  ViewChild
+  Optional,
+  ViewChild,
+  ViewEncapsulation
 } from '@angular/core';
 import {AbstractInputComponent} from '../shared/abstract-input.component';
-import {RandomUtils, StringBuilder} from 'co2m.js';
+import {ObjectUtils, StringBuilder} from 'co2m.js';
 import {twMerge} from 'tailwind-merge';
 import {CardinalDirection, Size, Status} from '../../../model/types';
-import {NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {NgControl} from '@angular/forms';
+import {errorMessage} from '../input/utils/errors-message-handler';
 
 @Component({
   selector: 'ka-radio',
   standalone: false,
-
+  encapsulation: ViewEncapsulation.None,
   templateUrl: './radio-button.component.html',
-  styleUrl: './radio-button.component.scss',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => RadioButtonComponent),
-      multi: true
-    }, {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => RadioButtonComponent),
-      multi: true
-    }
-  ]
+  styleUrls: ['./radio-button.component.scss', '../common/style.component.scss'],
+  providers: []
 })
 export class RadioButtonComponent extends AbstractInputComponent implements OnInit, AfterViewInit {
 
-  inputId = input<string>();
   status = input<Status>('default');
   size = input<Size>('small');
   label = input<string>();
   labelPosition = input<CardinalDirection>("right");
-  labelClassName = input<string>("");
   onlyLabel = input(false, {transform: booleanAttribute});
   disabledInput = input(false, {transform: booleanAttribute, alias: 'disabled'});
   checkedInput = input(false, {transform: booleanAttribute, alias: 'checked'});
@@ -49,10 +41,16 @@ export class RadioButtonComponent extends AbstractInputComponent implements OnIn
   el = inject(ElementRef<HTMLElement>);
   @ViewChild("inputElement")
   protected inputElement!: ElementRef<HTMLInputElement>;
-  protected ___id!: string;
   protected ___radioClass!: string;
   protected ___labelClass!: string;
   protected ___onlyLabelClass!: string;
+  protected readonly errorMessage = errorMessage;
+
+  constructor(
+    @Optional() @Host() public ngControl: NgControl
+  ) {
+    super(inject(ChangeDetectorRef), ngControl);
+  }
 
   compiledClasses(): string {
     const builder = new StringBuilder();
@@ -60,7 +58,7 @@ export class RadioButtonComponent extends AbstractInputComponent implements OnIn
     const labelBuilder = new StringBuilder("ka-radio-label");
     const onlyLabelBuilder = new StringBuilder();
 
-    radioBuilder.append(`ka-radio ka-radio-${this.status()} ka-radio-size-${this.size()}`);
+    radioBuilder.append(`ka-radio-custom ka-radio-${this.status()} ka-radio-size-${this.size()}`);
 
     if (this.disabledInput()) {
       radioBuilder.append("ka-radio-disabled");
@@ -77,12 +75,13 @@ export class RadioButtonComponent extends AbstractInputComponent implements OnIn
     this.___radioClass = twMerge(radioBuilder.segments());
 
     builder.append(this.nativeClassName());
-    labelBuilder.append(this.labelClassName());
-    onlyLabelBuilder.append(this.labelClassName());
+    labelBuilder.append(this.labelClassName()!);
+    onlyLabelBuilder.append(this.labelClassName()!);
+    builder.append(this.inputClassName()!);
 
     this.___labelClass = twMerge(labelBuilder.segments());
     this.___onlyLabelClass = twMerge(onlyLabelBuilder.segments());
-    return twMerge(builder.segments());
+    return twMerge(builder.segments().filter(ObjectUtils.isNotNullAndNotUndefined));
   }
 
   ngAfterViewInit(): void {
@@ -90,6 +89,7 @@ export class RadioButtonComponent extends AbstractInputComponent implements OnIn
   }
 
   ngOnInit(): void {
+    this.initSuper();
     this.initAll();
   }
 
@@ -99,7 +99,6 @@ export class RadioButtonComponent extends AbstractInputComponent implements OnIn
 
   private initAll = () => {
     this.elementClass = this.compiledClasses();
-    this.___id = this.inputId() ? this.inputId()! : RandomUtils.secureChars(12);
-    this.setValue(this.inputValue());
+    this.updateValue(this.inputValue());
   }
 }

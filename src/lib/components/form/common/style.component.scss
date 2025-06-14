@@ -1,0 +1,106 @@
+@use "sass:list";
+@use "sass:map";
+@use "sass:string";
+@use "./variables" as *;
+
+
+$components: (
+  ka-checkbox,
+  ka-radio,
+  ka-input,
+  ka-textarea,
+  ka-select,
+  ka-checkbox-control
+);
+
+@mixin generate-helper-text {
+  .helper-text {
+    @apply mt-2;
+    &.is-text {
+      @apply text-sm text-gray-500 dark:text-gray-300 font-medium
+    }
+  }
+}
+
+;
+
+@mixin generate-label-required-indicator($componentName) {
+  @if $componentName != null {
+    label.required {
+      @apply after:content-['*'] after:ml-0.5 after:text-red-500
+      after:inline-block after:text-sm after:items-end
+      after:justify-center;
+    }
+  }
+}
+
+@mixin generate-validation-effects($componentName: input) {
+  .validation-messages.validation\:error li {
+    .icon, p {
+      @apply text-red-600 dark:text-red-500
+    }
+  }
+  .validation-messages.validation\:success li {
+    .icon, p {
+      @apply text-emerald-600 dark:text-emerald-500
+    }
+  }
+
+  @each $sizeName in map.keys($ka-input-sizes-config) {
+    $sizeConfigMap: map.get($ka-input-sizes-config, $sizeName);
+    .#{$componentName}-size\:#{$sizeName} {
+      @if $componentName == ka-input {
+        .input-number-step {
+          @apply #{map.get($sizeConfigMap, number-step)}
+        }
+        .input-icon.fix-margin {
+          @apply #{map.get($sizeConfigMap, fix-icon-margin)}
+        }
+      }
+
+      @if list.index((ka-input, ka-textarea, ka-select), $componentName) != null {
+        @each $el in textarea, input, select {
+          &.ka-#{$el}-variant\:gray #{$el}.has-error,
+          &.ka-#{$el}-variant\:basic #{$el}.has-error {
+            @apply #{list.nth(map.get($sizeConfigMap, borders), 1)};
+          }
+
+          &.ka-#{$el}-variant\:underline #{$el}.has-error {
+            @apply border-b-2;
+          }
+        }
+      }
+      @each $el in input, textarea, select, ".select-input" {
+        #{string.unquote($el)}.has-error {
+          @apply border-red-600 dark:border-red-400
+          focus:border-red-600 dark:focus:border-red-400;
+        }
+        #{string.unquote($el)}.has-success {
+          @apply border-emerald-600 dark:border-emerald-400
+          focus:border-emerald-600 dark:focus:border-emerald-400;
+        }
+        #{string.unquote($el)}.has-success, #{string.unquote($el)}.has-error {
+          @apply bg-red-50 dark:bg-neutral-900;
+        }
+      }
+
+      label.has-error {
+        @apply text-red-600 dark:text-red-500;
+      }
+
+      label.has-success {
+        @apply text-emerald-600 dark:text-emerald-500;
+      }
+    }
+  }
+}
+
+;
+
+@each $c in $components {
+  .#{$c} {
+    @include generate-helper-text;
+    @include generate-validation-effects($c);
+    @include generate-label-required-indicator($c);
+  }
+}

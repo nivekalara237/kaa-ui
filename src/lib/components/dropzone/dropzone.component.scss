@@ -1,0 +1,54 @@
+.drag-transition {
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.ka-dropzone {
+  // @apply bg-white dark:bg-gray-600;
+
+  .ka-dropzone-zone {
+    @apply border-2 border-dashed rounded-lg p-8 text-center cursor-pointer
+    transition-colors mb-2 bg-white dark:bg-gray-600
+    border-gray-300 hover:border-gray-400 dark:border-gray-800 dark:hover:border-gray-900 // is not dragging
+    ;
+    &-dragging {
+      @apply border-blue-500 bg-blue-50 dark:bg-blue-900;
+      // is dragging
+    }
+  }
+
+  .ka-dropzone-preview {
+    .ka-dropzone-preview {
+      &-title {
+        @apply mb-3 font-medium text-lg text-neutral-800 dark:text-neutral-200;
+      }
+
+      &-items {
+
+        .ka-dropzone-preview-item {
+          &-progress {
+            @apply absolute bottom-0 left-0 right-0 bg-gray-200 h-1.5;
+          }
+
+          &-progress-percent {
+            @apply absolute top-1 left-1 bg-gray-600 dark:bg-gray-300
+            bg-opacity-50 text-white dark:text-gray-600 text-xs p-1 rounded;
+          }
+
+          &-btn-delete {
+            @apply absolute top-2 right-2 bg-red-500 text-white rounded-full
+            p-1;
+          }
+
+          &-image {
+            @apply w-full h-32 object-cover rounded-lg;
+          }
+
+          &-error {
+            @apply absolute bottom-0 left-0 right-0 bg-red-500 text-white
+            text-xs p-1;
+          }
+        }
+      }
+    }
+  }
+}

@@ -13,7 +13,8 @@ import {twMerge} from 'tailwind-merge';
 
 @Directive({
   host: {
-    "ngSkipHydration": ''
+    "ngSkipHydration": '',
+    "class": "prose"
   }
 })
 export abstract class AbstractUIComponent implements OnChanges {
@@ -40,8 +41,8 @@ export abstract class AbstractUIComponent implements OnChanges {
 
   abstract compiledClasses(): string;
 
-  addClass = (clazz: string | string[]) => {
-    this.elementClass = twMerge(this.elementClass, clazz);
+  addClass = (...classes: string[]) => {
+    this.elementClass = twMerge([this.elementClass, ...classes]);
     this.changeDetector.markForCheck();
   };
 
@@ -58,7 +59,5 @@ export abstract class AbstractUIComponent implements OnChanges {
       this.changeDetector.detectChanges();
       this.elementClass = this.compiledClasses();
     }
-
-    // console.log(changes);
   }
 }

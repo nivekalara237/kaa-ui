@@ -1,0 +1,14 @@
+@use "sass:map";
+
+.ka-stepper {
+
+  &.ka-stepper-orientation\:vertical {
+    .ka-stepper-steps {
+      max-width: 25%;
+    }
+
+    .ka-stepper-content {
+      max-width: 75%;
+    }
+  }
+}

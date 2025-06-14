@@ -1,0 +1,186 @@
+<div #parentElement
+     (blur)="this.handleChange('', 'BLUR')"
+     (focus)="this.handleChange('', 'FOCUS')"
+     [attr.aria-describedby]="getDescribedBy"
+     [attr.aria-disabled]="disabled"
+     [attr.aria-invalid]="isError"
+     [attr.aria-label]="ariaLabel()"
+     [attr.aria-labelledby]="ariaLabelledBy()"
+     [attr.id]="___inputIdAttr"
+     class="relative ka-select w-full cursor-pointer select-box">
+  <div
+    [class.relative]="floating()"
+    class="flex-row select-base ka-select-size:{{ size() }} ka-select-variant:{{ variant() }} ka-select-rounded:{{ roundedSize() }}"
+    id="input-select">
+    <ng-container *ngFor="let tpl of floating() ? [inputTpl, labelTpl] : [labelTpl, inputTpl]">
+      <ng-container *ngTemplateOutlet="tpl; context: {$implicit: floating()}"></ng-container>
+    </ng-container>
+    <ng-template #labelTpl let-floating>
+      <span [ngClass]="{
+          'required': required()
+        }" class="select-label ka-input-label-{{ size() }} {{ _labelCssClass }}"
+      >
+        @if (floating) {
+          {{ label() ?? placeholder() }}
+        } @else {
+          {{ label() }}
+        }
+      </span>
+    </ng-template>
+    <ng-template #inputTpl let-floating>
+      <div (focusin)="handlerInputFocus('IN')"
+           (focusout)="handlerInputFocus('OUT')"
+           [attr.data-readonly]="readOnly()"
+           [class.has-error]="isError"
+           [class.variant-gray]="variant() === 'gray'"
+           class="select-input focusable flex justify-between {{ _inputCssClass }}"
+           tabindex="0">
+        <div [class.items-center]="!iconName()" [class.justify-between]="iconName() && iconPosition() === 'right'"
+             [ngClass]="{
+          'flex-row-reverse': iconPosition() === 'right',
+          'flex': iconName()
+          }" class="flex-row w-full">
+          <div *ngIf="iconName()"
+               class="{{ iconPosition() === 'right' ? 'ml-2 mr-1' : 'mr-2' }}">
+            <ui-icon
+              [name]="iconName()!"
+              [size]="size()"
+              nativeClassName="{{ inputIconSize[size()] }}"></ui-icon>
+          </div>
+          <div class="selected-value">
+            @if (selectedValue.length > 0) {
+              @if (!multiple()) {
+                <ng-container
+                  *ngTemplateOutlet="labelRenderTemplate() ? labelRenderTemplate()! : renderSingleTpl, context: {$implicit: selectedValue.at(0), index: 0}">
+                </ng-container>
+              } @else {
+                <div id="multiple-select-items"
+                     class="flex for-peer-fl flex-wrap justify-start max-w-full box-border gap-1">
+                  @for (item of selectedValue; track item.value; let idx = $index) {
+                    <div [@fadeInOut]
+                         class="px-1 flex w-max hover:bg-gray-200 dark:hover:bg-gray-800
+                    justify-center items-center rounded-md border border-gray-300
+                    dark:border-gray-400 whitespace-nowrap overflow-hidden
+                    bg-gray-100 dark:bg-gray-700 multiple-select-item">
+                      <ng-container
+                        *ngTemplateOutlet="labelRenderTemplate() ? labelRenderTemplate()! : renderMultipleItemTpl, context: {$implicit: item, index: idx}"></ng-container>
+                      <a (click)="removeSelectValue(item, idx)"
+                         class="hover:bg-red-300 dark:hover:bg-red-900 p-0.5 ms-1 rounded-full"
+                         href="javascript:void(0)">
+                        <svg class="w-3 h-3 text-red-800 dark:text-white" aria-hidden="true"
+                             xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18 17.94 6M18 18 6.06 6"/>
+                        </svg>
+                      </a>
+                    </div>
+                  }
+                </div>
+              }
+            } @else {
+              <span *ngIf="!floating" class="select-placeholder">{{ placeholder() }}</span>
+            }
+          </div>
+        </div>
+        <div class="select-arrow">
+          <span class="ka-input-caret">
+            <svg [ngClass]="{
+            'rotate-180': opened,
+            'rotate-0': !opened
+            }" aria-hidden="true"
+                 class="text-gray-700 dark:text-white" fill="none"
+                 height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="m8 10 4 4 4-4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-width="2"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+
+  <ng-container *ngTemplateOutlet="helperTextTpl, context: {$implicit: !!helperText()}"></ng-container>
+  <ng-container *ngTemplateOutlet="errorTpl"></ng-container>
+
+  <div aria-describedby="input-select" class="hidden" id="floating-block" role="listbox">
+    <ng-container *ngIf="filter()">
+      <div class="mt-4">
+        <div class="relative mx-3" id="filter-input">
+          <input (ngModelChange)="filterChange.emit(filterText)"
+                 [(ngModel)]="filterText"
+                 class="peer py-1.5 sm:py-2 px-4 ps-8 block w-full bg-gray-100
+                 border-transparent outline-none ring-0 rounded-lg sm:text-sm disabled:opacity-50
+                 disabled:pointer-events-none dark:bg-neutral-700
+                 dark:border-transparent dark:text-neutral-400
+                 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                 placeholder="Search items.."
+                 type="text">
+          <div
+            class="absolute inset-y-0 start-0 flex items-center pointer-events-none ps-2 peer-disabled:opacity-50 peer-disabled:pointer-events-none">
+            <svg aria-hidden="true" class="shrink-0 size-4 text-gray-500 dark:text-neutral-500" fill="none"
+                 height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" stroke="currentColor" stroke-linecap="round"
+                    stroke-width="2"/>
+            </svg>
+          </div>
+        </div>
+        <div class="w-full mt-4 border-b border-neutral-200
+         dark:border-neutral-800 shadow-md"></div>
+      </div>
+    </ng-container>
+    <ng-content select="[kaSelectHeader]"></ng-content>
+    <div class="p-4 grid gap-y-1">
+      <ng-container *ngIf="mergedOptions.length === 0">
+        <ng-content select="[kaSelectEmpty]"></ng-content>
+      </ng-container>
+      <ng-container *ngIf="options().length > 0; else internalOptions">
+        <ui-option
+          *ngFor="let item of options(); let idx = index"
+          [attr.optionLabel]="item.label"
+          [disabled]="item.disabled"
+          [extra]="item.extraData"
+          [index]="idx"
+          [value]="item.value">{{ item.label }}
+        </ui-option>
+      </ng-container>
+      <ng-template #internalOptions>
+        <ng-content select="ui-option, ka-option, ui-group-option, ka-group-option"></ng-content>
+      </ng-template>
+    </div>
+    <ng-content select="[kaSelectAction]"></ng-content>
+  </div>
+</div>
+
+<ng-template #renderMultipleItemTpl let-index="idx" let-option>
+  <div class="ps-1.5 px-1 text-inherit dark:text-white">{{ option.label }}</div>
+</ng-template>
+<ng-template #renderSingleTpl let-index="idx" let-option>
+  <span class="text-inherit for-peer-fl dark:text-white">{{ option.label }}</span>
+</ng-template>
+
+<ng-template #helperTextTpl let-has>
+  @if (has) {
+    @if (isHelperText) {
+      <p class="helper-text is-text"> {{ helperText() }}</p>
+    } @else {
+      <div class="helper-text">
+        <ng-container *ngTemplateOutlet="helperTextAsTemplate"></ng-container>
+      </div>
+    }
+  }
+</ng-template>
+<ng-template #errorTpl>
+  <ul *ngIf="isError && controlErrors"
+      class="validation-messages validation:{{ isError ? 'error' : 'success' }} list-none mt-1.5 flex gap-y-2">
+    <li *ngFor="let errorKey of controlErrors | keyvalue" class="m-0 p-0 flex items-center">
+      <svg aria-hidden="true" class="w-3.5 h-3.5 me-1 icon" fill="none"
+           height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+        <path d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"/>
+      </svg>
+      <p
+        class="text-xs max-w-fit text-red-600 dark:text-red-500">{{ errorMessage[(errorKey.key)](ngControl?.name + '', errorKey.value) }}</p>
+    </li>
+  </ul>
+</ng-template>

@@ -1,0 +1,86 @@
+<div class="ka-menu {{ elementClass }} ka-menu-open:{{ dropped }} ka-menu-borderless:{{ borderless }}" role="menu">
+  <div *ngIf="_headerTemplate" class="ka-menu-header" role="heading">
+    <ng-container *ngTemplateOutlet="_headerTemplate"></ng-container>
+  </div>
+  <ul class="ka-menu-items ka-menu-orientation:{{ orientation }} list-none">
+    <ng-container *ngFor="let menuItem of _itemsWrapper; let idx = index">
+      @if (menuItem.item.isSeparator) {
+        <ng-container *ngTemplateOutlet="separator"></ng-container>
+      } @else {
+        <ng-container *ngTemplateOutlet="itemTpl, context: {$implicit: menuItem, index: idx}"></ng-container>
+      }
+    </ng-container>
+
+  </ul>
+  <div *ngIf="_footerTemplate" class="ka-menu-footer">
+    <ng-container *ngTemplateOutlet="_footerTemplate"></ng-container>
+  </div>
+</div>
+
+<ng-template #separator>
+  <li class="ka-menu-separator"></li>
+</ng-template>
+
+<ng-template #itemTpl let-index="index" let-itemWrapper>
+  <li #selectableItem
+      (click)="onItemSelected(itemWrapper, selectableItem, index, submenus, $event.target);">
+    <div [class.ka-disabled]="itemWrapper.item.disabled" class="ka-menu-item">
+      <ng-container *ngIf="_itemTemplate; else noTemplate">
+        <ng-container *ngTemplateOutlet="_itemTemplate, context: {$implicit: itemWrapper.item}"></ng-container>
+      </ng-container>
+      <ng-template #noTemplate>
+        <ng-container *ngTemplateOutlet="icon, context: {$implicit: itemWrapper.item}"></ng-container>
+        <span *ngIf="itemWrapper.item.label" class="ka-menu-item-label">
+          {{ itemWrapper.item.label }}
+        </span>
+        <ui-badge *ngIf="itemWrapper.item.badge" [closable]="false"
+                  class="ka-menu-item-badge {{ itemWrapper.item.badgeClass }}" color="blue"
+                  rounded="full"
+                  size="tiny">{{ itemWrapper.item.badge }}
+        </ui-badge>
+      </ng-template>
+      <div
+        #chevron
+        *ngIf="itemWrapper.item.children"
+        class="ka-menu-item-chevron p-1" data-clicked-state="unclicked">
+        <svg
+          [class.rotate-0]="chevron.getAttribute('data-clicked-state') === 'unclicked'"
+          [class.rotate-180]="chevron.getAttribute('data-clicked-state') === 'clicked'"
+          aria-hidden="true" class="w-4 h-4 transition-all duration-300 text-gray-800 dark:text-white" fill="none"
+          height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <path d="m8 10 4 4 4-4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2"/>
+        </svg>
+      </div>
+    </div>
+    <div #submenus
+         (@collapse.done)="onCollapseDone($event, itemWrapper)"
+         [@collapse]="!!itemWrapper.item.expanded ? 'expanded' : 'collapsed'"
+         [attr.data-submenus]="index"
+         class="ka-menu-item-submenus"
+    >
+      <ui-menu
+        *ngIf="itemWrapper.shouldSubmenuRender && itemWrapper.item.children"
+        [items]="itemWrapper.item.children!"
+        borderless></ui-menu>
+    </div>
+  </li>
+</ng-template>
+
+<ng-template #icon let-item>
+  @if (item.icon) {
+    @if (isIconObject(item)) {
+      <ui-icon class="ka-menu-item-icon" [nativeClassName]="item.iconClass!" *ngIf="item.icon"
+               [variant]="getIconObject(item).variant"
+               name="{{ getIconObject(item).name }}"
+               size="small"></ui-icon>
+    } @else {
+      <ui-icon class="ka-menu-item-icon" [nativeClassName]="item.iconClass!" *ngIf="item.icon" name="{{ item.icon }}"
+               size="small"></ui-icon>
+    }
+  }
+</ng-template>
+
+<ng-template>
+  <ng-content></ng-content>
+</ng-template>

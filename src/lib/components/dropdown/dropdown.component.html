@@ -1,0 +1,51 @@
+<div #htmlDivElement class="{{ elementClass }} relative inline-block">
+  <div #toggle (click)="trigger() === 'click' && toggleHandler()"
+       (mouseleave)="leaveButtonOrMenu($event)"
+       (pointerenter)="onHover(true)"
+       class="cursor-pointer inline" id="toggleButton">
+    @if (button()) {
+      <ng-container *ngTemplateOutlet="button()"></ng-container>
+    } @else {
+      <button type="button"
+              class="text-gray-900 bg-white hover:bg-gray-100
+              border border-gray-200 focus:ring-4 focus:outline-none
+              focus:ring-gray-100 font-medium rounded-lg text-sm px-4 py-2.5
+              text-center inline-flex gap-x-3 items-center dark:focus:ring-gray-600
+              dark:bg-gray-800 dark:border-gray-700 dark:text-white
+              dark:hover:bg-gray-700">
+        {{ label() }}
+        <svg
+          [ngClass]="{
+            'rotate-180': (isOpen$ | async),
+            'rotate-0': !(isOpen$ | async)
+            }"
+          class="size-4 transition-transform duration-500 text-gray-900 dark:text-white" aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24" height="24" fill="none" viewBox="0 0 24 24">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="m19 9-7 7-7-7"/>
+        </svg>
+      </button>
+    }
+  </div>
+
+  <div #target
+       (mouseenter)="handleButtonCloser($event)"
+       (mouseleave)="leaveButtonOrMenu($event)"
+       [ngClass]="{
+       'translate-y-0': (!isTranslableX() && (isOpen$ | async)),
+       'translate-y-4': (!isTranslableX() && !(isOpen$ | async)),
+       '-translate-y-0': (!isTranslableX() && isDropup() && (isOpen$ | async)),
+       '-translate-y-4': (!isTranslableX() && isDropup() && !(isOpen$ | async)),
+       'translate-x-0': (placement() === 'right' && (isOpen$ | async)),
+       'translate-x-4': (placement() === 'right' && !(isOpen$ | async)),
+       '-translate-x-0': (placement() === 'left' && (isOpen$ | async)),
+       '-translate-x-4': (placement() === 'left' && !(isOpen$ | async)),
+       }"
+       class="dropdown hidden absolute d-{{ placement() }}"
+  >
+    <div class="flex flex-col">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

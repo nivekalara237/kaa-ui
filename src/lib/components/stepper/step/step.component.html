@@ -1,0 +1,72 @@
+<ng-template #content>
+  <div [class.active]="active"
+       class="flex flex-auto step-status:{{ status }} step-orientation:{{ stepper?.orientation() }}">
+    <div [class.flex-col]="_isVertical"
+         [ngClass]="{'items-center' : _isVertical}"
+         class="step-flow flex justify-center">
+      <div
+        class="flex items-center justify-center step-indic">
+        @if (type() === 'numbered') {
+          <span class="step-number">
+            @switch (status) {
+              @case ('error') {
+                <svg class="w-4 h-4 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                     width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M6 18 17.94 6M18 18 6.06 6"/>
+              </svg>
+              }
+              @case ('completed') {
+                <svg class="w-4 h-4 text-green-500 dark:text-green-400" aria-hidden="true"
+                     xmlns="http://www.w3.org/2000/svg"
+                     width="24" height="24" fill="none" viewBox="0 0 24 24">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M5 11.917 9.724 16.5 19 7.5"/>
+                </svg>
+              }
+              @default {
+                {{ index }}
+              }
+            }
+          </span>
+        } @else if (type() === 'iconic') {
+          <span class="step-icon" [innerHTML]="iconContent"></span>
+        } @else {
+          <ng-container [ngTemplateOutlet]="indicatorTemplateRef()!"></ng-container>
+        }
+      </div>
+      @if (_isVertical) {
+        <ng-container *ngTemplateOutlet="connectorTpl"></ng-container>
+      }
+    </div>
+    <div class="step-details flex-1 flex gap-2 flex-col">
+      @if (_isVertical) {
+        <ng-container *ngTemplateOutlet="titleTpl"></ng-container>
+      } @else {
+        <div class="flex items-center gap-x-2">
+          <ng-container *ngTemplateOutlet="titleTpl"></ng-container>
+          <ng-container *ngTemplateOutlet="connectorTpl"></ng-container>
+        </div>
+      }
+      <div [innerHTML]="_description"
+           class="step-description"></div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #connectorTpl>
+  <div
+    [ngClass]="{
+      'w-px': _isVertical && status === 'none',
+      'w-[2px]': _isVertical && status !== 'none',
+      'h-px': !_isVertical && status === 'none',
+      'h-[2px]': !_isVertical && status !== 'none'
+    }"
+    class="step-connector group-[&:last-child]:hidden group-[&:last-child]:bg-transparent"></div>
+</ng-template>
+<ng-template #titleTpl>
+  <span class="step-title"> {{ title() }}</span>
+</ng-template>
+
+<ng-container *ngTemplateOutlet="content"></ng-container>
+

@@ -2,75 +2,73 @@ import {
   AfterViewInit,
   booleanAttribute,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
-  forwardRef,
+  inject,
   input,
   OnInit,
-  output,
+  Optional,
+  Self,
   ViewChild
 } from '@angular/core';
-import {AbstractUIComponent} from '../../abstract.component';
-import {ObjectUtils, RandomUtils, StringBuilder, StringUtils} from 'co2m.js';
+import {ObjectUtils, StringBuilder, StringUtils} from 'co2m.js';
 import {twMerge} from 'tailwind-merge';
 import {InputFactory} from '../input/input.factory';
 import {Color, InputVariant, OverflowPosition, RoundedSize, Size, Status, TextareaResize} from '../../../model/types';
-import {FormElementControlValueAccessor} from '../shared/form-element.control-value-accessor';
-import {NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {NgControl} from '@angular/forms';
 import {genericWithDefaultAttribute, stringAttribute} from '../input/utils/functions';
 import {textareaResize, textareaScrollablePosition} from '../../../model/themes/input.theme';
 import {scrollbarStylesMapping} from '../../../model/themes/common.theme';
+import {errorMessage} from '../input/utils/errors-message-handler';
+import {AbstractInputComponent} from '../shared/abstract-input.component';
 
 @Component({
   selector: 'ui-textarea',
   standalone: false,
   templateUrl: './textarea.component.html',
-  styleUrl: './textarea.component.css',
+  styleUrls: [
+    './textarea.component.css',
+    'textarea.component.scss',
+    '../common/style.component.scss'
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: AbstractUIComponent,
-      useExisting: TextareaComponent
-    },
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => TextareaComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => TextareaComponent),
-      multi: true
-    }
-  ]
+  providers: [],
+  host: {
+    'class': 'transition-all duration-300'
+  }
 })
-export class TextareaComponent extends FormElementControlValueAccessor implements OnInit, AfterViewInit {
+export class TextareaComponent extends AbstractInputComponent implements OnInit, AfterViewInit {
 
   @ViewChild("content")
   contentElement!: ElementRef<HTMLDivElement>;
+  @ViewChild('textarea') textareaElement!: ElementRef<HTMLTextAreaElement>;
 
   resizable = input(undefined, {transform: (v: TextareaResize) => ObjectUtils.isNullOrUndefined(v) ? 'xy' : v});
   scrollable = input(undefined, {transform: (v: OverflowPosition) => ObjectUtils.isNullOrUndefined(v) || StringUtils.size(v + "") === 0 ? 'auto' : v});
   roundedSize = input<RoundedSize>("small", {alias: 'rounding'});
-  size = input<Size>("medium");
+  size = input<Size>("small");
   color = input<Status | Color>("default");
   variant = input<InputVariant>("basic");
   placeholder = input(null, {transform: stringAttribute});
   label = input<string>();
   textareaInputId = input<string>();
-  textareaClass = input<string>();
   rows = input(null, {transform: genericWithDefaultAttribute<number>(4)});
   gray = input(false, {transform: booleanAttribute});
   underline = input(false, {transform: booleanAttribute});
   requiredValue = input(false, {transform: booleanAttribute});
   readOnly = input(false, {transform: booleanAttribute});
-
-  change = output<string>();
-  touch = output<string>();
+  autoResize = input(false, {transform: booleanAttribute, alias: "auto-resize"});
 
   ___textareaClasses!: string;
   ___labelClasses!: string;
-  ___id!: string;
+  protected readonly errorMessage = errorMessage;
+
+  constructor(
+    @Optional() @Self() protected ngControl: NgControl,
+  ) {
+    super(inject(ChangeDetectorRef), ngControl);
+  }
 
   get getVariant(): InputVariant {
     if (this.variant()) {
@@ -103,7 +101,7 @@ export class TextareaComponent extends FormElementControlValueAccessor implement
 
     areaclassesBuilder.append(scrollbarStylesMapping['default'])
       .append("[&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:rounded-full")
-    if (this.resizable()) {
+    if (this.autoResize() && this.resizable()) {
       areaclassesBuilder.append(textareaResize[this.resizable()!])
     }
     if (this.scrollable()) {
@@ -123,10 +121,12 @@ export class TextareaComponent extends FormElementControlValueAccessor implement
       areaclassesBuilder.append("px-1");
     }
 
-    if (this.textareaClass()) {
-      areaclassesBuilder.append(this.textareaClass()!);
+    if (this.inputClassName()) {
+      areaclassesBuilder.append(this.inputClassName()!);
     }
-
+    if (this.labelClassName()) {
+      labelclassesBuilder.append(this.labelClassName()!);
+    }
 
     this.___textareaClasses = twMerge(areaclassesBuilder.segments());
     this.___labelClasses = twMerge(labelclassesBuilder.segments());
@@ -138,7 +138,7 @@ export class TextareaComponent extends FormElementControlValueAccessor implement
     if (this.contentElement) {
       const text = this.contentElement.nativeElement.textContent;
       if (StringUtils.size(text!) !== 0) {
-        this.setValue(text, false);
+        this.updateValue(text, false);
         this.changeDetector.markForCheck();
       }
     }
@@ -146,12 +146,21 @@ export class TextareaComponent extends FormElementControlValueAccessor implement
 
   ngOnInit(): void {
     this.elementClass = this.compiledClasses();
-    this.___id = ObjectUtils.isNullOrUndefined(this.textareaInputId()) ? RandomUtils.secureChars(12) : this.textareaInputId()!;
+    this.initSuper();
   }
 
-  handleChange($event: string) {
-    this.change.emit($event);
-    // this.handlerChange();
-    this.setValue($event, true);
+  override handleChange($event: string, eventType: 'FOCUS' | 'INPUT' | 'BLUR' | 'KEY_UP') {
+    super.handleChange($event, eventType);
+    if (eventType === "INPUT") {
+      this.handlerAutoResize();
+    }
   }
+
+  private handlerAutoResize = () => {
+    if (this.autoResize()) {
+      const el = this.textareaElement.nativeElement;
+      // el.style.height = "auto";
+      el.style.height = `${el.scrollHeight}px`;
+    }
+  };
 }

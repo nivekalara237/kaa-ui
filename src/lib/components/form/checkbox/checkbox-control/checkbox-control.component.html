@@ -1,0 +1,61 @@
+<div #element class="ka-checkbox-control">
+  <div [id]="___inputIdAttr"
+       class="ka-checkbox-control-size:{{ size() }} ka-checkbox-control-rounded:{{ roundedSize() }} ka-checkbox-control-status:{{ status() }}">
+    <label *ngIf="label()"
+           [class.has-error]="isError"
+           [class.required]="required()"
+           class="block mb-2 text-gray-700">{{ label() }}</label>
+    <div [ngClass]="layout() === 'horizontal' ? 'flex gap-4 flex-wrap' : 'space-y-4'">
+      <ng-container *ngFor="let option of options(); let idx = index">
+        <div>
+          <ka-checkbox
+            (change)="onCheckboxChange(option, $event.target?.checked)"
+            [checked]="value?.includes(option.value)"
+            [disabled]="disabled || disabledCheckbox()"
+            [fieldId]="___inputIdAttr + '-' + idx"
+            [helperText]="!onlyLabel() ? option.helperText: undefined"
+            [inputValue]="option.value"
+            [labelPosition]="labelPosition()"
+            [label]="option.label"
+            [onlyLabel]="onlyLabel()"
+            [outline]="outline()"
+            [ripple]="ripple()"
+            [roundedSize]="roundedSize()"
+            [size]="size()"
+            [status]="status()"
+          ></ka-checkbox>
+        </div>
+      </ng-container>
+    </div>
+    <ng-container *ngTemplateOutlet="errorTpl"></ng-container>
+    <ng-container *ngTemplateOutlet="helperTextTpl, context: {$implicit: !!helperText()}"></ng-container>
+  </div>
+</div>
+
+<ng-template #helperTextTpl let-has>
+  @if (has) {
+    @if (isHelperText) {
+      <p class="helper-text is-text"> {{ helperText() }}</p>
+    } @else {
+      <div class="helper-text">
+        <ng-container *ngTemplateOutlet="helperTextAsTemplate"></ng-container>
+      </div>
+    }
+  }
+
+</ng-template>
+<ng-template #errorTpl>
+  <ul *ngIf="isError && controlErrors"
+      class="validation-messages validation:{{ isError ? 'error' : 'success' }} list-none mt-1.5 flex gap-y-2">
+    <li *ngFor="let errorKey of controlErrors | keyvalue" class="m-0 p-0 flex items-center">
+      <svg aria-hidden="true" class="w-3.5 h-3.5 me-1 icon" fill="none"
+           height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+        <path d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"/>
+      </svg>
+      <p
+        class="text-xs max-w-fit text-red-600 dark:text-red-500">{{ errorMessage[(errorKey.key)](ngControl?.name + '', errorKey.value) }}</p>
+    </li>
+  </ul>
+</ng-template>

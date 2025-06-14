@@ -1,4 +1,4 @@
-import {booleanAttribute, Component, input, OnInit} from '@angular/core';
+import {booleanAttribute, Component, input, OnInit, ViewEncapsulation} from '@angular/core';
 import {AbstractUIComponent} from '../abstract.component';
 import {StringBuilder} from 'co2m.js';
 import {Color, IconVariant, Size, Status} from '../../model/types';
@@ -13,7 +13,11 @@ import {NgClass} from '@angular/common';
     NgClass
   ],
   templateUrl: './icon.component.html',
-  styleUrl: './icon.component.css'
+  styleUrl: './icon.component.css',
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    "class": "leading-none"
+  }
 })
 export class IconComponent extends AbstractUIComponent implements OnInit {
   name = input.required<string>();
@@ -26,17 +30,15 @@ export class IconComponent extends AbstractUIComponent implements OnInit {
     const builder = new StringBuilder();
 
     if (this.size()) {
-      builder.append(iconVariantSizeMapping[this.variant()][this.size()])
-        .append(" ");
+      builder.append(iconVariantSizeMapping[this.variant()][this.size()]);
     }
     if (this.color()) {
-      builder.append(textColorAndStatusWithDensityMapping[this.color()]["d800"])
-        .append(" ");
+      builder.append(textColorAndStatusWithDensityMapping[this.color()]["d600"]);
     }
     if (this.nativeClassName()) {
-      builder.append(this.nativeClassName()).append(" ");
+      builder.append(this.nativeClassName());
     }
-    return twMerge(builder.toString().split(" "));
+    return twMerge(builder.segments());
   }
 
   ngOnInit(): void {

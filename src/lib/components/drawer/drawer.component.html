@@ -1,0 +1,55 @@
+<div (click)="onBackdropClick()" *ngIf="hasBackdrop() && isOpen" [class.close]="!isOpen"
+     [id]="idAttr" class="ka-drawer:backdrop overlay" role="dialog" tabindex="-1"></div>
+<div
+  *ngIf="isVisible"
+  [class.close]="!isOpen"
+  [class.open]="isOpen"
+  aria-modal="true"
+  class="ka-drawer ka-drawer-size:{{ size() }} ka-drawer-position:{{ position }}"
+  role="dialog"
+>
+  <div
+    class="ka-drawer-container {{ position }}">
+    <div *ngIf="isHeadless || !noHeader" class="ka-drawer-header"
+    >
+      @if (isPlainHeaderText(_header2Display)) {
+        <div class="ka-drawer-header-text">
+          {{ headerText() }}
+        </div>
+      } @else {
+        <div>
+          <ng-container *ngTemplateOutlet="headerAsTemplate!"></ng-container>
+        </div>
+      }
+
+      <ka-button (click)="close()" *ngIf="!_closeable" class="ka-drawer-header-close" ghost
+                 nativeClassName="p-3 flex items-center justify-center"
+                 rounded="full" size="tiny">
+        <svg aria-hidden="true" class="w-4 h-4 text-gray-600 dark:text-white" fill="none"
+             height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 18 17.94 6M18 18 6.06 6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2"/>
+        </svg>
+      </ka-button>
+    </div>
+
+    <ng-container *ngIf="isHeadless; else noHeadless">
+      <ng-container *ngTemplateOutlet="headlessSlot?.template!"></ng-container>
+    </ng-container>
+    <ng-template #noHeadless>
+      <div class="ka-drawer-content ka-scrollbar ka-scrollbar-vertical">
+        <ng-content></ng-content>
+      </div>
+    </ng-template>
+
+    <div class="ka-drawer-footer">
+      <ng-container *ngIf="hasFooterSlot; else noFooterSlot">
+        <ng-container *ngTemplateOutlet="footerSlot.template!"></ng-container>
+      </ng-container>
+      <ng-template #noFooterSlot>
+        <ng-content select="[kaDrawerFooter]"></ng-content>
+      </ng-template>
+    </div>
+  </div>
+</div>
+

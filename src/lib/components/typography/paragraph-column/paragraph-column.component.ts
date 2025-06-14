@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {AbstractUIComponent} from '../../abstract.component';
 import {StringBuilder} from 'co2m.js';
 import {twMerge} from 'tailwind-merge';
@@ -7,7 +7,8 @@ import {twMerge} from 'tailwind-merge';
   selector: 'ui-paragraph-column',
   imports: [],
   templateUrl: './paragraph-column.component.html',
-  styleUrl: './paragraph-column.component.css'
+  styleUrl: './paragraph-column.component.css',
+  encapsulation: ViewEncapsulation.None,
 })
 export class ParagraphColumnComponent extends AbstractUIComponent implements OnInit {
   compiledClasses(): string {

@@ -1,6 +1,11 @@
 {
   "name": "@nivekaa/kaa-ui",
+<<<<<<< Updated upstream
   "version": "1.0.1-beta.13",
+=======
+  "version": "1.0.1-beta.14",
+  "homepage": "https://github.com/nivekalara237/kaa-ui",
+>>>>>>> Stashed changes
   "keywords": [
     "angular",
     "typescript",

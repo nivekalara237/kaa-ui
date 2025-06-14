@@ -43,8 +43,8 @@ import {BehaviorSubject} from 'rxjs';
     '../common/style.component.scss'
   ],
   providers: [],
-  encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     "class": "h-max"
   },
